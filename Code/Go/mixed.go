@@ -1,6 +1,6 @@
 package main
 
-import ("fmt")
+import "fmt"
 
 // ...........
 // Interfaces
@@ -43,12 +43,11 @@ type PairwiseSum[T INumeric] struct {
 }
 
 func (self PairwiseSum[T]) sum(x []T) T {
-   N := 2
-   if ( len(x) <= N ) {
-     return self.other.sum(x)
+   if len(x) <= 2 {
+      return self.other.sum(x)
    } else {
-     m := len(x) / 2
-     return self.sum(x[:m+1]) + self.sum(x[m+1:])
+      m := len(x) / 2
+      return self.sum(x[:m+1]) + self.sum(x[m+1:])
    }
 }
 

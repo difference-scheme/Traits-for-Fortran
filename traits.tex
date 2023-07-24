@@ -30,7 +30,7 @@
 
 \maketitle
 
-\abstract{.}
+\abstract{TBD.}
 
 \section{Introduction}
 
@@ -86,11 +86,11 @@ answering this question:
 \item
  Firstly, most larger programs have dependencies on
  \emph{user-defined} procedures and data types. If the programmer
- employs encapsulation of not just a program's data, i.e. state, but
- also its procedures, both these dependencies can actually be viewed
- as dependencies on \emph{user-defined} abstract data types,
- i.e. types that contain both user-defined state, and implementation
- code which operates on that state. These are the dependencies that
+ employs encapsulation of both a program's procedures and its data,
+ i.e. its state, both these dependencies can actually be viewed as
+ dependencies on user-defined abstract data types, i.e. types that
+ contain both user-defined state, and implementation code which
+ operates on that (hidden) state. These are the dependencies that
  Martin is concretely referring to in the above quotation, and it is
  these dependencies on (volatile) implementation (details) that are
  particularly troublesome, because they lead to rigid coupling between
@@ -111,9 +111,9 @@ answering this question:
 
 The most widely used approaches to manage dependencies on language
 intrinsic types have so far been through generics, while dependency
-management of user-defined types has so far been the task of OO
-programming and OO design patterns. Martin has, for instance, defined
-object-orientation as follows:
+management of user-defined (abstract data) types has so far been the
+task of OO programming and OO design patterns. Martin has, for
+instance, defined object-orientation as follows:
 
 \begin{displayquote}
   ``OO is the ability, through the use of polymorphism, to gain
@@ -236,22 +236,22 @@ of numbers stored inside a one-dimensional array. In the remainder of
 this section we will first provide an account and some straightforward
 monomorphic (i.e. coupled) functional implementation of this test
 problem, followed by a functional implementation that makes use of
-both run-time and compile-time polymorphism. In the survey of
-programming languages presented in Sect.~\ref{}, we will then recode
-this test problem in an encapsulated fashion to highlight how the
-source code dependencies in this problem can be managed in different
-languages in more complex situations that require OO techniques in
-order to hide state.
+both run-time and compile-time polymorphism to manage source code
+dependencies. In the survey of programming languages presented in
+Sect.~\ref{sect:survey}, we will then recode this test problem in an
+encapsulated fashion, to highlight how the source code dependencies in
+this problem can be managed in different languages even in more
+complex situations, that require OO techniques in order to hide state.
 
 \subsection{Monomorphic functional implementation}
 
 We have chosen Go here as a language to illustrate the basic ideas.
 Go is easily understood, even by beginners, and is therefore well
 suited for this purpose (another good choice would have been the Swift
-language). The code in the following Listing~\ref{lst:procGo} should
+language). The code in the following Listing~\ref{lst:funcGo} should
 be self explanatory for anyone who is even only remotely familiar with
 the syntax of C family languages. So, we'll make only a few remarks
-regarding the syntax.
+regarding syntax.
 \begin{itemize}
 \item
   While mostly following a C like syntax, variable declarations in Go
@@ -265,57 +265,76 @@ regarding the syntax.
   Numpy (which exclude the last element of an array slice).
 \end{itemize}
 
-Our algorithm for caclulating the average value of an array of integer
-elements employs two different implementations for averaging. The first
-makes use of a ``simple'' summation of all the array's elements, in
-ascending order of their array index. While the second sums in a
-``pairwise'' manner, dividing the array in half to carry out the
-summations recursively, and switching to the ``simple'' method once
-subdivision is no longer possible.
+Our basic algorithm for caclulating the average value of an array of
+integer elements employs two different implementations for
+averaging. The first makes use of a ``simple'' summation of all the
+array's elements, in ascending order of their array index. While the
+second sums in a ``pairwise'' manner, dividing the array in half to
+carry out the summations recursively, and switching to the ``simple''
+method once subdivision is no longer possible.
 
 As a result, this code has some hard-wired dependencies on specific
 user-defined implementations. Namely, function \code{pairwise\_sum}
-depends on the implementation of function \code{simple\_sum}.
-While functions \code{simple\_average} and \code{pairwise\_average}
-depend on the implementations of functions \code{simple\_sum}, and
+depends on function \code{simple\_sum}'s implementation. While the
+functions \code{simple\_average} and \code{pairwise\_average} depend
+on the implementations of the functions \code{simple\_sum}, and
 \code{pairwise\_sum}, respectively. In addition to these dependencies
 on user-defined implementations, the entire program depends rigidly on
-the \code{int} data type to declare the arrays that it is operating on,
-as well as the results of the summations. Hence, this code cannot be
-used on arrays of any other data type than \code{int}s.
+the \code{int} data type to declare the arrays that it is operating
+on, as well as the results of the summations. Hence, this code cannot
+be used on arrays of any other data type than \code{int}s.
 
-\lstinputlisting[language=Go,style=boxed,label={lst:procGo},caption={Monomorphic functional version of the array averaging example in Go.}]{Code/Go/coupled.go}
+\lstinputlisting[language=Go,style=boxed,label={lst:funcGo},caption={Monomorphic functional version of the array averaging example in Go.}]{Code/Go/coupled.go}
 
 \subsection{Polymorphic functional implementation}
+\label{sect:poly_functional}
 
-{\sf To be inserted here \dots}
+Listing~\ref{lst:polyfuncGo} gives an implementation of the same
+problem, but this time using Go's generics and functional features in
+order to eliminate rigid dependencies (we thank Robert Griesemer of
+the Go team for providing the original code of this particular version
+of the example). The code makes use of Go's generics to admit arrays
+of both the \code{int} and \code{float64} types as arguments for all
+functions, and to correspondingly express the return values of these
+functions. It also uses the run-time polymorphism inherent in Go's
+functional features, like closures and variables of function value, to
+replace the two previous versions of function \code{average}, that
+depended on specific implementations, by a single polymorphic
+version. Only the dependency of function \code{pairwise\_sum} on
+function \code{simple\_sum} hasn't been eliminated, in order to keep
+the code more readable. In the OO code versions, that are given in the
+next section, even this dependency has been eliminated.
 
-\newpage
+\lstinputlisting[language=Go,style=boxed,label={lst:polyfuncGo},caption={Polymorphic functional version of the array averaging example in Go.}]{Code/Go/functional.go}
 
 \section{Survey of modern languages}
+\label{sect:survey}
 
 In the present section we will give implementations, in various modern
 languages, of encapsulated (i.e. OO) code versions of the test
-example. We will employ run-time polymorphism to manage the
-dependencies on user-defined abstract data types, and generics in
-order to manage the dependencies on language intrinsic abstract data
-types. This will serve to illustrate how both run-time and
-compile-time polymorphism can be typically used for dependency
-management in these modern languages. The survey will also serve to
-highlight the many commonalities but also some of the minor
-differences in the approaches to polymorphism that were taken in these
-different languages. As a final disclaimer: We do not generally
-advocate to code problems, that are as simple as this test case, in
-such an encapsulated manner. However, in more complex cases, where
-state would be involved that would have to be hidden, an encapsulated
-programming style will be difficult to avoid. Hence the test problem
-will also have to stand in, in this section, for emulating such a more
-complex problem, that would benefit from an encapsulated coding style.
+example. As in the functional example presented in
+Sect.~\ref{sect:poly_functional}, we will employ run-time polymorphism
+to manage the dependencies on user-defined implementations (in this
+case abstract data types), and generics in order to manage the
+dependencies on language intrinsic types. This will serve to
+illustrate how both run-time and compile-time polymorphism can be
+typically used for dependency management in an OO setting in these
+modern languages. The survey will also serve to highlight the many
+commonalities but also some of the minor differences in the approaches
+to polymorphism that were taken in these different languages. As a
+final disclaimer, we do not generally advocate to code problems, that
+can be easily coded in these languages in a functional way (as it is
+the case for this problem), in an OO manner. However, in more complex
+cases, where state would be involved that would have to be hidden,
+only the OO programming style would be appropriate. Hence our test
+problem will also have to stand in, in this section, for emulating
+such a more complex problem, that would benefit from an encapsulated
+coding style.
 
 
 \subsection{Go}
 
-Go supported run-time polymorphism through (polymorphic)
+Go has supported run-time polymorphism through (polymorphic)
 ``interfaces'' since its inception. Since version 1.18, Go supports
 also compile-time polymorphism through generics that are bounded by
 generics constraints. Such constraints in Go are expressed through
@@ -328,10 +347,11 @@ state in a ``\code{struct}'' and by binding procedures that need to
 use that state to this same \code{struct}, thus creating a
 user-defined abstract data type (or ADT). Go allows the programmer to
 make such ADTs conform to interfaces, by implementing all the
-functions whose signatures are contained in an interface. There' no
-explicit statement to implement interfaces. Instead an ADT is
-implicitly assumed to implement an interface whenever it provides
-implementations of all the interface's functions.
+functions whose signatures are contained in an interface. In Go,
+there is no explicit statement for the purpose of implementing
+interfaces. Instead an ADT is implicitly assumed to implement an
+interface whenever it provides implementations of all the interface's
+functions.
 
 \subsubsection{Encapsulated version coded in Go}
 
@@ -341,16 +361,38 @@ have been encapsulated in ADTs as described above. The crucial
 elements for managing any dependencies on these user-defined ADTs in
 this encapsulated code version are the (polymorphic) interfaces
 \code{ISum} and \code{IAverager}. These are required in order to
-express polymorphism for the various objects of the Sum and Averager
-ADTs.
+express polymorphism for the various objects of the \code{SimpleSum},
+\code{PairwiseSum}, and \code{Averager} ADTs that implement either one
+of these interfaces. The interface \code{INumeric} serves the same
+purpose as in the functional polymorphic version given in
+Sect.~\ref{sect:poly_functional}, namely to make all function
+arguments and return values polymorphic, by admitting as input and
+output parameters, respectively, both the \code{int} and
+\code{float64} intrinsic types.
+
+All the interfaces, except \code{INumeric}, and all the user-defined
+ADTs take generic parameters in order to enable generics polymorphism
+for the \code{sum} and \code{average} methods. The main program makes
+use of Go's built-in structure constructors in order to instantiate
+objects of all the ADTs. In particular, it instantiates run-time
+polymorphic ``averager objects'' (depending on whether simple or
+pairwise sum averaging is to take place), and it does so for both the
+\code{int} and \code{float64} types separately, in order to then use
+these objects on \code{int} and \code{float64} data, respectively. The
+fact that \code{two} such objects are required (one for each data
+type) is connected to the fact that in order to obtain generic methods
+in Go, one has to parametrize interfaces by generic parameters, and
+instantiate them with different data types. A single
+(i.e. unparameterized) interface therefore doesn't suffice, which is
+unfortunate from the user's perspective.
 
 \lstinputlisting[language=Go,style=boxed,label={lst:OOGo},caption={Encapsulated Go version of the array averaging example.}]{Code/Go/mixed.go}
 
 
 \subsection{Rust}
 
-Rust supports both run-time and compile-time polymorphism through
-polymorphic interfaces, which Rust calls ``traits''.
+Like Go, Rust supports both run-time and compile-time polymorphism
+through polymorphic interfaces, which Rust calls ``traits''.
 
 \subsubsection{Encapsulated version coded in Rust}
 
@@ -358,7 +400,7 @@ polymorphic interfaces, which Rust calls ``traits''.
 
 \subsection{Swift}
 
-Being a successor language to Objective~C, Swift differs somewhat from
+Being a successor language to Objective~C, Swift differs slightly from
 the languages considered so far in that it opted to retain
 implementation inheritance for backwards compatibility to Objective~C,
 whereas both Go and Rust do not support implementation inheritance
@@ -366,21 +408,21 @@ whereas both Go and Rust do not support implementation inheritance
 it also allows one to bind methods to structures (which in contrast to
 classes are value types in Swift).
 
-Like the other modern languages, Swift supports both run-time and
-compile-time polymorphism through polymorphic interfaces, that are
-called ``protocols'' in Swift. If the Swift programmer chooses to
-ignore implementation inheritance and classes, he can therefore very
-much program with structures and protocols in Swift as he would with
+Swift also supports (like Go and Rust) run-time and compile-time
+polymorphism through polymorphic interfaces, that are called
+``protocols'' in Swift. If the Swift programmer chooses to ignore
+implementation inheritance and classes, he can therefore very much
+program with structures and protocols in Swift as he would with
 structures and interfaces/traits in Go and Rust, respectively. We will
 demonstrate this in the next section.
 
 Swift has generics capabilities that are on par with those of Go and
 Rust. For instance, all these languages allow for the parametrization
-of structures (and in Swift's case also for classes). Where Swift
-differs from both Go an Rust, is that it allows for parameterized
-\emph{methods}. Whereas both Go and Rust have their users parameterize
-entire interfaces/traits instead, in order to achieve the same
-functionality.
+of functions and structures (and in Swift's case also for
+classes). Where Swift differs from both Go an Rust, is that it also
+allows for parameterized \emph{methods}. Whereas both Go and Rust have
+their users parameterize entire interfaces/traits instead, in order to
+achieve the same functionality.
 
 The Swift way of directly parametrizing methods but \emph{not}
 protocols has some advantages from the user's perspective, because it
@@ -397,11 +439,11 @@ has to bother with instantiating a generic function, a method, and
 often not even a structure or a class.
 
 If the Swift programmer knows how to write generic functions, his
-knowledge also automatically translates into coding generic methods,
-since generic functions can be transformed into generic methods
-without requiring any changes to their function signatures. This
-property is helpful for the refactoring of non-OO codes into
-corresponding OO versions.
+knowledge automatically translates into coding generic methods, since
+generic functions can be transformed into generic methods without
+requiring any changes to their function signatures. This property is
+helpful for the refactoring of non-OO codes into corresponding OO
+versions.
 
 \subsubsection{Encapsulated version coded in Swift}
 
@@ -433,7 +475,8 @@ Swift. See the following remarks in order to understand this code:
     name. There is no separate \code{impl} block as in Rust, or implicit
     conformance to a protocol by implementing all its methods, as in Go.
   \item
-    The Swift version makes use of language supplied structure constructors.
+    The Swift version makes use of language built-in, default, structure
+    constructors.
   \item
     Array slices are not arrays themselves. So an explicit conversion
     using an \code{Array()} constructor is required in such cases.
@@ -447,14 +490,14 @@ Swift. See the following remarks in order to understand this code:
     ``\code{exactly}'' in the function responsible for the type
     conversion).
   \item
-    Notice, how in contrast to both Go and Rust, the Swift code doesn't
-    instantiate any interfaces by making use of type parameters for them.
-    E.g. there is only a single version of the \code{IAverager} interface,
-    and hence there's only a need in the main program to declare a single
-    variable, \code{av}, of that interface (\code{av} being polymorphic
-    over different \code{Averager} types). This single object is then
-    straightforwardly used with data of \emph{both} the \code{Int} and
-    \code{Float64} types.
+    Notice, how in contrast to both Go and Rust, the Swift code
+    doesn't instantiate any interfaces/protocols. For instance, there
+    is only a single, unique version of the \code{IAverager}
+    interface, and hence there's only a need in the main program to
+    declare a single variable, \code{av}, of that interface (\code{av}
+    being polymorphic over different \code{Averager} types). This
+    single object can then be straightforwardly used on data of
+    \emph{both} the \code{Int} and \code{Float64} types!
 \end{itemize}
 
 \lstinputlisting[language=Swift,style=boxed,label={lst:OOSwift},caption={Encapsulated Swift version of the array averaging example.}]{Code/Swift/mixed.swift}
@@ -462,7 +505,7 @@ Swift. See the following remarks in order to understand this code:
 \subsection{Conclusions from the different implementations}
 
 Since the use of run-time polymorphism by means of interfaces is very
-similar in all languages considered here, we will only make some final
+similar in all the languages considered here, we will only make some final
 comments on the languages' compile-time, i.e.  generics features.
 
 \subsubsection{Conclusions on Go}
@@ -474,7 +517,7 @@ What sets Go apart from the other languages is its brilliant new
 notion to interpret interfaces as type sets, and its syntax to support
 this notion. This enables the Go programmer to easily tailor
 constraints on generic types to his specific needs, which is what
-makes the use of generics in Go very pleasant.
+makes the use of generics in Go pleasant.
 
 \subsubsection{Conclusions on Rust}
 
@@ -508,7 +551,9 @@ be enhanced by Go's idea to interpret interfaces as type sets.
 
 \newpage
 
-\section{New additions to Fortran: Subtyping}
+\section{Additions to Fortran: File extension with new defaults}
+
+\section{Additions to Fortran: Subtyping}
 
 \subsection{Named abstract interfaces (traits)}
 
@@ -524,16 +569,15 @@ interfaces.
 
 \subsection{Improved structure constructors}
 
-\subsection{File extension with predefined new defaults}
 
 \newpage
 
-\section{New additions to Fortran: Generics}
+\section{Additions to Fortran: Generics}
 
 The new features that were discussed in the previous section are
 required in order to uniformly express and support both run-time and
 compile-time polymorphism in Fortran. We will now proceed with
-discussing those additional new features that are exclusively required
+discussing some additional new features that are exclusively required
 in order to further support compile-time polymorphism, i.e. generics.
 
 \subsection{Interfaces containing generic procedure signatures}
@@ -699,6 +743,7 @@ implementation of the \code{sum} procedure.
 
 
 \subsection{Generic type parameters for structure constructors}
+\label{sect:param_constructors}
 
 If a derived type is parameterized with a generic type, then its
 structure constructor must also be assumed to be parameterized with
@@ -720,14 +765,18 @@ parameters itself.
 
 \subsection{Functional version}
 
-{\sf To be inserted here \dots}
+{\sf (What to do about this one, given that Fortran doesn't have Go's
+  functional programming capabilities? In this case, I think it should
+  be sufficient to demonstrate only the decoupling of the argument
+  types through generics, and leave all the other coupling in, as
+  it is the case in the coupled functional Go version.)}
 
 \subsection{Encapsulated version}
 
 Listing~\ref{lst:OOFortran} gives our Fortran version of the
 encapsulated form of the test example that corresponds to the code
-versions that were presented in Sect.~\ref{} for all the other
-languages.
+versions that were presented in Sect.~\ref{sect:survey} for all the
+other languages.
 
 \begin{itemize}
 \item
@@ -749,8 +798,8 @@ languages.
   parameterized itself, since we followed Swift's model of generics.
 \item
   Interface inheritance is expressed through the presence of the
-  \code{implements(...)} specifier in a derived-type (i.e. class)
-  definition (equivalent to Swift).
+  \code{implements(...)} specifier in a derived-type definition
+  (equivalent to Swift).
 \item
   Conversions to generic types are done as in Go. Notice, how the
   compiler will have to do the necessary replacements of, e.g.,
@@ -760,8 +809,8 @@ languages.
 \item
   The example code makes use, in the main program, of the new
   structure constructors, with their enhancements that were discussed
-  in Sect.~\ref{}, for the classes \code{Averager}, \code{SimpleSum},
-  and \code{PairwiseSum}.
+  in Sect.~\ref{sect:param_constructors}, for the classes
+  \code{Averager}, \code{SimpleSum}, and \code{PairwiseSum}.
 \item
   The Fortran version makes use of modules and \code{use} statements
   with \code{only} clauses, in order to make explicit the source code
@@ -781,16 +830,38 @@ and as easy to use as the Swift implementation.
 The features described in this document have enabled us to avoid
 rigidity in the program, by both decoupling it and making it operate
 on multiple data types, thus allowing for a maximum of code
-reuse. Notice the use of run-time polymorphism in
-Listing~\ref{lst:OOFortran} by the \code{av} object of
-\code{IAverager} type that is initialized in the \code{select case}
-statement. This object necessarily cannot employ compile-time
-polymorphism, as it is employed within a statement that performs a
-run-time decision.
+reuse.
 
 \subsection{Encapsulated (mostly) static version}
 
-{\sf Do we need to have this one as a further example?}
+To finally demonstrate how methods can be made to use static, as
+opposed to dynamic dispatch, Listing~\ref{lst:staticFortran} gives a
+version of the encapsulated Fortran code that contains all the
+required changes as compared to Listing~\ref{lst:OOFortran} to effect
+static dispatch of the \code{sum} methods.
+
+The changes are confined to a parametrization of the
+\code{PairwiseSum} and \code{Averager} derived types, by generic type
+parameters that are named \code{U}. These type parameters are then
+used in order to statically declare the field objects ``\code{other}''
+and ``\code{drv}'' of these derived types, respectively, that were
+previously declared as \code{allocatable} variables that were to be
+initialized dynamically at run-time.  Correspondingly, there is no
+longer any such dynamic instantiation necessary for these
+object. Instead, the unparameterized structure constructor of
+\code{SimpleSum}, and the parameterized structure constructor of
+\code{PairwiseSum} are called from the main program, in order to
+instantiate these object statically.
+
+\lstinputlisting[language=LFortran,style=boxed,label={lst:staticFortran},caption={Encapsulated Fortran version of the array averaging example with static method dispatch.}]{Code/Fortran/static.ft}
+
+Notice, that in Listing~\ref{lst:staticFortran}, the \code{av} object
+of \code{IAverager} type that is initialized in the \code{select case}
+statement of the main program still needs to make use of run-time
+polymorphism. This object cannot be made to employ compile-time
+polymorphism, as it is used within a statement that performs a
+run-time decision.
+
 
 \newpage
 

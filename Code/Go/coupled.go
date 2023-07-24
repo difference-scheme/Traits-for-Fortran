@@ -1,6 +1,6 @@
 package main
 
-import ("fmt")
+import "fmt"
 
 func simple_sum(x []int) int {
    var s int
@@ -12,12 +12,11 @@ func simple_sum(x []int) int {
 }
 
 func pairwise_sum(x []int) int {
-   N := 2
-   if ( len(x) <= N ) {
-     return simple_sum(x)
+   if len(x) <= 2 {
+      return simple_sum(x)
    } else {
-     m := len(x) / 2
-     return pairwise_sum(x[:m+1]) + pairwise_sum(x[m+1:])
+      m := len(x) / 2
+      return pairwise_sum(x[:m+1]) + pairwise_sum(x[m+1:])
    }
 }
 

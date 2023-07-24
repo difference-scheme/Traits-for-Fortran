@@ -34,8 +34,7 @@ struct PairwiseSum<U: ISum>: ISum {
     var other: U
     
     func sum<T: Numeric>(x: [T]) -> T {
-        let N = 2
-        if ( x.count <= N ) {
+        if ( x.count <= 2 ) {
             return other.sum(x: x)
         } else {
             let m = x.count / 2
@@ -56,7 +55,6 @@ struct Averager<U: ISum>: IAverager {
         return drv.sum(x: x)
     }
 }
-
 
 // ..............
 // main program
