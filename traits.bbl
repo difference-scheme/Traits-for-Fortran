@@ -1,0 +1,27 @@
+\begin{thebibliography}{1}
+
+\bibitem{Cardelli_Wegner_85}
+Luca Cardelli and Peter Wegner.
+\newblock On understanding types, data abstraction, and polymorphism.
+\newblock {\em ACM Computing Surveys}, 17:471--523, 12 1985.
+
+\bibitem{Dahl_04}
+Ole-Johan Dahl.
+\newblock The birth of object orientation: the simula languages.
+\newblock In O.~Owe, S.~Krogdahl, and T.~Lyche, editors, {\em From
+  Object-Orientation to Formal Methods}, volume 2635 of {\em Lecture Notes in
+  Computer Science}, Berlin, Heidelberg, 2004. Springer.
+
+\bibitem{Martin_17}
+Robert~C. Martin.
+\newblock {\em Clean Architecture: A Craftsman's Guide to Software Structure
+  and Design}.
+\newblock Robert C. Martin Series. Prentice Hall, Boston, MA, 2017.
+
+\bibitem{Matsakis_2014}
+Nicholas~D Matsakis and Felix~S Klock~II.
+\newblock The rust language.
+\newblock In {\em ACM SIGAda Ada Letters}, volume~34, pages 103--104. ACM,
+  2014.
+
+\end{thebibliography}
