@@ -337,13 +337,13 @@ A few remarks are in order for a better understanding of
 Listing~\ref{lst:polyfuncGo}'s code:
 \begin{itemize}
 \item
-  In Go, generic parameters to a function, like the parameter \code{T}
-  here, are provided in a separate parameter list, that is enclosed in
-  brackets [ ].
+  In Go, generic type parameters to a function, like the parameter
+  \code{T} here, are provided in a separate parameter list, that is
+  enclosed in brackets [ ].
 \item
-  Generic parameters have a constraint that follows their declared
-  name. Go uses exclusively interfaces as such constraints (see the
-  interface \code{INumeric} in the present example).
+  Generic type parameters have a constraint that follows their
+  declared name. Go uses exclusively interfaces as such constraints
+  (see the interface \code{INumeric} in the present example).
 \item
   Interfaces consist of either function signatures, or \emph{type
   sets}, like ``\code{int | float64}'' in the present example. The
@@ -410,23 +410,22 @@ inception. In Go, encapsulation is done by storing state in a
 ``\code{struct}'' and by binding procedures, that need to use that
 state, to this same \code{struct}. Thus creating a user-defined
 abstract data type (or ADT) with methods. Go allows the programmer to
-make such ADTs conform to polymorphic interfaces, by implementing all
-the functions whose signatures are contained in an interface.
+implement multiple polymorphic interfaces for an ADT (i.e. to use
+multiple interface inheritance), even though it offers no explicit
+language statement for this purpose.
 
-In Go, there is no explicit statement for the purpose of implementing
-interfaces (i.e. for interface inheritance). Instead, an ADT is
-implicitly assumed to implement an interface whenever it provides
-implementations of all the interface's function signatures. This way
-of implementing methods requires only a reference to an ADT object to
-be passed to the method (by means of a separate parameter list, in
-front of the method's actual name). It is otherwise completely
-decoupled from the ADT's (i.e. the actual \code{struct}'s)
-definition. Hence, existing ADTs (even if their source code itself is
-inaccessible) can be made to retroactively implement new interfaces
-and methods, and hence to be used in new settings. Go, finally, makes it
-explicit in its syntax that interfaces are types in their own right,
-and that hence polymorphic variables (i.e. objects) can be declared in
-terms of them.
+Instead, an ADT is implicitly assumed to implement an interface
+whenever it provides implementations of all the interface's function
+signatures. This way of implementing interfaces requires only a
+reference to an ADT object to be passed to its methods (by means of a
+separate parameter list, in front of a method's actual name). It is
+otherwise completely decoupled from the ADT's (i.e. the actual
+\code{struct}'s) definition. Hence, existing ADTs (even if their
+source code itself is inaccessible) can be made to retroactively
+implement new interfaces and methods, and hence to be used in new
+settings. Go, finally, makes it explicit in its syntax that interfaces
+are types in their own right, and that hence polymorphic variables
+(i.e. objects) can be declared in terms of them.
 
 Since version 1.18, Go also supports compile-time polymorphism through
 generics. Go's generics make use of ``strong concepts'', since they
@@ -441,19 +440,20 @@ belong.
 \subsubsection{Encapsulated version coded in Go}
 
 Listing~\ref{lst:OOGo} gives an encapsulated version of the test
-example coded in Go. The two versions of the \code{sum} function have
-been encapsulated in two different ADTs named \code{SimpleSum} and
-\code{PairwiseSum}, whereas a third ADT named \code{Averager}
-encapsulates the functionality that is required to perform the actual
-averaging. The latter two ADTs contain the lower-level objects
-``\code{other}'' and ``\code{drv}'' of \code{ISum[T]} type as
-components, to which they delegate calls to these objects' \code{sum}
-methods. Notice how the use of the polymorphic interface
-\code{ISum[T]} in the respective declarations enables either
-\code{SimpleSum} or \code{PairwiseSum} objects to be plugged into
-their higher-level clients.
+example coded in Go. The two different implementations of the
+\code{sum} function have been encapsulated in two different ADTs named
+\code{SimpleSum} and \code{PairwiseSum}, whereas a third ADT named
+\code{Averager} encapsulates the functionality that is required to
+perform the actual averaging. The latter two ADTs contain the
+lower-level objects ``\code{other}'' and ``\code{drv}'' of
+\code{ISum[T]} type as components, to which they delegate calls to
+these objects' \code{sum} methods. Notice how the use of the
+polymorphic interface \code{ISum[T]} in the declarations of
+``\code{other}'' and ``\code{drv}'' enables either \code{SimpleSum} or
+\code{PairwiseSum} objects to be plugged into their higher-level
+clients.
 
-A further interface, named \code{IAverager}, is used to enable
+A second interface, named \code{IAverager}, is used to enable
 polymorphism for different averaging algorithms. Finally, there's a
 third interface, \code{INumeric}, that serves exactly the same purpose
 as in the functional polymorphic version given in
@@ -466,27 +466,27 @@ Hence, three polymorphic interfaces were required in this code, in
 order to eliminate the three levels of rigid dependencies that were
 listed in Sect.~\ref{sect:mono_functional}. Notice also that,
 exempting \code{INumeric}, all the interfaces and all the user-defined
-ADTs need to take generic parameters in this example. This is required
-in order to enable all the \code{sum} and \code{average} methods to
-use generic type parameters in Go.
+ADTs need to take in generic type parameters in this example. This is
+required in order to enable all the \code{sum} and \code{average}
+methods to use generic type parameters in Go.
 
 \lstinputlisting[language=Go,style=boxed,label={lst:OOGo},caption={Encapsulated Go version of the array averaging example.}]{Code/Go/mixed.go}
 
-The main program makes use of Go's built-in structure constructors in
-order to instantiate objects of all the ADTs. In particular, it
-instantiates run-time polymorphic ``\code{Averager}'' objects
-(depending on whether simple or pairwise sum averaging is to take
-place), and it does so for both the \code{int} and \code{float64}
-types separately, in order to then use these objects on \code{int} and
-\code{float64} data, respectively. The fact that \code{two} such
-objects are required (one for each language intrinsic data type) is
-connected to the fact that in order to obtain generic methods in Go,
-one has to parameterize interfaces by generic parameters, and
-instantiate them with different data types, as in \code{func main}'s
-first two code lines. A single (i.e. unparameterized) \code{IAverager}
-interface therefore doesn't suffice, which is unfortunate from the
-user's perspective, as some code duplication in client code cannot be
-avoided in this way.
+The main program makes use of Go's built-in structure constructors,
+and constructor chaining, in order to instantiate objects of the
+required ADTs. In particular, it instantiates run-time polymorphic
+``\code{Averager}'' objects (depending on whether simple or pairwise
+sum averaging is to take place), and it does so for both the
+\code{int} and \code{float64} types separately, in order to then use
+these objects on \code{int} and \code{float64} data, respectively. The
+fact that \code{two} such objects are required (one for each language
+intrinsic data type) is connected to the fact that in order to obtain
+generic methods in Go, one has to parameterize interfaces by generic
+parameters, and instantiate them with different actual data types, as
+in \code{func main}'s first two code lines. A single
+(i.e. unparameterized) \code{IAverager} interface therefore doesn't
+suffice, which is unfortunate from the user's perspective, as some
+code duplication in client code cannot be avoided in this way.
 
 \subsection{Rust}
 
@@ -518,10 +518,10 @@ demonstrate this in the next section.
 Swift generics support ``strong concepts'', and are thus fully
 type-checked, and their capabilities are on par with those of Go and
 Rust. For instance, all these languages allow for the parameterization
-of functions and structures (and in Swift's case also for
-classes). Where Swift differs from both Go an Rust, is that it also
-allows for parameterized \emph{methods}. Whereas both Go and Rust have
-their users parameterize entire interfaces/traits instead, in order to
+of functions and structures (and in Swift's case also classes). Where
+Swift differs from both Go an Rust, is that it also allows for
+parameterized \emph{methods}. Whereas both Go and Rust have their
+users parameterize entire interfaces/traits instead, in order to
 achieve the same functionality. This has some interesting consequences
 for the programmer, that will be discussed in detail below.
 
@@ -553,9 +553,10 @@ Swift. See the following remarks in order to understand this code:
     signified in Swift with the \code{:} operator appearing behind a
     structure's (or a class's) name. There is no separate \code{impl}
     block as in Rust, or implicit conformance to a protocol by
-    implementing all its methods, as in Go. Functionality to implement
-    protocols retroactively is provided through an ``extension''
-    block, instead.
+    implementing all its methods, as in Go. Functionality for a
+    \code{struct} or \code{class} to implement protocols
+    retroactively, is provided through an ``extension'' block,
+    instead.
   \item
     The Swift version makes use of language built-in, default, structure
     constructors (called ``initializers'').
@@ -583,12 +584,12 @@ parameterize and instantiate any generic interfaces/protocols, in
 contrast to both Go and Rust. The consequences are
 \begin{itemize}
 \item
-that method genericity for some ADT can be expressed using only a
-single, as opposed to multiple protocols,
+that method genericity for an ADT's objects can be expressed using
+only a single, as opposed to multiple protocols,
 \item
 that merely a \emph{single} object instance of that same protocol is
-required, whose methods are then able to operate on many different
-language intrinsic data types, and
+required, in order to be able to operate on many different language
+intrinsic data types, and
 \item
 that this also largely \emph{obviates the need for manual instantiations
 of generics in Swift} (because generic functions/methods are easier to
@@ -614,9 +615,9 @@ such as \code{av}, especially if such client code needs to work on
 instantiation of a different version of \code{IAverager} is required
 for \emph{every} different generic type parameter that the user wishes
 to employ. Notice also, how there's \emph{not a single manual
-instantiation} of any generics in the Swift code example! We consider
-these significant advantages of the generics approach that is taken in
-Swift vs. that of Go and Rust.
+instantiation} of generics code required in the Swift example! We
+consider these significant advantages of the generics approach that is
+taken in Swift vs. that of Go and Rust.
 
 
 \subsection{Conclusions from the different implementations}
@@ -641,24 +642,28 @@ makes the use of generics in Go pleasant.
 
 \subsubsection{Conclusions on Rust}
 
-Rust's basic model for generics is similar to Go's in that it
-allows for parameterization of structures, interfaces, and ordinary
-functions. Hence, what has been said above for Go holds also for Rust.
-Rust has some quirks which render its use for the management of all
-types of dependencies through polymorphism somewhat sub-optimal when
-compared to the other languages considered here. The language is
-unpleasant to use, because of its ``borrow checker'', its employment
-of move semantics by default, its excessive obsession with type
-safety, and its general C++-like philosophy to copiously rely on
-external dependencies, even for the most basic tasks, like
-initializing a generic type. The Rust version of our test case is
-therefore marred by some dependencies on external libraries (called
-``crates'' in Rust), which are quite contrarian to the purpose of
-programming in a polymorphic fashion, namely to avoid rigid
-dependencies. But even with the functionality provided by such
+Rust's basic model for generics is similar to Go's in that it allows
+for parameterization of structures, interfaces, and ordinary
+functions. Hence, what has been said above for Go in this respect
+holds also for Rust. Rust has, unfortunately, some quirks which render
+its use for the management of all types of dependencies through
+polymorphism somewhat sub-optimal when compared to the other languages
+considered here. The language is unpleasant to use, because of its
+``borrow checker'', its \emph{excessive} obsession with type safety,
+its employment of move semantics by default, and its overall C++-like
+philosophy to copiously rely on external dependencies, even for the
+most basic tasks, like initializing a generic type. The Rust version
+of our test case is therefore marred by some dependencies on external
+libraries (called ``crates'' in Rust), which is somewhat contrarian to
+the purpose of programming in a polymorphic fashion, namely to avoid
+rigid dependencies. But even with the functionality provided by such
 external dependencies, Rust doesn't allow type conversion to generic
 types within generic routines. A necessary capability for numerical
-work that is, for instance, built into Go.
+work that is, for instance, built into Go. The points we like most
+about the language are its idea to decouple trait implementations from
+a \code{struct}'s definition through explicit \code{impl} blocks,
+and the complete control over the use of dynamic vs. static dispatch
+that Rust affords the programmer.
 
 \subsubsection{Conclusions on Swift}
 
@@ -1037,13 +1042,13 @@ given in Listing~\ref{lst:OOFortran} should generally be preferred
 over that of Listing~\ref{lst:staticFortran}, as it leads to more
 readable code. The use of numerous generic parameters can quickly make
 code unreadable. We'd therefore recommend the default use of run-time
-polymorphism and dynamic dispatch for managing dependencies on user
-implementation code, and the employment of generics and static
-dispatch for this latter task only in cases where profiling has shown
-that static dispatch would significantly speed up a program's
-execution (by allowing method inlining by the compiler). Of course,
-the use of generics to manage dependencies on language intrinsic types
-remains unaffected by this recommendation.
+polymorphism for managing dependencies on user implementation code,
+and the employment of generics with static dispatch for this latter
+task only in cases where profiling has shown that static dispatch
+would significantly speed up a program's execution (by allowing method
+inlining by the compiler). Of course, the use of generics to manage
+dependencies on language intrinsic types remains unaffected by this
+recommendation.
 
 \section{Comparison to J3's generics proposal for Fortran~202y}
 
