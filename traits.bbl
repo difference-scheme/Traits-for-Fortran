@@ -12,6 +12,11 @@ Ole-Johan Dahl.
   Object-Orientation to Formal Methods}, volume 2635 of {\em Lecture Notes in
   Computer Science}, Berlin, Heidelberg, 2004. Springer.
 
+\bibitem{Haveraaen_et_al_19}
+M.~Haveraaen, J.~J{\"a}rvi, and D.~Rouson.
+\newblock Reflecting on generics in fortran.
+\newblock July 2019.
+
 \bibitem{Martin_17}
 Robert~C. Martin.
 \newblock {\em Clean Architecture: A Craftsman's Guide to Software Structure
