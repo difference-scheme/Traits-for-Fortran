@@ -224,14 +224,15 @@ it is possible for the user to uniformly and transparently express
 both generics (i.e. compile-time) and run-time polymorphism in the
 same application, and to relatively easily switch between the two,
 where possible. Rust's traits are an improved form of
-protocols/interfaces in that the user can implement them for a
-user-defined type without having these implementations be coupled to
-the type's actual definition. Hence, existing types can be made to
-retroactively implement new traits, and hence be used in new settings,
-even if their source code itself is inaccessible (because it is, for
-instance, contained in a binary library).
+protocols/interfaces in that the user can implement them for a type
+without having these implementations be coupled to the type's actual
+definition. Hence, existing types can be made to retroactively
+implement new traits, and hence be used in new settings (with some
+restrictions though on user ownership of either the traits or the
+types). In Rust, traits can, for instance, be implemented by the
+programer for both user-defined and language intrinsic types.
 
-These ideas were quickly absorbed by almost all other mainstream
+Rust's main ideas were quickly absorbed by almost all other mainstream
 modern languages, most notably Go, Swift, and Carbon, with the
 difference that these latter languages tend to leave the choice
 between static and dynamic procedure dispatch to the compiler, or
@@ -389,14 +390,14 @@ discussed in the next chapter, with objects replacing the closures
 
 In the present chapter we give implementations, in various modern
 languages, of encapsulated (i.e. OO) code versions of the test
-example. As in the functional example presented in
+problem. As in the functional code version presented in
 Sect.~\ref{sect:poly_functional}, we employ run-time polymorphism to
 manage the dependencies on user-defined implementations (in this case
 abstract data types), and generics in order to manage the dependencies
 on language intrinsic types. This serves to illustrate how both
 run-time and compile-time polymorphism can be typically used for
 dependency management in an OO setting in these modern languages. The
-survey also serves to highlight the many commonalities but also some
+survey also aims to highlight the many commonalities but also some
 of the minor differences in the approaches to polymorphism that were
 taken in these different languages. As a final disclaimer, we do not
 advocate to code problems in an OO manner that can be easily coded in
@@ -417,21 +418,23 @@ inception. In Go, encapsulation is done by storing state in a
 ``\code{struct}'' and by binding procedures, that need to use that
 state, to this same \code{struct}. Thus creating a user-defined
 abstract data type (or ADT) with methods. Go allows the programmer to
-implement multiple polymorphic interfaces for an ADT (i.e. to use
+implement multiple polymorphic interfaces for such a type (i.e. to use
 multiple interface inheritance), even though it offers no explicit
 language statement for this purpose.
 
-Instead, an ADT is implicitly assumed to implement an interface
+Instead, a type is implicitly assumed to implement an interface
 whenever it provides implementations of all the interface's function
-signatures. This way of implementing interfaces requires only a
-reference to an ADT object to be passed to its methods (by means of a
-separate parameter list, in front of a method's actual name). It is
-otherwise completely decoupled from the ADT's (i.e. the actual
-\code{struct}'s) definition. Go thus implements a true ``trait
-system''. Go, finally, makes it explicit in its type definition syntax
-that interfaces (like \code{struct}'s) are types in their own right,
-and that hence polymorphic variables (i.e. objects) can be declared in
-terms of them.
+signatures. This way of implementing interfaces requires only an
+object reference of the type to be passed to its methods (by means of
+a separate parameter list, in front of a method's actual name). It is
+otherwise decoupled from the type's definition (i.e. the ADT's
+\code{struct} definition). A limitation in Go is that new methods and
+interfaces cannot be directly implemented for an existing type that
+is defined in another package (i.e. user defined wrappers are
+required for this purpose). Go, finally, makes it explicit in its type
+definition syntax that interfaces (like \code{struct}'s) are types in
+their own right, and that hence polymorphic variables (i.e. objects)
+can be declared in terms of them.
 
 Since version 1.18, Go also supports compile-time polymorphism through
 generics. Go's generics make use of ``strong concepts'', since they
@@ -498,7 +501,7 @@ code duplication in client code cannot be avoided in this way.
 
 Like Go, Rust supports both run-time and compile-time polymorphism
 through polymorphic interfaces, which Rust calls ``traits''. Rust was
-the first mainstream language that came with a ``trait system''. In
+the first mainstream language that came with a trait system. In
 contrast to Go, Rust has its programmers implement traits in an
 explicit manner, by using explicit ``\code{impl}'' code blocks to
 provide a trait's method implementations. These same \code{impl}
@@ -506,6 +509,14 @@ blocks also serve to bind methods to a type that aren't a part of some
 trait, like e.g.  user-defined constructors for \code{struct}s (the
 functions named ``\code{new}'' in the following code
 Listing~\ref{lst:OORust}).
+
+In contrast to Go, Rust allows the programmer to retroactively
+implement traits for types that are located in external libraries
+(called ``crates'' in Rust), as long as the traits themselves are
+defined in the programmer's crate. The reverse, namely implementing an
+external trait for a user-owned type, is also possible. Only the case
+of implementing an external trait for an external type is not allowed
+(the so called ``orphan rule''), and requires the use of wrappers.
 
 
 \subsection{Encapsulated version coded in Rust}
@@ -522,8 +533,8 @@ whereas both Go and Rust do not support implementation inheritance
 it also allows one to bind methods to structures (which, in contrast
 to classes, are value types in Swift).
 
-Like Go and Rust, Swift (furthermore) supports a true ``trait system''
-in order to implement run-time and compile-time polymorphism through
+Like Go and Rust, Swift (furthermore) supports a trait system in order
+to implement run-time and compile-time polymorphism through
 polymorphic interfaces, that are called ``protocols'' in Swift. If the
 Swift programmer chooses to ignore implementation inheritance and
 classes, he can therefore very much program with structures and
@@ -535,9 +546,11 @@ protocol (i.e. interface inheritance) is usually done as in
 ``classical'' OO languages, i.e. within a structure's or a class's
 definition. The \code{:} operator followed by one or more interface
 names must be supplied for this purpose after the structure's or
-class's own name. However, functionality for types to implement
+class's own name. A very powerful facility for types to implement
 protocols retroactively is also provided, through so-called
-``\code{extension}s'', which are similar to Rust's \code{impl} blocks.
+``\code{extension}s'', that work even if the types' source code is
+inaccessible (because one is, e.g., working with a library in binary
+form).
 
 Swift generics support ``strong concepts'', and are thus fully
 type-checked, and their capabilities are on par with those of Go and
@@ -638,20 +651,21 @@ taken in Swift vs. that of Go and Rust.
 
 \section{Conclusions from the different implementations}
 
-The use of run-time polymorphism by means of interfaces is very
-similar in all the languages considered here. This includes the fact
-that all these languages offer true ``trait systems'', where the
-implementation of an interface by a user-defined type can be
-accomplished independently from the type's definition site (which is
-for instance not possible in ``classical'' OO languages, like
-Java). All of these languages thereby collectively rebut Haveraaen et
-al.'s critique \cite{Haveraaen_et_al_19} of Java. In fact, it is
-\emph{interface inheritance} which makes the uniform polymorphic
-treatment of both intrinsic and user-defined types possible in the
-first place in these modern languages, that Haveraaen et al. seem to
-also (rightly) demand. Given their many similarities, we will thus
-only make some final comments on the differences in these languages'
-compile-time, i.e.  generics features.
+The use of run-time polymorphism by means of interfaces is rather
+similar in all the languages considered here. The most significant
+difference appears to be that Go has some stricter limitations with
+regards to package ownership when it comes to retroactively
+implementing interfaces for existing types. Whereas Rust (with some
+restrictions) and even more so Swift allow the implementation of an
+interface by some type to be accomplished independently from the
+type's definition site. Rust and Swift thereby overcome Haveraaen et
+al.'s critique \cite{Haveraaen_et_al_19} of Java regarding this
+point. In fact, it is \emph{interface inheritance} which makes the
+uniform polymorphic treatment of both intrinsic and user-defined types
+possible in the first place in Rust and Swift, that Haveraaen et
+al. seem to also (rightly) demand. In the following we will make some
+final comments on the differences in all these languages' generics
+features.
 
 \subsection{Conclusions on Go}
 
@@ -683,17 +697,17 @@ its employment of move semantics by default, and its overall C++-like
 philosophy to copiously rely on external dependencies, even for the
 most basic tasks, like initializing a generic type. The Rust version
 of our test case is therefore marred by some dependencies on external
-libraries (called ``crates'' in Rust), which is somewhat contrarian to
-the purpose of programming in a polymorphic fashion, namely to avoid
-rigid dependencies. But even with the functionality provided by such
-external dependencies, Rust doesn't allow type conversion to generic
-types within generic routines. A necessary capability for numerical
-work that is, for instance, built into Go. The points we like most
-about the language are its idea to decouple trait implementations from
-a \code{struct}'s definition through explicit \code{impl} blocks, and
-the complete control over the use of dynamic vs. static dispatch that
-Rust affords the programmer. These are particular features of Rust
-that, in our opinion, Fortran should borrow in some form.
+libraries, which is somewhat contrarian to the purpose of programming
+in a polymorphic fashion, namely to avoid rigid dependencies. But even
+with the functionality provided by such external dependencies, Rust
+doesn't allow type conversion to generic types within generic
+routines. A necessary capability for numerical work that is, for
+instance, built into Go. The points we like most about the language
+are its idea to decouple trait implementations from a \code{struct}'s
+definition through explicit \code{impl} blocks, and the complete
+control over the use of dynamic vs. static dispatch that Rust affords
+the programmer. These are particular features of Rust that, in our
+opinion, Fortran should borrow in some form.
 
 \subsection{Conclusions on Swift}
 
@@ -818,16 +832,17 @@ end module basic
 The \code{extension}s described below are a feature that is modeled
 after \code{extension}s in Swift, in order to make it possible to
 retroactively implement new methods, constructors, and especially
-traits, for types, and to hence support a true trait
-system. Extensions fulfill the same purpose as Rust's \code{impl}
-blocks, but have been adjusted here to Fortran's syntax that binds
-methods to types through declarations, rather than by including the
-actual implementation bodies themselves into such a block (the
-implementations need to be supplied as module procedures, as is usual
-in Fortran). The syntax of the feature is largely symmetric to that of
-derived type definitions. Most of the options that are allowed for
-type-bound procedure declarations in derived type definitions, are
-therefore also allowed for such declarations within \code{extension}s.
+traits, for types, regardless of where the original type definition is
+located. Swift's extensions fulfill essentially the same purpose as
+Rust's \code{impl} blocks in this respect. They have been adjusted
+here to Fortran's syntax that binds methods to types through
+declarations, rather than by including the actual implementation
+bodies themselves into such a block (the implementations need to be
+supplied as module procedures, as is usual in Fortran). The syntax of
+the feature is largely symmetric to that of derived type
+definitions. Most of the options that are allowed for type-bound
+procedure declarations in derived type definitions, are therefore also
+allowed for such declarations within \code{extension}s.
 
 \subsubsection{Retroactively adding methods to a type}
 

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  31 JUL 2023 19:55
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  1 AUG 2023 16:24
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -463,7 +463,7 @@ File: lstlang3.sty 2020/03/24 1.8d listings language file
 LaTeX Font Info:    Font shape `T1/fvm/b/n' will be
 (Font)              scaled to size 8.97906pt on input line 1.
  [7])
-Overfull \hbox (3.62334pt too wide) in paragraph at lines 355--361
+Overfull \hbox (3.62334pt too wide) in paragraph at lines 356--362
 []\T1/ppl/m/n/10.95 Interfaces con-sist of ei-ther func-tion sig-na-tures, or \
 T1/ppl/m/it/10.95 type sets\T1/ppl/m/n/10.95 , like ``\T1/fvm/m/n/10.95 int | f
 loat64\T1/ppl/m/n/10.95 '' in the present
@@ -472,13 +472,13 @@ loat64\T1/ppl/m/n/10.95 '' in the present
 [8] (./Code/Go/functional.go [9]) [10]
 Chapter 3.
 
-Overfull \hbox (5.81958pt too wide) in paragraph at lines 414--423
+Overfull \hbox (5.81958pt too wide) in paragraph at lines 415--424
 \T1/ppl/m/n/10.95 Go has sup-ported run-time poly-mor-phism through (poly-mor-p
 hic) ``in-ter-faces'' (and hence modern-
  []
 
 
-Overfull \hbox (0.76628pt too wide) in paragraph at lines 436--445
+Overfull \hbox (0.76628pt too wide) in paragraph at lines 439--448
 []\T1/ppl/m/n/10.95 Since ver-sion 1.18, Go also sup-ports compile-time poly-mo
 r-phism through gener-ics. Go's gener-
  []
@@ -525,7 +525,7 @@ Chapter 6.
 ] [29] [30] [31]
 Chapter 7.
 LaTeX Font Info:    Trying to load font information for T1+cmss on input line 1
-111.
+126.
 (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmss.fd
 File: t1cmss.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 ) [32
@@ -545,7 +545,7 @@ Package rerunfilecheck Info: File `traits.out' has not changed.
 Here is how much of TeX's memory you used:
  15156 strings out of 480247
  225263 string characters out of 5896151
- 749444 words of memory out of 5000000
+ 746838 words of memory out of 5000000
  31886 multiletter control sequences out of 15000+600000
  497235 words of font info for 77 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
@@ -557,7 +557,7 @@ onts/type1/public/bera/fvmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
 blic/bera/fvmro8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/u
 plb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></
 usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on traits.pdf (43 pages, 216786 bytes).
+Output written on traits.pdf (43 pages, 217795 bytes).
 PDF statistics:
  1599 PDF objects out of 1728 (max. 8388607)
  1494 compressed objects within 15 object streams
