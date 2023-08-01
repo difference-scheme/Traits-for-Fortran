@@ -16,7 +16,7 @@
 \newcommand{\code}[1]{{\selectfont\ttfamily{#1}}}
 
 \lstdefinelanguage{LFortran}[]{Fortran}{
-  morekeywords={abstract,type,implements,initial,extension}
+  morekeywords={abstract,type,implements,implement,initial,extension}
 }
 
 \hypersetup{
@@ -226,13 +226,12 @@ same application, and to relatively easily switch between the two,
 where possible. Rust's traits are an improved form of
 protocols/interfaces in that the user can implement them for a type
 without having these implementations be coupled to the type's actual
-definition. Hence, existing types can be made to retroactively
+definition. Thus, existing types can be made to retroactively
 implement new traits, and hence be used in new settings (with some
-restrictions though on user ownership of either the traits or the
-types). In Rust, traits can, for instance, be implemented by the
-programer for both user-defined and language intrinsic types.
+minor restrictions on user ownership of either the traits or the
+types).
 
-Rust's main ideas were quickly absorbed by almost all other mainstream
+Rust's main idea was quickly absorbed by almost all other mainstream
 modern languages, most notably Go, Swift, and Carbon, with the
 difference that these latter languages tend to leave the choice
 between static and dynamic procedure dispatch to the compiler, or
@@ -422,29 +421,31 @@ implement multiple polymorphic interfaces for such a type (i.e. to use
 multiple interface inheritance), even though it offers no explicit
 language statement for this purpose.
 
-Instead, a type is implicitly assumed to implement an interface
-whenever it provides implementations of all the interface's function
-signatures. This way of implementing interfaces requires only an
-object reference of the type to be passed to its methods (by means of
-a separate parameter list, in front of a method's actual name). It is
-otherwise decoupled from the type's definition (i.e. the ADT's
-\code{struct} definition). A limitation in Go is that new methods and
-interfaces cannot be directly implemented for an existing type that
-is defined in another package (i.e. user defined wrappers are
-required for this purpose). Go, finally, makes it explicit in its type
-definition syntax that interfaces (like \code{struct}'s) are types in
-their own right, and that hence polymorphic variables (i.e. objects)
-can be declared in terms of them.
+Instead, a user-defined type is implicitly assumed to implement an
+interface whenever it provides implementations of all the interface's
+function signatures. This way of implementing interfaces requires only
+an object reference of the type to be passed to its methods (by means
+of a separate parameter list, in front of a method's actual name). It
+is otherwise decoupled from the type's definition (i.e. the ADT's
+\code{struct} definition). Limitations in Go are that language
+intrinsic types cannot have methods, and that methods and interfaces
+cannot be directly implemented for user-defined types whose
+definitions are located in other packages. That is, the programmer has
+to write wrappers in the latter case. Go, finally, makes it explicit
+in its type definition syntax that interfaces (like \code{struct}'s)
+are types in their own right, and that hence polymorphic variables
+(i.e. objects) can be declared in terms of them.
 
 Since version 1.18, Go also supports compile-time polymorphism through
 generics. Go's generics make use of ``strong concepts'', since they
 are bounded by constraints that are expressed through
 interfaces. Hence, the Go compiler will fully type-check generic code.
-In Go, structures, interfaces, and functions (but not methods) can all
-be given their own generic type parameters. To allow methods to make
-use of such parameters one has to parameterize the structures and
-interfaces to which these methods or, respectively, their signatures
-belong.
+In Go, structures, interfaces, and functions, but not methods, can all
+be given their own generic type parameters.
+
+%To allow methods to make use of such parameters one has to
+%parameterize the structures and interfaces to which these methods or,
+%respectively, their signatures belong.
 
 \subsection{Encapsulated version coded in Go}
 
@@ -500,23 +501,56 @@ code duplication in client code cannot be avoided in this way.
 \section{Rust}
 
 Like Go, Rust supports both run-time and compile-time polymorphism
-through polymorphic interfaces, which Rust calls ``traits''. Rust was
-the first mainstream language that came with a trait system. In
+through polymorphic interfaces, which Rust calls ``traits''. In
 contrast to Go, Rust has its programmers implement traits in an
 explicit manner, by using explicit ``\code{impl}'' code blocks to
 provide a trait's method implementations. These same \code{impl}
 blocks also serve to bind methods to a type that aren't a part of some
-trait, like e.g.  user-defined constructors for \code{struct}s (the
+trait, like e.g. user-defined constructors for \code{struct}s (see the
 functions named ``\code{new}'' in the following code
 Listing~\ref{lst:OORust}).
 
-In contrast to Go, Rust allows the programmer to retroactively
-implement traits for types that are located in external libraries
-(called ``crates'' in Rust), as long as the traits themselves are
-defined in the programmer's crate. The reverse, namely implementing an
-external trait for a user-owned type, is also possible. Only the case
-of implementing an external trait for an external type is not allowed
-(the so called ``orphan rule''), and requires the use of wrappers.
+In contrast to Go, Rust allows the programmer to implement traits for
+both user-defined \emph{and} language intrinsic types, and to do so
+for types that are located in external libraries (called ``crates'' in
+Rust), as long as the traits themselves are defined in the
+programmer's own crate. The reverse, namely implementing an external
+trait for a user-owned type, is also possible. Only the case of
+implementing an external trait for an external type is not allowed
+(this is called the ``orphan rule''). The latter case requires the use
+of wrappers.
+
+Comparable to Go, Rust's generics model allows for the generic
+parameterization of functions, traits, and user-defined types like
+\code{struct}s. Rust does not explicitly forbid generic
+methods. However, if one defines such a method within a trait, then
+this will make the trait unuseable for the declaration of any ``trait
+objects'', i.e. for the employment of run-time polymorphism. Thus, the
+Rust programmer will in general (need to) parameterize traits and
+\code{struct}s rather than any methods themselves. Rust generics are
+fully type-checked at compilation time, i.e. Rust supports ``strong
+concepts''. The code in the following Listing~\ref{lst:OORust} is in
+its outline quite similar to the Go code version. However, see the
+following notes for the differences.
+
+\begin{itemize}
+\item
+  Rust uses angled brackets to indicate generic parameter lists.
+\item
+  Use of a \code{Num} trait was necessary to enable numeric operations
+  on generic types, which leads to dependency on external library
+  code. Nevertheless, conversion to generic types wasn't possible.
+  Hence, some type conversions had to be moved to the main program.
+\item
+  Generics constraints in Rust are typically enforced by specifying
+  the required traits in \code{impl} blocks using \code{where}
+  statements.
+\item
+  To declare run-time polymorphic variables one has to put so-called
+  ``trait objects'' into ``Boxes'', i.e. to declare smart pointers of
+  them (this is the Rust equivalent to using \code{allocatable}
+  polymorphic objects in Fortran).
+\end{itemize}
 
 
 \subsection{Encapsulated version coded in Rust}
@@ -534,7 +568,7 @@ it also allows one to bind methods to structures (which, in contrast
 to classes, are value types in Swift).
 
 Like Go and Rust, Swift (furthermore) supports a trait system in order
-to implement run-time and compile-time polymorphism through
+to implement both run-time and compile-time polymorphism through
 polymorphic interfaces, that are called ``protocols'' in Swift. If the
 Swift programmer chooses to ignore implementation inheritance and
 classes, he can therefore very much program with structures and
@@ -544,23 +578,22 @@ in Go and Rust, respectively.
 Given Swift's backwards compatible design, implementation of a
 protocol (i.e. interface inheritance) is usually done as in
 ``classical'' OO languages, i.e. within a structure's or a class's
-definition. The \code{:} operator followed by one or more interface
-names must be supplied for this purpose after the structure's or
-class's own name. A very powerful facility for types to implement
-protocols retroactively is also provided, through so-called
+definition. The ``\code{:}'' operator followed by one or more
+interface names must be supplied for this purpose after the
+structure's or class's own name. A very powerful facility for types to
+implement protocols retroactively is also provided, through so-called
 ``\code{extension}s'', that work even if the types' source code is
 inaccessible (because one is, e.g., working with a library in binary
-form).
+form). This same facility also allows the implementation of protocols
+for language-intrinsic types, e.g. the following little code prints
+out ``\code{I am 4.9}'':
+\lstinputlisting[language=Swift,style=boxed]{Code/Swift/extension.swift}
 
 Swift generics support ``strong concepts'', and are thus fully
 type-checked, and their capabilities are on par with those of Go and
-Rust, and in some aspects even superior. For instance, all these
-languages allow for the parameterization of functions and structures
-(and in Swift's case also classes). Where Swift differs from both Go
-an Rust, is that it also allows for parameterized
-\emph{methods}. Whereas both Go and Rust have their users parameterize
-entire interfaces/traits instead, in order to achieve the same
-functionality. This has some interesting, postive consequences for the
+Rust. In one aspect they are even superior, namely in that Swift
+allows for parameterized \emph{methods}, instead of parameterized
+protocols. This has some interesting, postive consequences for the
 Swift programmer, that will be discussed in detail below.
 
 \subsection{Encapsulated version coded in Swift}
@@ -649,25 +682,24 @@ consider these significant advantages of the generics approach that is
 taken in Swift vs. that of Go and Rust.
 
 
-\section{Conclusions from the different implementations}
+\section{Conclusions}
 
 The use of run-time polymorphism by means of interfaces is rather
 similar in all the languages considered here. The most significant
-difference appears to be that Go has some stricter limitations with
-regards to package ownership when it comes to retroactively
-implementing interfaces for existing types. Whereas Rust (with some
-restrictions) and even more so Swift allow the implementation of an
-interface by some type to be accomplished independently from the
-type's definition site. Rust and Swift thereby overcome Haveraaen et
-al.'s critique \cite{Haveraaen_et_al_19} of Java regarding this
-point. In fact, it is \emph{interface inheritance} which makes the
-uniform polymorphic treatment of both intrinsic and user-defined types
-possible in the first place in Rust and Swift, that Haveraaen et
-al. seem to also (rightly) demand. In the following we will make some
-final comments on the differences in all these languages' generics
-features.
+difference appears to be that Go has stricter limitations on
+retroactively implementing interfaces for existing types than the
+other languages. Whereas Rust (with some minor restrictions) and Swift
+allow the implementation of an interface by some type to be
+accomplished independently from the type's definition site. Rust and
+Swift thereby overcome Haveraaen et al.'s critique
+\cite{Haveraaen_et_al_19} of Java regarding this point. In fact, it is
+\emph{interface inheritance} which makes the uniform polymorphic
+treatment of both intrinsic and user-defined types possible in the
+first place in Rust and Swift, that Haveraaen et al. seem to also
+(rightly) demand. In the following we will make some final comments on
+the differences in all these languages' generics features.
 
-\subsection{Conclusions on Go}
+\subsection{Go}
 
 Go's basic model to implement generics allows structures, interfaces,
 and ordinary functions, but not methods, to be given their own generic
@@ -683,7 +715,7 @@ specific needs, which is what makes the use of generics in Go
 pleasant. We consider these latter particular features of Go as ``must
 haves'' for Fortran.
 
-\subsection{Conclusions on Rust}
+\subsection{Rust}
 
 Rust's basic model for generics is similar to Go's in that it allows
 for parameterization of structures, interfaces, and ordinary
@@ -709,7 +741,7 @@ control over the use of dynamic vs. static dispatch that Rust affords
 the programmer. These are particular features of Rust that, in our
 opinion, Fortran should borrow in some form.
 
-\subsection{Conclusions on Swift}
+\subsection{Swift}
 
 Swift's basic model of implementing generics by allowing parameterized
 structures and methods (but not parameterized interfaces) is both the
@@ -836,7 +868,7 @@ traits, for types, regardless of where the original type definition is
 located. Swift's extensions fulfill essentially the same purpose as
 Rust's \code{impl} blocks in this respect. They have been adjusted
 here to Fortran's syntax that binds methods to types through
-declarations, rather than by including the actual implementation
+declaration blocks, rather than by including the actual implementation
 bodies themselves into such a block (the implementations need to be
 supplied as module procedures, as is usual in Fortran). The syntax of
 the feature is largely symmetric to that of derived type
@@ -879,7 +911,8 @@ we have added the code of the required methods, but we haven't made
 \code{BasicMath} pluggable into code that is written in terms of
 either one of these latter interfaces. To fix this, we combine the
 addition of our two new methods to the \code{BasicMath} type with an
-implementation of these two interfaces by this type, as follows:
+\code{implements} specification for these two interfaces by this type,
+as follows:
 \begin{lstlisting}[language=LFortran,style=boxed]  
    use basic, only: BasicMath
   
@@ -947,10 +980,9 @@ The example illustrates the use of a generic type parameter, i.e.  a
 meta-type, or a \emph{type of types}. In this example, this type
 parameter is simply called \code{T}, and it is preceded by the name of
 an abstract interface that expresses a constraint on the type
-parameter. Fortran generics thus support ``strong concepts''.
-
-Both, the type parameter and its constraint, are part of a generic
-type parameter list that is enclosed in curly braces, and follows
+parameter. Fortran generics thus support ``strong concepts''. Both,
+the type parameter and its constraint, are part of a generic type
+parameter list that is enclosed in curly braces, and follows
 immediately behind the procedure's name. Notice that, since \code{T}
 is a meta-type, the syntax used above, that deviates slightly from how
 Fortran's usual function arguments are declared, appears justified as
