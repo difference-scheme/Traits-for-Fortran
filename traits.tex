@@ -86,36 +86,38 @@ protocols/traits, as they are also known today). The possibility to
 reuse code is then merely the logical consequence of such proper
 dependency management.
 
-\section{Source code dependencies}
+\section{Source code dependencies in statically typed languages}
 
 Which then are the source code dependencies that polymorphism helps us
 manage? It has been customary to make the following distinction when
 answering this question:
 \begin{itemize}
 \item
- Firstly, most larger programs have dependencies on
- \emph{user-defined} procedures and data types. If the programmer
- employs encapsulation of both a program's procedures and its data,
- i.e. its state, both these dependencies can actually be viewed as
- dependencies on user-defined abstract data types, i.e. types that
- contain both user-defined state, and implementation code which
- operates on that (hidden) state. These are the dependencies that
- Martin is concretely referring to in the above quotation, and it is
- these dependencies on (volatile) implementation (details) that are
- particularly troublesome, because they lead to rigid coupling between
- the various different \emph{parts} of an application. Their results
- are recompilation cascades, the non-reusability of higher-level
- modules, the impossibility to comprehend a large application
- incrementally, and fragility of such an application as a whole.
+  Firstly, most larger programs that are written in statically typed
+  languages (like Fortran) have dependencies on \emph{user-defined}
+  procedures and data types. If the programmer employs encapsulation
+  of both a program's procedures and its data, i.e. its state, both
+  these dependencies can actually be viewed as dependencies on
+  user-defined abstract data types, i.e. types that contain both
+  user-defined state, and implementation code which operates on that
+  (hidden) state. These are the dependencies that Martin is concretely
+  referring to in the above quotation, and it is these dependencies on
+  (volatile) implementation (details) that are particularly
+  troublesome, because they lead to rigid coupling between the various
+  different \emph{parts} of an application. Their results are
+  recompilation cascades, the non-reusability of higher-level modules,
+  the impossibility to comprehend a large application incrementally,
+  and fragility of such an application as a whole.
 \item
- Secondly, every program also has dependencies on abstract data types
- that are provided by the programming language in which it is written.
- Fortran's \code{integer}, \code{real}, etc. intrinsic types are
- examples of language intrinsic abstract data types. While hard-wired
- dependencies on such intrinsic types may not couple different parts
- of a program (because the implementations of these types are supplied
- by the language), they nevertheless make a program's source code
- rigid with respect to the data that it can be used on.
+  Secondly, every program, that is written in a statically typed
+  language, also has dependencies on abstract data types that are
+  provided by the language itself. Fortran's \code{integer},
+  \code{real}, etc. intrinsic types are examples of language intrinsic
+  abstract data types. While hard-wired dependencies on such intrinsic
+  types may not couple different parts of a program (because the
+  implementations of these types are supplied by the language), they
+  nevertheless make a program's source code rigid with respect to the
+  data that it can be used on.
 \end{itemize}
 
 The most widely used approaches to manage dependencies on language
@@ -515,7 +517,7 @@ both user-defined \emph{and} language intrinsic types, and to do so
 for types that are located in external libraries (called ``crates'' in
 Rust), as long as the traits themselves are defined in the
 programmer's own crate. The reverse, namely implementing an external
-trait for a user-owned type, is also possible. Only the case of
+trait for a user-owned type, is also possible. Only the (edge) case of
 implementing an external trait for an external type is not allowed
 (this is called the ``orphan rule''). The latter case requires the use
 of wrappers.
@@ -529,33 +531,68 @@ objects'', i.e. for the employment of run-time polymorphism. Thus, the
 Rust programmer will in general (need to) parameterize traits and
 \code{struct}s rather than any methods themselves. Rust generics are
 fully type-checked at compilation time, i.e. Rust supports ``strong
-concepts''. The code in the following Listing~\ref{lst:OORust} is in
-its outline quite similar to the Go code version. However, see the
-following notes for the differences.
+concepts''.
+
+\subsection{Encapsulated version coded in Rust}
+
+The encapsulated Rust version of our test problem that is given in the
+following Listing~\ref{lst:OORust} is in its outline quite similar to
+the corresponding Go version. There are, however, a few minor
+differences, that are listed in the following notes.
 
 \begin{itemize}
 \item
   Rust uses angled brackets to indicate generic parameter lists.
 \item
-  Use of a \code{Num} trait was necessary to enable numeric operations
-  on generic types, which leads to dependency on external library
-  code. Nevertheless, conversion to generic types wasn't possible.
-  Hence, some type conversions had to be moved to the main program.
-\item
   Generics constraints in Rust are typically enforced by specifying
   the required traits in \code{impl} blocks using \code{where}
   statements.
 \item
+  Use of a ``\code{Num}'' trait from the external ``\code{num}'' crate was
+  necessary, in order to enable numeric operations on generic types,
+  which leads to dependency on external library code.
+\item
+  At times, use of the ``\code{Copy}'' trait also had to be made, to
+  work around Rust's default move semantics.
+\item
+  In order to help make all of the source code dependencies explicit,
+  our Rust version employs modules, and \code{use} statements to import
+  the required functionality.
+\item
+  Despite reliance on external dependencies, conversion to generic
+  types wasn't possible. This led to the necessity to move the type
+  conversion from method \code{average} to its calls in the main
+  program. We also had to import a \code{zero} generic function from
+  the external ``\code{num}'' crate, in order to initialize the
+  variable \code{s} that is returned by the \code{sum} method of the
+  \code{SimpleSum} ADT.
+\item
+  Rust's default structure constructors suffer from the same flaw
+  as Fortran's. That is, they are unable to initialize from an
+  external scope, structure components that are declared being private
+  to their module. As in Fortran, use of user-defined constructors had
+  to be made instead (see the functions named ``\code{new}'' that are
+  defined in separate \code{impl} blocks for the ADTs
+  \code{PairwiseSum} and \code{Averager}).
+\item
   To declare run-time polymorphic variables one has to put so-called
   ``trait objects'' into ``Boxes'', i.e. to declare smart pointers of
-  them (this is the Rust equivalent to using \code{allocatable}
-  polymorphic objects in Fortran).
+  them, for dynamic instantiation and memory allocation (this is the
+  Rust equivalent to using \code{allocatable} polymorphic objects in
+  Fortran).
 \end{itemize}
 
-
-\subsection{Encapsulated version coded in Rust}
-
 \lstinputlisting[language=Rust,style=boxed,label={lst:OORust},caption={Encapsulated Rust version of the array averaging example.}]{Code/Rust/mixed_poly/src/main.rs}
+
+The main program in the Rust version is somewhat longer then in the
+corresponding Go version because of the need to import dependencies
+from modules (as it would be necessary in realistic situations). Its
+logic is also somewhat convoluted compared to the Go version, because
+Rust doesn't allow the programmer to declare variables that aren't
+initialized upon declaration, and because of the aforementioned
+necessity to move the required type conversions out of method
+\code{average}. Otherwise the codes are pretty much identical.
+
 
 \section{Swift}
 
