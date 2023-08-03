@@ -835,20 +835,21 @@ Fortran's intrinsic types.
 
 \section{Named abstract interfaces (traits)}
 
-The most important of all our new additions to Fortran is the
-capability to define named abstract interfaces (i.e. collections of
-procedure signatures), or traits, and to declare instance variables of
-them. Named abstract interfaces are the crucial feature that is
-required in order to uniformly express both run-time and compile-time
+The most important of all the new additions to Fortran, that are
+described in this document, is the capability to define named abstract
+interfaces, or traits (i.e. named collections of procedure
+signatures), and to declare instance variables of them. Named abstract
+interfaces are the crucial feature that is required in order to
+uniformly and properly express both run-time and compile-time
 polymorphism (i.e. generics) in the language, and to thereby enable a
-uniform managegement of dependendencies on both user-defined
-\emph{and} language-intrinsic types.
+uniform management of dependendencies on both user-defined \emph{and}
+language-intrinsic types.
 
 \subsection{Interface definitions}
 
 Fortran already allows the programmer to define unnamed abstract
 interfaces, but in order to use these as types, named versions of them
-are required. As in the following example, that defines two such named
+are required, as in the following example, that defines two such named
 interfaces, \code{IAddition} and \code{ISubtraction}:
 \begin{lstlisting}[language=LFortran,style=boxed]
    abstract interface :: IAddition
@@ -882,7 +883,7 @@ latter).
 
 In particular, in order to use abstract interfaces for the support of
 run-time polymorphic objects with dynamic method dispatch, Fortran's
-\code{type} specifier for variable declarations needs to be enhanced,
+\code{type} specifier for variable declarations needs to be enhanced
 to accept named abstract interfaces, like in the following two
 examples:
 \begin{lstlisting}[language=LFortran,style=boxed]
@@ -892,14 +893,14 @@ examples:
 The semantics here are that whenever a named abstract interface
 appears \emph{directly} within the \code{type} specifier of an
 object's declaration, then all the \code{public} methods of that
-object, whose signatures appear within the adopted interface, will
-make use of late binding, i.e. their calls will be resolved by the
+object, whose signatures are prescribed by the adopted interface, will
+make use of late binding. That is, their calls will be resolved by the
 run-time system of the language (e.g. through a virtual method
-table). Since this requires that such objects (like \code{adder} or
-\code{adderptr} in this example) be instantiated at run time, it also
-entails that these objects be declared using the \code{allocatable},
-or the \code{pointer} attribute (as in the examples above), or that
-they be the arguments of a procedure.
+table). Since this requires that such ``trait objects'' (like
+\code{adder} or \code{adderptr} in this example) be instantiated at
+run time, it also entails that such objects be either declared using
+the \code{allocatable}, or the \code{pointer} attribute (as in the
+examples above), or that they be the arguments of a procedure.
 
 
 \subsection{Extends specifier for interfaces}
@@ -923,10 +924,9 @@ used in settings that require conformance to either the
 
 There are often cases where the union of two (or more) interfaces is
 required but where one would not like to go through the labor to
-explicitly set up a separate resulting interface, like
-\code{IBasicMath} above. This can be useful in variable
-declarations. In such cases, it should be possible to specify the
-following
+explicitly set up a separate derived interface, like \code{IBasicMath}
+above. This can be useful in variable declarations. In such cases, it
+should be possible to specify the following
 \begin{lstlisting}[language=LFortran,style=boxed]
    type(IAddition + ISubtraction), allocatable :: addsub
 \end{lstlisting}
@@ -941,18 +941,18 @@ follows:
 \section{Multiple interface inheritance for types}
 
 The language must make it possible not only for named interfaces to
-adopt other named interfaces, but also for \emph{other} types to do
-the same, regardless of whether such types are user-defined or
+conform to other named interfaces, but also for \emph{other types} to
+do the same, regardless of whether such types are user-defined or
 intrinsic to the language.
 
 
 \subsection{Implements specifier for derived type definitions}
 
-User-defined (i.e. derived) types can be made to adopt an interface by
-means of an \code{implements} specifier for derived type definitions.
-In the following example the derived type \code{BasicMath} implements
-(i.e. conforms to, or adopts) the interface \code{IBasicMath} that was
-defined above
+User-defined (i.e. derived) types can be made to conform to an
+interface by means of an \code{implements} specifier in derived type
+definitions.  In the following example the derived type
+\code{BasicMath} implements (i.e. conforms to, or adopts) the
+interface \code{IBasicMath} that was defined above
 \begin{lstlisting}[language=LFortran,style=boxed]
 module basic
   
@@ -1004,16 +1004,17 @@ be done as in the previous example):
 
 \subsection{Extensions for types}
 
-In order to avoid having to wrap existing types into wrappers for new
-use cases, it should be possible (as in Swift or Rust) to make
-\emph{any} type implement new interfaces, regardless of where its
-original type definition is located, or whether the type is a
-user-defined or a language intrinsic one. This also means that methods
-should be allowed for intrinsic types. The \code{extension}s described
-below are the language feature that is aimed at accomplishing these
-capabilities. They are modelled after \code{extension}s in Swift, in
-order to make it possible to retroactively implement new methods,
-additional constructors, and especially new interfaces, for types.
+In order to avoid having to wrap existing types into wrappers, when
+unforeseen new use cases come up, it should be possible (as in Swift
+or Rust) to make \emph{any} type implement new interfaces, regardless
+of where its original type definition is located, or whether the type
+is a user-defined or a language intrinsic one. This also means that
+methods should be allowed for \emph{intrinsic} types. The
+\code{extension}s described below are the language feature that is
+aimed at accomplishing these capabilities. The feature is modelled
+after \code{extension}s in Swift, in order to enable retroactive
+implementation of new methods, additional constructors, and especially
+new interfaces, for types.
 
 Swift's extensions fulfill essentially the same purpose as Rust's
 \code{impl} blocks in this respect. They have been adjusted here to
@@ -1037,6 +1038,8 @@ module extended
 
    use basic, only: BasicMath
 
+   public :: BasicMath
+   
    extension :: BasicMath
       procedure, nopass :: mul
       procedure, nopass :: div
@@ -1050,7 +1053,7 @@ where the actual implementations of the \code{mul} and \code{div}
 procedures would be given after the module's \code{contains} statement
 as usual.
 
-\subsubsection{Retroactively implementing traits by a type}
+\subsubsection{Retroactively implementing interfaces by a type}
 
 Assume now that the purpose of our addition of the previous two
 methods was to actually make \code{BasicMath} conform to settings
@@ -1059,21 +1062,21 @@ are required, and where the required functionality is described by two
 interfaces called \code{IMultiplication} and \code{IDivision}. So far
 we have added the code of the required methods, but we haven't made
 \code{BasicMath} pluggable into code that is written in terms of
-either one of these latter interfaces. To fix this, we combine the
-addition of our two new methods to the \code{BasicMath} type with an
-\code{implements} specification for these two interfaces by this type,
-as follows:
+either one of these latter interfaces. To fix this, we simply state
+that the \code{BasicMath} type already has all of the required
+functionality, by acknowledging this with an \code{implements}
+specification for these two interfaces as follows:
 \begin{lstlisting}[language=LFortran,style=boxed]  
-   use basic, only: BasicMath
+   use extended, only: BasicMath
   
    extension, implements(IMultiplication,IDivision) :: BasicMath
-      procedure, nopass :: mul
-      procedure, nopass :: div
    end extension BasicMath
-   ...   
+
 \end{lstlisting}
-We could also split this single \code{extension} statement into
-two, to achieve the same effect, like so:
+We could have also skipped these two steps, to instead adopt the
+interfaces and provide the methods simultaneously, splitting the
+\code{extension} statements along the way to adopt one interface at a
+time, like so:
 \begin{lstlisting}[language=LFortran,style=boxed]  
    use basic, only: BasicMath
   
@@ -1084,12 +1087,14 @@ two, to achieve the same effect, like so:
    extension, implements(IDivision) :: BasicMath
       procedure, nopass :: div
    end extension BasicMath
-   ...   
+   ...
 \end{lstlisting}
-This can be useful to improve readability, if the different interfaces
-contain multiple procedure signatures. These two statements, together
-with their corresponding implementations, could then even be
-distributed among different modules and files.
+The result would have been the same. Such splitting of
+\code{extension} statements can be useful to improve readability, if
+different interfaces contain multiple procedure signatures, that would
+all have to be implemented. These two statements (together with the
+required implementations), could then even be distributed among
+different modules and files.
 
 \subsubsection{Adding new initializers}
 

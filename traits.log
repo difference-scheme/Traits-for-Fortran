@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  3 AUG 2023 19:19
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  3 AUG 2023 23:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -523,7 +523,7 @@ File: lstlang1.sty 2020/03/24 1.8d listings language file
 File: lstlang1.sty 2020/03/24 1.8d listings language file
 )
 
-LaTeX Warning: Reference `' on page 26 undefined on input line 880.
+LaTeX Warning: Reference `' on page 26 undefined on input line 881.
 
 [26
 
@@ -534,7 +534,7 @@ Chapter 6.
 ] [32] [33] [34]
 Chapter 7.
 LaTeX Font Info:    Trying to load font information for T1+cmss on input line 1
-308.
+313.
 (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmss.fd
 File: t1cmss.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 ) [35
@@ -555,8 +555,8 @@ Package rerunfilecheck Info: File `traits.out' has not changed.
 (rerunfilecheck)             Checksum: 458D7E5983EC55684AC0A852D6116B30;10166.
  ) 
 Here is how much of TeX's memory you used:
- 15216 strings out of 480247
- 226171 string characters out of 5896151
+ 15215 strings out of 480247
+ 226156 string characters out of 5896151
  750978 words of memory out of 5000000
  31909 multiletter control sequences out of 15000+600000
  497235 words of font info for 77 fonts, out of 8000000 for 9000
@@ -569,10 +569,10 @@ onts/type1/public/bera/fvmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
 blic/bera/fvmro8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/u
 plb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></
 usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on traits.pdf (46 pages, 227732 bytes).
+Output written on traits.pdf (46 pages, 227964 bytes).
 PDF statistics:
- 1659 PDF objects out of 1728 (max. 8388607)
- 1550 compressed objects within 16 object streams
- 1037 named destinations out of 1200 (max. 500000)
+ 1658 PDF objects out of 1728 (max. 8388607)
+ 1549 compressed objects within 16 object streams
+ 1036 named destinations out of 1200 (max. 500000)
  385 words of extra memory for PDF output out of 10000 (max. 10000000)
 
