@@ -165,9 +165,9 @@ These two developments taken together have recently opened up the
 possibility to treat polymorphism, and hence the dependency management
 of both user-defined and language intrinsic types, uniformly in a
 programming language. As a consequence, it has become possible to use
-the potentially more efficient (but also somewhat less flexible)
-mechanism of compile-time polymorphism also for a number of tasks that
-have traditionally been reserved for run-time polymorphism (i.e. OO
+the potentially more efficient (but also less flexible) mechanism of
+compile-time polymorphism also for a number of tasks that have
+traditionally been reserved for run-time polymorphism (i.e. OO
 programming), and to mix and match the two polymorphism types inside a
 single application to better satisfy a user's needs for both
 flexibility and efficiency.
@@ -204,9 +204,10 @@ ideas under the monikers ``interfaces'' and ``interface
 inheritance''. Today, nearly all modern languages support polymorphic
 interfaces/protocols, and the basic mechanism of multiple interface
 inheritance that was introduced to express run-time polymorphism in
-Objective~C, albeit in improved, more flexible, manifestations. The
-only negative exceptions in this respect being modern Fortran, and
-C++, which both still stick to the obsolescent Simula~67 paradigm.
+Objective~C, often in even improved, more flexible,
+manifestations. The only negative exceptions in this respect being
+modern Fortran, and C++, which both still stick to the obsolescent
+Simula~67 paradigm.
 
 A similar learning process, as that outlined for run-time
 polymorphism, took place in the field of compile-time/parametric
@@ -452,7 +453,7 @@ be given their own generic type parameters.
 \subsection{Encapsulated version coded in Go}
 
 Listing~\ref{lst:OOGo} gives an encapsulated version of the test
-example coded in Go. The two different implementations of the
+problem coded in Go. The two different implementations of the
 \code{sum} function have been encapsulated in two different ADTs named
 \code{SimpleSum} and \code{PairwiseSum}, whereas a third ADT named
 \code{Averager} encapsulates the functionality that is required to
@@ -567,13 +568,13 @@ differences, that are listed in the following notes.
   variable \code{s} that is returned by the \code{sum} method of the
   \code{SimpleSum} ADT.
 \item
-  Rust's default structure constructors suffer from the same flaw
-  as Fortran's. That is, they are unable to initialize from an
-  external scope, structure components that are declared being private
-  to their module. As in Fortran, use of user-defined constructors had
-  to be made instead (see the functions named ``\code{new}'' that are
-  defined in separate \code{impl} blocks for the ADTs
-  \code{PairwiseSum} and \code{Averager}).
+  Rust's default structure constructors suffer from the same flaw as
+  Fortran's. That is, they are unable to initialize from an external
+  scope, structure components that are declared being private to their
+  module. As in Fortran, use of user-defined constructors must be made
+  instead (see the functions named ``\code{new}'' that are defined in
+  separate \code{impl} blocks for the ADTs \code{PairwiseSum} and
+  \code{Averager}).
 \item
   To declare run-time polymorphic variables one has to put so-called
   ``trait objects'' into ``Boxes'', i.e. to declare smart pointers of
@@ -591,7 +592,8 @@ logic is also somewhat convoluted compared to the Go version, because
 Rust doesn't allow the programmer to declare variables that aren't
 initialized upon declaration, and because of the aforementioned
 necessity to move the required type conversions out of method
-\code{average}. Otherwise the codes are pretty much identical.
+\code{average}, and into the calls of this method. Otherwise the codes
+are pretty much identical.
 
 
 \section{Swift}
@@ -617,21 +619,22 @@ protocol (i.e. interface inheritance) is usually done as in
 ``classical'' OO languages, i.e. within a structure's or a class's
 definition. The ``\code{:}'' operator followed by one or more
 interface names must be supplied for this purpose after the
-structure's or class's own name. A very powerful facility for types to
-implement protocols retroactively is also provided, through so-called
-``\code{extension}s'', that work even if the types' source code is
-inaccessible (because one is, e.g., working with a library in binary
-form). This same facility also allows the implementation of protocols
-for language-intrinsic types, e.g. the following little code prints
-out ``\code{I am 4.9}'':
+structure's or class's own name. However, a very powerful facility for
+types to implement protocols retroactively is also provided, through
+so-called ``\code{extension}s'', that work even if the types' source
+code is inaccessible (because one is, e.g., working with a library in
+binary form). This same facility also allows the implementation of
+protocols for language-intrinsic types. For instance, the following
+little program prints out ``\code{I am 4.9}'':
 \lstinputlisting[language=Swift,style=boxed]{Code/Swift/extension.swift}
 
 Swift generics support ``strong concepts'', and are thus fully
-type-checked, and their capabilities are on par with those of Go and
-Rust. In one aspect they are even superior, namely in that Swift
-allows for parameterized \emph{methods}, instead of parameterized
-protocols. This has some interesting, postive consequences for the
-Swift programmer, that will be discussed in detail below.
+type-checked at compile time, and their capabilities are on par with
+those of Go and Rust. In one aspect they are even superior, namely in
+that Swift allows for parameterized \emph{methods}, instead of
+parameterized protocols. This has some interesting, postive
+consequences for the Swift programmer, that will be discussed in
+detail below.
 
 \subsection{Encapsulated version coded in Swift}
 
@@ -723,18 +726,19 @@ taken in Swift vs. that of Go and Rust.
 
 The use of run-time polymorphism by means of interfaces is rather
 similar in all the languages considered here. The most significant
-difference appears to be that Go has stricter limitations on
-retroactively implementing interfaces for existing types than the
-other languages. Whereas Rust (with some minor restrictions) and Swift
-allow the implementation of an interface by some type to be
-accomplished independently from the type's definition site. Rust and
-Swift thereby overcome Haveraaen et al.'s critique
-\cite{Haveraaen_et_al_19} of Java regarding this point. In fact, it is
-\emph{interface inheritance} which makes the uniform polymorphic
-treatment of both intrinsic and user-defined types possible in the
-first place in Rust and Swift, that Haveraaen et al. seem to also
-(rightly) demand. In the following we will make some final comments on
-the differences in all these languages' generics features.
+differences (that were not concretely explored here) appear to be that
+Go has stricter limitations on retroactively implementing interfaces
+for existing types than the other languages. Whereas Rust (with some
+minor restrictions), and Swift allow the implementation of an interface
+by some type to be accomplished independently from the type's
+definition site. Rust and Swift thereby overcome Haveraaen et al.'s
+critique \cite{Haveraaen_et_al_19} of Java regarding this point. In
+fact, it is \emph{interface inheritance} which makes the uniform
+polymorphic treatment of both intrinsic and user-defined types
+possible in the first place in Rust and Swift, that Haveraaen et
+al. seem to also (rightly) demand. In the following we will make some
+final comments on the differences in all these languages' generics
+features.
 
 \subsection{Go}
 
@@ -831,13 +835,21 @@ Fortran's intrinsic types.
 
 \section{Named abstract interfaces (traits)}
 
-The most important of all the new features is the possibility to
-declare named abstract interfaces, or traits (of collections of
-procedure signatures). Fortran already allows the programmer to
-declare unnamed abstract interfaces, but in order to use these as
-types in their own right, named versions of them are required,
-as in the following example:
+The most important of all our new additions to Fortran is the
+capability to define named abstract interfaces (i.e. collections of
+procedure signatures), or traits, and to declare instance variables of
+them. Named abstract interfaces are the crucial feature that is
+required in order to uniformly express both run-time and compile-time
+polymorphism (i.e. generics) in the language, and to thereby enable a
+uniform managegement of dependendencies on both user-defined
+\emph{and} language-intrinsic types.
 
+\subsection{Interface definitions}
+
+Fortran already allows the programmer to define unnamed abstract
+interfaces, but in order to use these as types, named versions of them
+are required. As in the following example, that defines two such named
+interfaces, \code{IAddition} and \code{ISubtraction}:
 \begin{lstlisting}[language=LFortran,style=boxed]
    abstract interface :: IAddition
       function add(a,b) result(c)
@@ -853,27 +865,98 @@ as in the following example:
       end function sub
    end interface
 \end{lstlisting}
-Named abstract interfaces are the central feature that is required in
-order to uniformly express both compile-time and run-time polymorphism
-(i.e. generics).
+Since this is a simple addition to Fortran, that merely aims to
+further extend the use cases of abstract interfaces in the language
+(which presently serve as bounds on the signatures of procedure
+pointers, and methods of abstract classes), it is fully backwards
+compatible.
 
-\section{Enhanced type declarations}
+\subsection{Variable declarations}
 
-Named abstract interfaces/traits are types in their own right. Hence,
-(polymorphic) instance variables can be declared in terms of them. To
-enable the Fortran programmer to do so, Fortran's \code{type}
-declaration specifier needs to be enhanced to accept named abstract
-interfaces.
+Named abstract interfaces/traits are types in their own right. Their
+purpose is to allow the programmer to declare variables in terms of
+them. Either directly, i.e. as objects of such interfaces in run-time
+polymorphism, or as constraints on generic type parameters in
+compile-time polymorphism (see Sect.~\ref{} for examples of the
+latter).
+
+In particular, in order to use abstract interfaces for the support of
+run-time polymorphic objects with dynamic method dispatch, Fortran's
+\code{type} specifier for variable declarations needs to be enhanced,
+to accept named abstract interfaces, like in the following two
+examples:
+\begin{lstlisting}[language=LFortran,style=boxed]
+  type(IAddition), allocatable :: adder
+  type(IAddition), pointer     :: adderptr
+\end{lstlisting}
+The semantics here are that whenever a named abstract interface
+appears \emph{directly} within the \code{type} specifier of an
+object's declaration, then all the \code{public} methods of that
+object, whose signatures appear within the adopted interface, will
+make use of late binding, i.e. their calls will be resolved by the
+run-time system of the language (e.g. through a virtual method
+table). Since this requires that such objects (like \code{adder} or
+\code{adderptr} in this example) be instantiated at run time, it also
+entails that these objects be declared using the \code{allocatable},
+or the \code{pointer} attribute (as in the examples above), or that
+they be the arguments of a procedure.
 
 
-\section{Multiple interface inheritance}
+\subsection{Extends specifier for interfaces}
 
-\subsection{Implements specifier}
+Abstract interface definitions must allow the programmer to declare
+new interfaces that are the union of \emph{multiple} simpler ones
+(multiple interface inheritance).  In the following example, the
+interface \code{IBasicMath} inherits the signatures of both the
+interfaces \code{IAddition}, and \code{ISubtraction}, making
+\code{IBasicMath} at the same time a \emph{subtype} of both these
+simpler interfaces. That is, objects that adopt/implement the
+\code{IBasicMath} interface (i.e. they conform to it), can also be
+used in settings that require conformance to either the
+\code{IAddition}, or \code{ISubtraction} interfaces.
+\begin{lstlisting}[language=LFortran,style=boxed]
+   abstract interface, extends(IAddition,ISubtraction) :: IBasicMath
+   end interface
+\end{lstlisting}
 
+\subsection{Short-hand notation for union of interfaces}
+
+There are often cases where the union of two (or more) interfaces is
+required but where one would not like to go through the labor to
+explicitly set up a separate resulting interface, like
+\code{IBasicMath} above. This can be useful in variable
+declarations. In such cases, it should be possible to specify the
+following
+\begin{lstlisting}[language=LFortran,style=boxed]
+   type(IAddition + ISubtraction), allocatable :: addsub
+\end{lstlisting}
+instead of having to explicitly derive \code{IBasicMath} from
+\code{IAddition} and \code{ISubtraction}, as above, and then use it as
+follows:
+\begin{lstlisting}[language=LFortran,style=boxed]
+   type(IBasicMath), allocatable :: addsub
+\end{lstlisting}
+
+
+\section{Multiple interface inheritance for types}
+
+The language must make it possible not only for named interfaces to
+adopt other named interfaces, but also for \emph{other} types to do
+the same, regardless of whether such types are user-defined or
+intrinsic to the language.
+
+
+\subsection{Implements specifier for derived type definitions}
+
+User-defined (i.e. derived) types can be made to adopt an interface by
+means of an \code{implements} specifier for derived type definitions.
+In the following example the derived type \code{BasicMath} implements
+(i.e. conforms to, or adopts) the interface \code{IBasicMath} that was
+defined above
 \begin{lstlisting}[language=LFortran,style=boxed]
 module basic
   
-   type, implements(IAddition,ISubtraction) :: BasicMath
+   type, implements(IBasicMath) :: BasicMath
    contains
       procedure, nopass :: add
       procedure, nopass :: sub
@@ -895,23 +978,53 @@ contains
       
 end module basic      
 \end{lstlisting}
+by providing implementations of all the method signatures that are
+contained in that interface. Hence, \code{BasicMath} can now be used
+in client code that requires conformance to either one of the
+interfaces \code{IBasicMath}, \code{IAddition}, or \code{ISubtraction}.
 
-\subsection{Extensions}
+It is crucial, for flexibility, that the above interface inheritance
+mechanism allows for a type to implement \emph{multiple} different
+interfaces. For instance, if we wouldn't have defined the interface
+\code{IBasicMath} from above, and would nevertheless need to use
+objects of type \code{BasicMath} in settings that require conformance
+to either the \code{IAddition}, or \code{ISubtraction} interfaces,
+then we would define type \code{BasicMath} as follows (skipping for
+brevity the implementation of the actual methods, that would have to
+be done as in the previous example):
+\begin{lstlisting}[language=LFortran,style=boxed]
+   type, implements(IAddition,ISubtraction) :: BasicMath
+   contains
+      procedure, nopass :: add
+      procedure, nopass :: sub
+   end type BasicMath
+   ...
+\end{lstlisting}
 
-The \code{extension}s described below are a feature that is modeled
-after \code{extension}s in Swift, in order to make it possible to
-retroactively implement new methods, constructors, and especially
-traits, for types, regardless of where the original type definition is
-located. Swift's extensions fulfill essentially the same purpose as
-Rust's \code{impl} blocks in this respect. They have been adjusted
-here to Fortran's syntax that binds methods to types through
-declaration blocks, rather than by including the actual implementation
-bodies themselves into such a block (the implementations need to be
-supplied as module procedures, as is usual in Fortran). The syntax of
-the feature is largely symmetric to that of derived type
-definitions. Most of the options that are allowed for type-bound
-procedure declarations in derived type definitions, are therefore also
-allowed for such declarations within \code{extension}s.
+
+\subsection{Extensions for types}
+
+In order to avoid having to wrap existing types into wrappers for new
+use cases, it should be possible (as in Swift or Rust) to make
+\emph{any} type implement new interfaces, regardless of where its
+original type definition is located, or whether the type is a
+user-defined or a language intrinsic one. This also means that methods
+should be allowed for intrinsic types. The \code{extension}s described
+below are the language feature that is aimed at accomplishing these
+capabilities. They are modelled after \code{extension}s in Swift, in
+order to make it possible to retroactively implement new methods,
+additional constructors, and especially new interfaces, for types.
+
+Swift's extensions fulfill essentially the same purpose as Rust's
+\code{impl} blocks in this respect. They have been adjusted here to
+Fortran's syntax that binds methods to types through declaration
+blocks, rather than by including the actual implementation bodies
+themselves into such a block (the implementations need to be supplied
+as module procedures, as is usual in Fortran). The syntax of the
+feature is largely symmetric to that of derived type definitions. Most
+of the options that are allowed for type-bound procedure declarations
+in derived type definitions, are therefore also allowed for such
+declarations within \code{extension}s.
 
 \subsubsection{Retroactively adding methods to a type}
 
