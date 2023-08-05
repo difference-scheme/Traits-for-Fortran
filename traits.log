@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  3 AUG 2023 23:26
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  5 AUG 2023 15:12
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -285,10 +285,10 @@ File: csquotes.cfg
 Package: mathpazo 2020/03/25 PSNFSS-v9.3 Palatino w/ Pazo Math (D.Puga, WaS) 
 \symupright=\mathgroup4
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 27.
+Package hyperref Info: Option `colorlinks' set `true' on input line 28.
 Package csquotes Info: Checking for multilingual support...
 Package csquotes Info: ... none found.
-LaTeX Font Info:    Trying to load font information for T1+ppl on input line 31
+LaTeX Font Info:    Trying to load font information for T1+ppl on input line 32
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1ppl.fd
@@ -302,24 +302,24 @@ File: l3backend-pdftex.def 2022-01-12 L3 backend support: PDF output (pdfTeX)
 (./traits.aux)
 \openout1 = `traits.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -370,7 +370,7 @@ LaTeX Font Info:    ... okay on input line 31.
 \makeMPintoPDFobject=\count299
 \everyMPtoPDFconversion=\toks21
 )
-Package hyperref Info: Link coloring ON on input line 31.
+Package hyperref Info: Link coloring ON on input line 32.
  (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
 
@@ -382,41 +382,41 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
 \c@section@level=\count300
 )
-LaTeX Info: Redefining \ref on input line 31.
-LaTeX Info: Redefining \pageref on input line 31.
-LaTeX Info: Redefining \nameref on input line 31.
+LaTeX Info: Redefining \ref on input line 32.
+LaTeX Info: Redefining \pageref on input line 32.
+LaTeX Info: Redefining \nameref on input line 32.
 
 (./traits.out) (./traits.out)
 \@outlinefile=\write3
 \openout3 = `traits.out'.
 
 \big@size=\dimen157
-LaTeX Font Info:    Trying to load font information for OT1+ppl on input line 3
-9.
+LaTeX Font Info:    Trying to load font information for OT1+ppl on input line 4
+0.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ppl.fd
 File: ot1ppl.fd 2001/06/04 font definitions for OT1/ppl.
 )
 LaTeX Font Info:    Trying to load font information for OML+zplm on input line 
-39.
+40.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omlzplm.fd
 File: omlzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OML/zplm.
 )
 LaTeX Font Info:    Trying to load font information for OMS+zplm on input line 
-39.
+40.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omszplm.fd
 File: omszplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMS/zplm.
 )
 LaTeX Font Info:    Trying to load font information for OMX+zplm on input line 
-39.
+40.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omxzplm.fd
 File: omxzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMX/zplm.
 )
 LaTeX Font Info:    Trying to load font information for OT1+zplm on input line 
-39.
+40.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1zplm.fd
 File: ot1zplm.fd 2002/09/08 Fontinst v1.914 font definitions for OT1/zplm.
@@ -427,25 +427,25 @@ ination with the same identifier (name{page.1}) has been already used, duplicat
 e ignored
 <to be read again> 
                    \relax 
-l.42 \chapter
+l.43 \chapter
              {Introduction} [1]
 Chapter 1.
 [2
 
 ]
 LaTeX Font Info:    Trying to load font information for TS1+ppl on input line 9
-6.
+7.
  (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ppl.fd
 File: ts1ppl.fd 2001/06/04 font definitions for TS1/ppl.
 )
 LaTeX Font Info:    Trying to load font information for T1+fvm on input line 11
-4.
+5.
 
 (/usr/share/texlive/texmf-dist/tex/latex/bera/t1fvm.fd
 File: t1fvm.fd 2004/09/07 scalable font definitions for T1/fvm.
 )
 LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
-(Font)              scaled to size 8.97906pt on input line 114.
+(Font)              scaled to size 8.97906pt on input line 115.
  [3] [4] [5]
 Chapter 2.
 [6
@@ -463,7 +463,7 @@ File: lstlang3.sty 2020/03/24 1.8d listings language file
 LaTeX Font Info:    Font shape `T1/fvm/b/n' will be
 (Font)              scaled to size 8.97906pt on input line 1.
  [7])
-Overfull \hbox (3.62334pt too wide) in paragraph at lines 358--364
+Overfull \hbox (3.62334pt too wide) in paragraph at lines 359--365
 []\T1/ppl/m/n/10.95 Interfaces con-sist of ei-ther func-tion sig-na-tures, or \
 T1/ppl/m/it/10.95 type sets\T1/ppl/m/n/10.95 , like ``\T1/fvm/m/n/10.95 int | f
 loat64\T1/ppl/m/n/10.95 '' in the present
@@ -472,13 +472,13 @@ loat64\T1/ppl/m/n/10.95 '' in the present
 [8] (./Code/Go/functional.go [9]) [10]
 Chapter 3.
 
-Overfull \hbox (5.81958pt too wide) in paragraph at lines 417--426
+Overfull \hbox (5.81958pt too wide) in paragraph at lines 418--427
 \T1/ppl/m/n/10.95 Go has sup-ported run-time poly-mor-phism through (poly-mor-p
 hic) ``in-ter-faces'' (and hence modern-
  []
 
 
-Overfull \hbox (0.76628pt too wide) in paragraph at lines 442--448
+Overfull \hbox (0.76628pt too wide) in paragraph at lines 443--449
 []\T1/ppl/m/n/10.95 Since ver-sion 1.18, Go also sup-ports compile-time poly-mo
 r-phism through gener-ics. Go's gener-
  []
@@ -486,7 +486,7 @@ r-phism through gener-ics. Go's gener-
 [11
 
 ] (./Code/Go/mixed.go [12] [13]) [14]
-Overfull \hbox (8.59001pt too wide) in paragraph at lines 579--584
+Overfull \hbox (8.59001pt too wide) in paragraph at lines 580--585
 []\T1/ppl/m/n/10.95 To de-clare run-time poly-mor-phic vari-ables one has to pu
 t so-called ``trait ob-jects'' into ``Boxes'',
  []
@@ -512,53 +512,64 @@ File: lstmisc.sty 2020/03/24 1.8d (Carsten Heinz)
 (./Code/Swift/extension.swift) [19] (./Code/Swift/mixed.swift [20] [21])
 [22] [23] [24]
 Chapter 4.
-[25
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2020/03/24 1.8d listings language file
+)
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2020/03/24 1.8d listings language file
+) [25
 
 ]
+
+LaTeX Warning: Reference `' on page 26 undefined on input line 878.
+
+
+Overfull \hbox (5.5727pt too wide) in paragraph at lines 881--885
+[]\T1/ppl/m/n/10.95 In par-tic-u-lar, in or-der to use ab-stract in-ter-faces t
+o sup-port run-time poly-mor-phic ob-jects through
+ []
+
+
+Overfull \hbox (2.14284pt too wide) in paragraph at lines 881--885
+\T1/ppl/m/n/10.95 sub-typ-ing, For-tran's \T1/fvm/m/n/10.95 class \T1/ppl/m/n/1
+0.95 spec-i-fier for vari-able dec-la-ra-tions needs to be en-hanced to ac-cept
+ named
+ []
+
+[26]
+Overfull \hbox (13.27109pt too wide) in paragraph at lines 953--958
+\T1/ppl/m/n/10.95 User-defined (i.e. de-rived) types can be made to con-form to
+ an in-ter-face by in-tro-duc-ing an \T1/fvm/m/n/10.95 implements
+ []
+
+[27] [28] [29] [30]
 Chapter 5.
-(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
-File: lstlang1.sty 2020/03/24 1.8d listings language file
-)
-(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
-File: lstlang1.sty 2020/03/24 1.8d listings language file
-)
-
-LaTeX Warning: Reference `' on page 26 undefined on input line 881.
-
-[26
-
-] [27] [28] [29] [30]
-Chapter 6.
 [31
 
 ] [32] [33] [34]
-Chapter 7.
+Chapter 6.
 LaTeX Font Info:    Trying to load font information for T1+cmss on input line 1
-313.
+385.
 (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmss.fd
 File: t1cmss.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 ) [35
 
 ]
 (./Code/Fortran/mixed.ft [36] [37] [38]) (./Code/Fortran/static.ft [39]
-[40] [41]) [42] [43]
-Chapter 8.
-(./traits.bbl [44
-
-]) [45
+[40] [41]) [42] (./traits.bbl [43]) [44
 
 ] (./traits.aux)
 
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `traits.out' has not changed.
-(rerunfilecheck)             Checksum: 458D7E5983EC55684AC0A852D6116B30;10166.
+(rerunfilecheck)             Checksum: 6FAA337D9C1016E556A70FC0A8C35286;8773.
  ) 
 Here is how much of TeX's memory you used:
- 15215 strings out of 480247
- 226156 string characters out of 5896151
- 750978 words of memory out of 5000000
- 31909 multiletter control sequences out of 15000+600000
+ 15241 strings out of 480247
+ 226537 string characters out of 5896151
+ 751022 words of memory out of 5000000
+ 31920 multiletter control sequences out of 15000+600000
  497235 words of font info for 77 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  60i,6n,68p,7900b,3160s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -569,10 +580,10 @@ onts/type1/public/bera/fvmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
 blic/bera/fvmro8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/u
 plb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></
 usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on traits.pdf (46 pages, 227964 bytes).
+Output written on traits.pdf (45 pages, 230974 bytes).
 PDF statistics:
- 1658 PDF objects out of 1728 (max. 8388607)
- 1549 compressed objects within 16 object streams
- 1036 named destinations out of 1200 (max. 500000)
- 385 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1657 PDF objects out of 1728 (max. 8388607)
+ 1550 compressed objects within 16 object streams
+ 1051 named destinations out of 1200 (max. 500000)
+ 337 words of extra memory for PDF output out of 10000 (max. 10000000)
 
