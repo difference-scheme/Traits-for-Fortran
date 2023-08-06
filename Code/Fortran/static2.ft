@@ -66,9 +66,9 @@ module pairwise_library
    implicit none
    private
    
-   type, public, implements(ISum) :: PairwiseSum
+   type, public, implements(ISum) :: PairwiseSum{ISum :: U}
       private
-      class(ISum), allocatable :: other
+      type(U) :: other
    contains
       procedure :: sum
    end type PairwiseSum
@@ -76,9 +76,9 @@ module pairwise_library
 contains
 
    function sum{INumeric :: T}(self,x) result(s)
-      class(PairwiseSum), intent(in) :: self
-      type(T),            intent(in) :: x(:)
-      type(T)                        :: s
+      class(PairwiseSum{U}), intent(in) :: self
+      type(T),               intent(in) :: x(:)
+      type(T)                           :: s
       integer :: m
       if (size(x) <= 2) then
          s = self%other%sum(x)
@@ -98,9 +98,9 @@ module averager_library
    implicit none
    private
 
-   type, public, implements(IAverager) :: Averager
+   type, public, implements(IAverager) :: Averager{ISum :: U}
       private
-      class(ISum), allocatable :: drv
+      type(U) :: drv
    contains
       procedure :: average
    end type Averager
@@ -108,9 +108,9 @@ module averager_library
 contains
 
    function average{INumeric :: T}(self,x) result(a)
-      class(Averager), intent(in) :: self
-      type(T),         intent(in) :: x(:)
-      type(T)                     :: a
+      class(Averager{U}), intent(in) :: self
+      type(T),            intent(in) :: x(:)
+      type(T)                        :: a
       a = self%drv%sum(x) / T(size(x))
    end function average
 
@@ -131,9 +131,9 @@ program main
    integer :: key
    class(IAverager), allocatable :: avs, avp, av
 
-   ! use of enhanced structure constructors
-   avs = Averager(drv = SimpleSum())
-   avp = Averager(drv = PairwiseSum(other = SimpleSum()))
+   ! use of parameterized structure constructors for Averager
+   avs = Averager{SimpleSum}()
+   avp = Averager{PairwiseSum{SimpleSum}}()
 
    write(*,'(a)') 'Simple   sum average: 1'
    write(*,'(a)') 'Pairwise sum average: 2'

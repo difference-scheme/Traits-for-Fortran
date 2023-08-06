@@ -11,7 +11,13 @@
 \usepackage[title]{appendix}
 \usepackage{csquotes}
 \usepackage{mathpazo}
-%\usepackage{mathptmx}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{tablefootnote}
+
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}} 
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}} 
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
 
 \newcommand{\code}[1]{{\selectfont\ttfamily{#1}}}
 
@@ -196,9 +202,9 @@ implementation inheritance was Objective~C. It introduced
 ``protocols'' (i.e. polymorphic interfaces) in the year
 1990. Protocols in Objective C consist of pure function signatures,
 that lack implementation code. Objective~C provided a mechanism to
-implement (multiple) such protocols by a class, and to thus make
+implement multiple such protocols by a class, and to thus make
 classes conform to protocols. This can be viewed as a restricted form
-of (multiple) inheritance, namely inheritance of object
+of multiple inheritance, namely inheritance of object
 \emph{specification}, which is also known as \emph{subtyping}. Only a
 few years later, in 1995, the Java language hugely popularized these
 ideas under the monikers ``interfaces'' and ``interface
@@ -866,8 +872,8 @@ type-bound procedures, named \code{add} and \code{sub}:
 Since this is a simple addition to Fortran, that merely aims to
 further extend the use cases of abstract interfaces in the language
 (which presently serve as bounds on the signatures of procedure
-pointers, and methods of abstract classes), it is fully backwards
-compatible.
+pointers, and \code{deferred}, i.e. abstract, methods), it is fully
+backwards compatible.
 
 \subsection{Variable declarations}
 
@@ -896,7 +902,7 @@ table). Since this requires that such ``trait objects'' (like
 \code{adder} or \code{adderptr} in this example) be instantiated at
 run time, it also entails that such objects be either declared using
 the \code{allocatable}, or the \code{pointer} attribute (as in the
-examples above), or that they be arguments to a procedure (as in
+examples above), or that they be arguments to a procedure (as in the
 example of Sect.~\ref{sect:interface_defs}). This is in full
 accordance with how variables, that make use of run-time polymorphism
 through implementation inheritance (i.e. subclassing), are declared in
@@ -986,11 +992,11 @@ end module basic
 \end{lstlisting}
 by providing implementations of all the method signatures that are
 contained in that interface. Notice, how \code{BasicMath}, by virtue
-of being a ``descendant'' of \code{IBasicMath}, is now also a
-descendant of \code{IAddition}, and \code{ISubtraction}. Hence,
-\code{BasicMath} can be used in client code that requires conformance
-to either one of the interfaces \code{IBasicMath}, \code{IAddition},
-or \code{ISubtraction}.
+of being an implementor, or ``descendant'', of \code{IBasicMath}, is
+now also a descendant of \code{IAddition}, and
+\code{ISubtraction}. Hence, \code{BasicMath} can be used in client
+code that requires conformance to either one of the interfaces
+\code{IBasicMath}, \code{IAddition}, or \code{ISubtraction}.
 
 It is crucial, for flexibility, that the above interface inheritance
 mechanism allow for a type to implement \emph{multiple} different
@@ -1031,7 +1037,7 @@ capabilities.
 
 Notice, that such a type \code{annex} has \emph{no} relation to
 subclassing, i.e. one derived type being extended into another through
-rigid implementation inheritance. Rather, this is a feature that adds
+(rigid) implementation inheritance. Rather, this is a feature that adds
 new capabilities to a single, \emph{given} type. The feature is
 modelled after the ``\code{extension}'' feature of Swift, where it is
 used to enable retroactive implementation of new methods, additional
@@ -1169,7 +1175,7 @@ and compile-time polymorphism in Fortran. We will now proceed with
 discussing some further enhancements that are required in order to
 further support compile-time polymorphism, i.e. generics.
 
-\section{Interfaces containing generic procedure signatures}
+\section{Interfaces with generic procedure signatures}
 \label{sect:generic_interfaces}
 
 Abstract interfaces should be allowed to contain signatures of generic
@@ -1193,14 +1199,14 @@ The example illustrates the use of a generic type parameter, i.e.  a
 meta-type, or a \emph{type of types}. In this example, this type
 parameter is simply called \code{T}, and it is preceded by the name of
 an abstract interface that expresses a constraint on the type
-parameter. Fortran generics thus support ``strong concepts''. Both,
-the type parameter and its constraint, are part of a generic type
-parameter list that is enclosed in curly braces, and that follows
-immediately behind the procedure's name. Notice that, since \code{T}
-is a meta-type, the syntax used above, that deviates slightly from how
-Fortran's usual function arguments are declared, appears justified as
-it reflects that, in type parameters, one is dealing with different
-entities.
+parameter. The proposed Fortran generics thus support ``strong
+concepts''. Both, the type parameter and its constraint, are part of a
+generic type parameter list that is enclosed in curly braces, and that
+follows immediately behind the procedure's name. Notice that, since
+\code{T} is a meta-type, the syntax used above, that deviates slightly
+from how Fortran's usual function arguments are declared, appears
+justified as it reflects that, in type parameters, one is dealing with
+different entities.
 
 \section{Interfaces as type sets}
 
@@ -1221,22 +1227,11 @@ signatures}, namely the signatures of the intersecting (common) set of
 all the operations/functions for which the listed intrinsic types
 provide implementations.
 
-Constraints for, e.g., different ``length'' parameters for character
-variables could be handled in the same fashion. The following
-interface could, for the lack of a better example, be used as a
-generics type constraint, to only admit \code{character} variables
-with a length of either 4 or 8 characters:
-\begin{lstlisting}[language=LFortran,style=boxed]
-   abstract interface :: IPrintable
-      character(len=4) | character(len=8)
-   end interface
-\end{lstlisting}
-
 For simple use cases, it should be optionally possible for the
 programmer to employ a shorter notation for declaring type constraints
-than having to define a separate interface like \code{IPrintable}, or
-\code{INumeric} above. Like in the following modification of interface
-\code{ISum}'s original declaration, that was given in
+than having to define a separate interface, like \code{INumeric}
+above. Like in the following modification of interface \code{ISum}'s
+original declaration, that was given in
 Sect.~\ref{sect:generic_interfaces}:
 \begin{lstlisting}[language=LFortran,style=boxed]
    abstract interface :: ISum
@@ -1253,7 +1248,7 @@ to be used as a type constraint for type \code{T}. In this particular
 case, to admit only the default \code{integer}, or \code{real(real64)}
 types, for \code{T}, as before.
 
-\section{Predefined interfaces for expressing common constraints}
+\section{Predefined interfaces}
 
 The language should ideally supply some predefined, commonly used generic
 constraints in the form of abstract interfaces that are contained in a
@@ -1294,9 +1289,37 @@ requires the functionality of \code{INumeric}.
 
 \section{Conversions to generic types}
 
+A language like Fortran, that is intended for numeric use, where
+conversions between different numeric types are required quite
+frequently, must allow conversions to generic types to be done as
+easily as it is the case in the Go language. That is, by means that
+are built into the language, and without having to rely exclusively on
+external library functionality for this purpose.
+
+For instance, generic routines will often have to initialize the
+result of reduction operations. As it is the case in the test problem
+of Sect.~\ref{}, where a variable for summation needs to be
+initialized to the zero constant of type \code{T}. In Go, it is easily
+possible to express this initialization by simply transforming the
+zero constant of the \code{int} type, \code{0}, into the corresponding
+constant of type \code{T} as follows:
+\begin{lstlisting}[language=LFortran,style=boxed]
+   s = T(0)
+\end{lstlisting}
+
+If, for instance, \code{T} is then instantiated at compile time with
+the \code{float64} type, the expression \code{T(0)} will simply be
+transformed by the compiler into \code{float64(0)}, i.e. a call to the
+correct conversion function. In Fortran's case, the compiler would
+have to translate the above expression into the intrinsic function
+call \code{real(0,kind=real64)}, which should actually be easy to do,
+also for all other cases where conversion is indeed
+possible. Otherwise, the compiler should emit an error, and abort the
+compilation at the generics instantiation step.
+
 \section{Generic type parameters for methods and procedures}
 
-As already mentioned above, LFortran's design of generics should
+As already mentioned above, LFortran's basic generics design should
 follow Swift's, if possible, and allow both ordinary and type-bound
 procedures (i.e. methods) to be given their own generic type
 parameters. An implementation of the generic method \code{sum} of
@@ -1373,12 +1396,19 @@ any generic type parameters itself.
 Fortran's special role, as a language that caters to numeric
 programming, demands that any generics design for the language must
 allow for the possibility to also handle genericity of array rank. The
-present design offers a lot of room in this respect. But for the
-purpose of a very first prototype implementation of the generics
-features discussed here this is not essential, and we thus prefer to
-focus on such an extension in a future document.
+present design offers a lot of room in this respect, by means of the
+device of ``associated items'' or ``associated types'' as they are
+implemented in both traits and protocols in Rust and Swift,
+respectively. In addition to different array ranks and array
+dimensions, also different ``length'' parameters of character
+variables could be treated via this same device. But for the purpose
+of a very first prototype implementation of the generics features
+described here, we consider a discussion of these features to be
+non-essential, and we thus prefer to focus on them in a separate
+document.
 
-\chapter{Proposed Fortran versions of the test example}
+
+\chapter{Fortran versions of the test example}
 
 \section{Functional version}
 
@@ -1418,11 +1448,7 @@ other languages.
   \code{implements(...)} specifier in a derived-type definition
   (equivalent to Swift).
 \item
-  Conversions to generic types are done as in Go. Notice, how the
-  compiler will have to do the necessary replacements of, e.g.,
-  \code{T(0)} in function \code{sum} of class \code{SimpleSum} by
-  calls to Fortran's correct conversion functions for integer and real
-  types of the right kinds.
+  Conversions to generic types are done as in Go.
 \item
   The example code makes use, in the main program, of the new
   structure constructors, with their enhancements that were discussed
@@ -1449,56 +1475,115 @@ rigidity in the program, by both decoupling it and making it operate
 on multiple data types, thus allowing for a maximum of code
 reuse.
 
-\section{Encapsulated (mostly) static version}
+\section{Encapsulated version with static dispatch of \code{sum} methods}
 
-To finally demonstrate how methods can be made to use static, as
-opposed to dynamic dispatch, Listing~\ref{lst:staticFortran} gives a
-version of the encapsulated Fortran code that contains all the
-required changes, as compared to Listing~\ref{lst:OOFortran}, to
-effect static dispatch of the \code{sum} methods.
+One of the greatest benefits of the present design is that methods in
+OO programming can be made polymorphic, while still being dispatched
+statically, as opposed to dynamically. This will enable polymorphic
+method inlining by the compiler, to potentially improve code
+performance. Listing~\ref{lst:staticFortran} gives a \emph{minimally}
+changed version of the encapsulated Fortran code of
+Listing~\ref{lst:OOFortran}, to effect static dispatch of the
+different \code{sum} methods.
 
-The changes are confined to a parameterization of the
+The required changes are confined to a parameterization of the
 \code{PairwiseSum} and \code{Averager} derived types, by generic type
 parameters that are named \code{U}. These type parameters are then
-used in order to statically declare the field objects ``\code{other}''
-and ``\code{drv}'' of these derived types, respectively, that were
-previously declared (using the \code{class} specifier) as
-\code{allocatable} run-time polymorphic objects that were to be
-initialized dynamically at run-time. Correspondingly, there is no
-longer any such dynamic instantiation necessary for these objects. The
-only things that are required are instantiations of the parameterized
-derived types in which these objects are contained. Notice how these
-instantiations are carried out from the main program within the calls
-of \code{Averager}'s constructor, which is provided with the types
-\code{SimpleSum}, and \code{PairwiseSum}.
+used in order to declare the field objects \code{other} and \code{drv}
+of these derived types, respectively, by means of the \code{type}
+specifier. This signifies compile-time polymorphism for these objects
+(and hence static dispatch of their methods, as opposed to the
+\code{class} specifier that was used previously in order to effect
+run-time polymorphism and dynamic dispatch. See also
+Table~\ref{tab:dispatch} for a summary of rules regarding method
+dispatch).
 
+Everything else, especially the declaration of these object variables
+as \code{alloctable}s and their instantiation at run-time using
+constructor chaining, was kept the same in order to demonstrate that
+static method dispatch does \emph{not} necessarily mean that the
+actual object instances that contain the methods must be initialized
+and their memory allocated at compile-time (although in this
+particular case this is possible, as demonstrated in the next section,
+given that these objects do not contain any other \code{allocatable}
+data fields, like arrays).
 
-\lstinputlisting[language=LFortran,style=boxed,label={lst:staticFortran},caption={Encapsulated Fortran version of the array averaging example with static method dispatch.}]{Code/Fortran/static.ft}
+\lstinputlisting[language=LFortran,style=boxed,label={lst:staticFortran},caption={Demonstrates static method dispatch for the \code{sum} methods.}]{Code/Fortran/static1.ft}
 
-Notice also, that in Listing~\ref{lst:staticFortran}, the \code{av}
-object of \code{IAverager} type that is initialized in the
-\code{select case} statement of the main program still needs to make
-use of run-time polymorphism. This object cannot be made to employ
-compile-time polymorphism, as it is used within a statement that
-performs a run-time decision.
+\begin{table}[h]
+\centering
+\begin{tabular} {L{0.308\textwidth} C{0.308\textwidth} C{0.308\textwidth}}
+  \toprule
+  \textbf{object declaration} & \textbf{dynamic dispatch} & \textbf{static dispatch} \\
+  \midrule
+  \code{class(Interface)}   &  always             & never \\
+  \code{class(DerivedType)} &  if \code{DerivedType} is \code{extend}ed &
+  if \code{DerivedType} is un\code{extend}ed\tablefootnote{Or the method is declared as \code{non\_overridable}.} \\
+  \code{type(DerivedType)}  &  never              & always \\
+  \bottomrule
+\end{tabular}
+\caption{Correspondence between object declarations and method
+  dispatch strategies.}
+\label{tab:dispatch}
+\end{table}
 
-As a final remark we'd like to emphasize that a coding style as that
-given in Listing~\ref{lst:OOFortran} should generally be preferred
-over that of Listing~\ref{lst:staticFortran}, as it leads to more
-readable code. The use of numerous generic parameters can quickly make
-code unreadable. We'd therefore recommend the default use of run-time
-polymorphism for managing dependencies on user implementation code,
-and the employment of generics with static dispatch for this latter
+As in a corresponding Swift code version of the test problem, the
+instantiation of the objects \code{other} and \code{drv}
+through constructor calls in the main program has the benefit that the
+compiler should be able to infer the correct type parameters that are
+required to automatically instantiate the involved generic derived
+types. Notice also, that in Listing~\ref{lst:staticFortran}, the
+\code{av} object of \code{IAverager} type still needs to make use of
+run-time polymorphism, because it is initialized in a \code{select
+  case} statement by the main program. This object cannot be made to
+employ compile-time polymorphism, as it is initialized within a
+statement that performs a run-time decision.
+
+As a final remark we'd like to emphasize that, on readability grounds,
+a coding style as that given in Listing~\ref{lst:OOFortran} is
+generally preferrable over that of
+Listing~\ref{lst:staticFortran}. The use of numerous generic
+parameters can quickly make code unreadable. We'd therefore recommend
+the default use of run-time polymorphism for managing dependencies on
+user-defined types, and the employment of generics for this latter
 task only in cases where profiling has shown that static dispatch
 would significantly speed up a program's execution (by allowing method
 inlining by the compiler). Of course, the use of generics to manage
 dependencies on language intrinsic types remains unaffected by this
 recommendation.
 
-%\chapter{Comparison to J3's generics proposal for Fortran~202y}
-%
-%{\sf Feel free to add a corresponding code version here,
-%since I am not sufficiently familiar with their approach.}
+\section{Version with static object declarations}
+
+In the present simple example, and taking Listing~\ref{lst:staticFortran}
+as a baseline, it is actually possible to even get rid of some of the
+run-time memory allocation overhead of the program, by having the
+field objects \code{other} and \code{drv}, that are contained within
+the \code{PairwiseSum} and \code{Averager} types, be statically
+declared. To accomplish this, the two lines
+\begin{lstlisting}[language=LFortran,style=boxed]
+  type(U), allocatable :: other
+  type(U), allocatable :: drv
+\end{lstlisting}
+in Listing~\ref{lst:staticFortran} need to be replaced by the
+following two code lines:
+\begin{lstlisting}[language=LFortran,style=boxed]
+  type(U) :: other
+  type(U) :: drv
+\end{lstlisting}
+
+Correspondingly, the object instantiations that are to be carried out
+from the main program need to be changed from
+\begin{lstlisting}[language=LFortran,style=boxed]
+  avs = Averager(drv = SimpleSum())
+  avp = Averager(drv = PairwiseSum(other = SimpleSum()))
+\end{lstlisting}
+into the following two calls of \code{Averager}'s parameterized
+structure constructor, which must now be provided with the types
+\code{SimpleSum}, and \code{PairwiseSum} as generic type parameters:
+\begin{lstlisting}[language=LFortran,style=boxed]
+  avs = Averager{SimpleSum}()
+  avp = Averager{PairwiseSum{SimpleSum}}()
+\end{lstlisting}
 
 \bibliographystyle{plain}
 \bibliography{traits}

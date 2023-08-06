@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  5 AUG 2023 15:12
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  6 AUG 2023 12:37
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -285,10 +285,65 @@ File: csquotes.cfg
 Package: mathpazo 2020/03/25 PSNFSS-v9.3 Palatino w/ Pazo Math (D.Puga, WaS) 
 \symupright=\mathgroup4
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 28.
+(/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty
+Package: array 2021/10/04 v2.5f Tabular extension package (FMi)
+\col@sep=\dimen155
+\ar@mcellbox=\box52
+\extrarowheight=\dimen156
+\NC@list=\toks20
+\extratabsurround=\skip52
+\backup@length=\skip53
+\ar@cellbox=\box53
+)
+(/usr/share/texlive/texmf-dist/tex/latex/booktabs/booktabs.sty
+Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
+\heavyrulewidth=\dimen157
+\lightrulewidth=\dimen158
+\cmidrulewidth=\dimen159
+\belowrulesep=\dimen160
+\belowbottomsep=\dimen161
+\aboverulesep=\dimen162
+\abovetopsep=\dimen163
+\cmidrulesep=\dimen164
+\cmidrulekern=\dimen165
+\defaultaddspace=\dimen166
+\@cmidla=\count292
+\@cmidlb=\count293
+\@aboverulesep=\dimen167
+\@belowrulesep=\dimen168
+\@thisruleclass=\count294
+\@lastruleclass=\count295
+\@thisrulewidth=\dimen169
+)
+(/usr/share/texlive/texmf-dist/tex/latex/tablefootnote/tablefootnote.sty
+Package: tablefootnote 2014/01/26 v1.1c Table foot notes (HMM)
+
+(/usr/share/texlive/texmf-dist/tex/latex/xifthen/xifthen.sty
+Package: xifthen 2015/11/05 v1.4.0 Extended ifthen features
+
+(/usr/share/texlive/texmf-dist/tex/latex/tools/calc.sty
+Package: calc 2017/05/25 v4.3 Infix arithmetic (KKT,FJ)
+\calc@Acount=\count296
+\calc@Bcount=\count297
+\calc@Adimen=\dimen170
+\calc@Bdimen=\dimen171
+\calc@Askip=\skip54
+\calc@Bskip=\skip55
+LaTeX Info: Redefining \setlength on input line 80.
+LaTeX Info: Redefining \addtolength on input line 81.
+\calc@Ccount=\count298
+\calc@Cskip=\skip56
+)
+(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
+Package: ifthen 2020/11/24 v1.1c Standard LaTeX ifthen package (DPC)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/ifmtarg/ifmtarg.sty
+Package: ifmtarg 2018/04/16 v1.2b check for an empty argument
+)))
+Package hyperref Info: Option `colorlinks' set `true' on input line 34.
 Package csquotes Info: Checking for multilingual support...
 Package csquotes Info: ... none found.
-LaTeX Font Info:    Trying to load font information for T1+ppl on input line 32
+LaTeX Font Info:    Trying to load font information for T1+ppl on input line 38
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1ppl.fd
@@ -296,30 +351,30 @@ File: t1ppl.fd 2001/06/04 font definitions for T1/ppl.
 )
 (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2022-01-12 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count292
-\l__pdf_internal_box=\box52
+\l__color_backend_stack_int=\count299
+\l__pdf_internal_box=\box54
 )
 (./traits.aux)
 \openout1 = `traits.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 32.
-LaTeX Font Info:    ... okay on input line 32.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 32.
-LaTeX Font Info:    ... okay on input line 32.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 32.
-LaTeX Font Info:    ... okay on input line 32.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 32.
-LaTeX Font Info:    ... okay on input line 32.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 32.
-LaTeX Font Info:    ... okay on input line 32.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 32.
-LaTeX Font Info:    ... okay on input line 32.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 32.
-LaTeX Font Info:    ... okay on input line 32.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 32.
-LaTeX Font Info:    ... okay on input line 32.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 32.
-LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -355,22 +410,22 @@ LaTeX Font Info:    ... okay on input line 32.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-\c@lstlisting=\count293
+\c@lstlisting=\count300
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count294
-\scratchdimen=\dimen155
-\scratchbox=\box53
-\nofMPsegments=\count295
-\nofMParguments=\count296
-\everyMPshowfont=\toks20
-\MPscratchCnt=\count297
-\MPscratchDim=\dimen156
-\MPnumerator=\count298
-\makeMPintoPDFobject=\count299
-\everyMPtoPDFconversion=\toks21
+\scratchcounter=\count301
+\scratchdimen=\dimen172
+\scratchbox=\box55
+\nofMPsegments=\count302
+\nofMParguments=\count303
+\everyMPshowfont=\toks21
+\MPscratchCnt=\count304
+\MPscratchDim=\dimen173
+\MPnumerator=\count305
+\makeMPintoPDFobject=\count306
+\everyMPtoPDFconversion=\toks22
 )
-Package hyperref Info: Link coloring ON on input line 32.
+Package hyperref Info: Link coloring ON on input line 38.
  (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
 
@@ -380,43 +435,43 @@ Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 (/usr/share/texlive/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-\c@section@level=\count300
+\c@section@level=\count307
 )
-LaTeX Info: Redefining \ref on input line 32.
-LaTeX Info: Redefining \pageref on input line 32.
-LaTeX Info: Redefining \nameref on input line 32.
+LaTeX Info: Redefining \ref on input line 38.
+LaTeX Info: Redefining \pageref on input line 38.
+LaTeX Info: Redefining \nameref on input line 38.
 
 (./traits.out) (./traits.out)
 \@outlinefile=\write3
 \openout3 = `traits.out'.
 
-\big@size=\dimen157
+\big@size=\dimen174
 LaTeX Font Info:    Trying to load font information for OT1+ppl on input line 4
-0.
+6.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ppl.fd
 File: ot1ppl.fd 2001/06/04 font definitions for OT1/ppl.
 )
 LaTeX Font Info:    Trying to load font information for OML+zplm on input line 
-40.
+46.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omlzplm.fd
 File: omlzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OML/zplm.
 )
 LaTeX Font Info:    Trying to load font information for OMS+zplm on input line 
-40.
+46.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omszplm.fd
 File: omszplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMS/zplm.
 )
 LaTeX Font Info:    Trying to load font information for OMX+zplm on input line 
-40.
+46.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omxzplm.fd
 File: omxzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMX/zplm.
 )
 LaTeX Font Info:    Trying to load font information for OT1+zplm on input line 
-40.
+46.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1zplm.fd
 File: ot1zplm.fd 2002/09/08 Fontinst v1.914 font definitions for OT1/zplm.
@@ -427,25 +482,25 @@ ination with the same identifier (name{page.1}) has been already used, duplicat
 e ignored
 <to be read again> 
                    \relax 
-l.43 \chapter
+l.49 \chapter
              {Introduction} [1]
 Chapter 1.
 [2
 
 ]
-LaTeX Font Info:    Trying to load font information for TS1+ppl on input line 9
-7.
+LaTeX Font Info:    Trying to load font information for TS1+ppl on input line 1
+03.
  (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ppl.fd
 File: ts1ppl.fd 2001/06/04 font definitions for TS1/ppl.
 )
-LaTeX Font Info:    Trying to load font information for T1+fvm on input line 11
-5.
+LaTeX Font Info:    Trying to load font information for T1+fvm on input line 12
+1.
 
 (/usr/share/texlive/texmf-dist/tex/latex/bera/t1fvm.fd
 File: t1fvm.fd 2004/09/07 scalable font definitions for T1/fvm.
 )
 LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
-(Font)              scaled to size 8.97906pt on input line 115.
+(Font)              scaled to size 8.97906pt on input line 121.
  [3] [4] [5]
 Chapter 2.
 [6
@@ -463,7 +518,7 @@ File: lstlang3.sty 2020/03/24 1.8d listings language file
 LaTeX Font Info:    Font shape `T1/fvm/b/n' will be
 (Font)              scaled to size 8.97906pt on input line 1.
  [7])
-Overfull \hbox (3.62334pt too wide) in paragraph at lines 359--365
+Overfull \hbox (3.62334pt too wide) in paragraph at lines 365--371
 []\T1/ppl/m/n/10.95 Interfaces con-sist of ei-ther func-tion sig-na-tures, or \
 T1/ppl/m/it/10.95 type sets\T1/ppl/m/n/10.95 , like ``\T1/fvm/m/n/10.95 int | f
 loat64\T1/ppl/m/n/10.95 '' in the present
@@ -472,13 +527,13 @@ loat64\T1/ppl/m/n/10.95 '' in the present
 [8] (./Code/Go/functional.go [9]) [10]
 Chapter 3.
 
-Overfull \hbox (5.81958pt too wide) in paragraph at lines 418--427
+Overfull \hbox (5.81958pt too wide) in paragraph at lines 424--433
 \T1/ppl/m/n/10.95 Go has sup-ported run-time poly-mor-phism through (poly-mor-p
 hic) ``in-ter-faces'' (and hence modern-
  []
 
 
-Overfull \hbox (0.76628pt too wide) in paragraph at lines 443--449
+Overfull \hbox (0.76628pt too wide) in paragraph at lines 449--455
 []\T1/ppl/m/n/10.95 Since ver-sion 1.18, Go also sup-ports compile-time poly-mo
 r-phism through gener-ics. Go's gener-
  []
@@ -486,7 +541,7 @@ r-phism through gener-ics. Go's gener-
 [11
 
 ] (./Code/Go/mixed.go [12] [13]) [14]
-Overfull \hbox (8.59001pt too wide) in paragraph at lines 580--585
+Overfull \hbox (8.59001pt too wide) in paragraph at lines 586--591
 []\T1/ppl/m/n/10.95 To de-clare run-time poly-mor-phic vari-ables one has to pu
 t so-called ``trait ob-jects'' into ``Boxes'',
  []
@@ -521,23 +576,23 @@ File: lstlang1.sty 2020/03/24 1.8d listings language file
 
 ]
 
-LaTeX Warning: Reference `' on page 26 undefined on input line 878.
+LaTeX Warning: Reference `' on page 26 undefined on input line 884.
 
 
-Overfull \hbox (5.5727pt too wide) in paragraph at lines 881--885
+Overfull \hbox (5.5727pt too wide) in paragraph at lines 887--891
 []\T1/ppl/m/n/10.95 In par-tic-u-lar, in or-der to use ab-stract in-ter-faces t
 o sup-port run-time poly-mor-phic ob-jects through
  []
 
 
-Overfull \hbox (2.14284pt too wide) in paragraph at lines 881--885
+Overfull \hbox (2.14284pt too wide) in paragraph at lines 887--891
 \T1/ppl/m/n/10.95 sub-typ-ing, For-tran's \T1/fvm/m/n/10.95 class \T1/ppl/m/n/1
 0.95 spec-i-fier for vari-able dec-la-ra-tions needs to be en-hanced to ac-cept
  named
  []
 
 [26]
-Overfull \hbox (13.27109pt too wide) in paragraph at lines 953--958
+Overfull \hbox (13.27109pt too wide) in paragraph at lines 959--964
 \T1/ppl/m/n/10.95 User-defined (i.e. de-rived) types can be made to con-form to
  an in-ter-face by in-tro-duc-ing an \T1/fvm/m/n/10.95 implements
  []
@@ -546,33 +601,43 @@ Overfull \hbox (13.27109pt too wide) in paragraph at lines 953--958
 Chapter 5.
 [31
 
-] [32] [33] [34]
+] [32]
+
+LaTeX Warning: Reference `' on page 33 undefined on input line 1301.
+
+[33] [34] [35]
 Chapter 6.
 LaTeX Font Info:    Trying to load font information for T1+cmss on input line 1
-385.
+415.
 (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmss.fd
 File: t1cmss.fd 2019/12/16 v2.5j Standard LaTeX font definitions
-) [35
+)
+(./Code/Fortran/mixed.ft [36
 
-]
-(./Code/Fortran/mixed.ft [36] [37] [38]) (./Code/Fortran/static.ft [39]
-[40] [41]) [42] (./traits.bbl [43]) [44
+] [37] [38] [39])
+LaTeX Font Info:    Font shape `T1/fvm/b/n' will be
+(Font)              scaled to size 11.80809pt on input line 1478.
+ (./Code/Fortran/static1.ft
+[40] [41] [42] [43])
+LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
+(Font)              scaled to size 7.38007pt on input line 1528.
+ [44] (./traits.bbl [45]) [46
 
 ] (./traits.aux)
 
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `traits.out' has not changed.
-(rerunfilecheck)             Checksum: 6FAA337D9C1016E556A70FC0A8C35286;8773.
+(rerunfilecheck)             Checksum: 572EC4B5F7AEF7CF086E4ADD79BC6343;8881.
  ) 
 Here is how much of TeX's memory you used:
- 15241 strings out of 480247
- 226537 string characters out of 5896151
- 751022 words of memory out of 5000000
- 31920 multiletter control sequences out of 15000+600000
- 497235 words of font info for 77 fonts, out of 8000000 for 9000
+ 15739 strings out of 480247
+ 235513 string characters out of 5896151
+ 757777 words of memory out of 5000000
+ 32359 multiletter control sequences out of 15000+600000
+ 510853 words of font info for 107 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 60i,6n,68p,7900b,3160s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 60i,16n,68p,7900b,3160s stack positions out of 5000i,500n,10000p,200000b,80000s
  </home/knk/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/ecss1095.600pk
 >{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive
 /texmf-dist/fonts/type1/public/bera/fvmb8a.pfb></usr/share/texlive/texmf-dist/f
@@ -580,10 +645,10 @@ onts/type1/public/bera/fvmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
 blic/bera/fvmro8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/u
 plb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></
 usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on traits.pdf (45 pages, 230974 bytes).
+Output written on traits.pdf (47 pages, 236511 bytes).
 PDF statistics:
- 1657 PDF objects out of 1728 (max. 8388607)
- 1550 compressed objects within 16 object streams
- 1051 named destinations out of 1200 (max. 500000)
- 337 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1703 PDF objects out of 1728 (max. 8388607)
+ 1594 compressed objects within 16 object streams
+ 1080 named destinations out of 1200 (max. 500000)
+ 345 words of extra memory for PDF output out of 10000 (max. 10000000)
 

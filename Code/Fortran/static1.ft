@@ -2,6 +2,8 @@ module interfaces
 
    use, intrinsic :: iso_fortran_env, only: real64
 
+   private   
+
    public :: INumeric, ISum, IAverager
    
    abstract interface :: INumeric
@@ -10,6 +12,7 @@ module interfaces
 
    abstract interface :: ISum
       function sum{INumeric :: T}(self,x) result(s)
+         import; implicit none
          class(ISum), intent(in) :: self
          type(T),     intent(in) :: x(:)
          type(T)                 :: s
@@ -18,6 +21,7 @@ module interfaces
 
    abstract interface :: IAverager
       function average{INumeric :: T}(self,x) result(a)
+         import; implicit none
          class(IAverager), intent(in) :: self
          type(T),          intent(in) :: x(:)
          type(T)                      :: a
@@ -30,10 +34,11 @@ end module interfaces
 module simple_library
 
    use interfaces, only: ISum, INumeric
-   
-   public :: SimpleSum
 
-   type, implements(ISum) :: SimpleSum
+   implicit none
+   private
+   
+   type, public, implements(ISum) :: SimpleSum
    contains
       procedure :: sum
    end type SimpleSum
@@ -58,11 +63,12 @@ module pairwise_library
 
    use interfaces, only: ISum, INumeric
    
-   public :: PairwiseSum
+   implicit none
+   private
    
-   type, implements(ISum) :: PairwiseSum{ISum :: U}
+   type, public, implements(ISum) :: PairwiseSum{ISum :: U}
       private
-      type(U) :: other
+      type(U), allocatable :: other
    contains
       procedure :: sum
    end type PairwiseSum
@@ -88,12 +94,13 @@ end module pairwise_library
 module averager_library
 
    use interfaces, only: IAverager, ISum, INumeric
-   
-   public :: Averager
-   
-   type, implements(IAverager) :: Averager{ISum :: U}
+
+   implicit none
+   private
+
+   type, public, implements(IAverager) :: Averager{ISum :: U}
       private
-      type(U) :: drv
+      type(U), allocatable :: drv
    contains
       procedure :: average
    end type Averager
@@ -124,9 +131,9 @@ program main
    integer :: key
    class(IAverager), allocatable :: avs, avp, av
 
-   ! use of parameterized structure constructors
-   avs = Averager{SimpleSum}()
-   avp = Averager{PairwiseSum{SimpleSum}}()
+   ! use of enhanced structure constructors
+   avs = Averager(drv = SimpleSum())
+   avp = Averager(drv = PairwiseSum(other = SimpleSum()))
 
    write(*,'(a)') 'Simple   sum average: 1'
    write(*,'(a)') 'Pairwise sum average: 2'
