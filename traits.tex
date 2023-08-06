@@ -28,9 +28,9 @@
 
 \hypersetup{
     colorlinks,
-    linkcolor={green!40!black},
+    linkcolor={blue!70!black},
     citecolor={blue!70!black},
-    urlcolor={blue!90!black}
+    urlcolor={blue!70!black}
 }
 
 \frenchspacing
@@ -992,11 +992,11 @@ end module basic
 \end{lstlisting}
 by providing implementations of all the method signatures that are
 contained in that interface. Notice, how \code{BasicMath}, by virtue
-of being an implementor, or ``descendant'', of \code{IBasicMath}, is
-now also a descendant of \code{IAddition}, and
-\code{ISubtraction}. Hence, \code{BasicMath} can be used in client
-code that requires conformance to either one of the interfaces
-\code{IBasicMath}, \code{IAddition}, or \code{ISubtraction}.
+of being an implementor of \code{IBasicMath}, is now also an
+implementor of \code{IAddition}, and \code{ISubtraction}. Hence,
+\code{BasicMath} can be used in client code that requires conformance
+to either one of the interfaces \code{IBasicMath}, \code{IAddition},
+or \code{ISubtraction}.
 
 It is crucial, for flexibility, that the above interface inheritance
 mechanism allow for a type to implement \emph{multiple} different
@@ -1325,6 +1325,7 @@ procedures (i.e. methods), and derived types to be given their own
 generic type parameters.
 
 \subsection{Procedures}
+\label{sect:generic_procedures}
 
 Using the syntax proposed in this document, an implementation of a
 Fortran function for array summation that is generic over the type of its
@@ -1340,14 +1341,16 @@ input array argument would look as follows:
       end do
    end function sum
 \end{lstlisting}
+Generic subroutines can be coded completely analogously.
 
 \subsection{Methods}
 \label{sect:generic_methods}
 
-The same algorithm implemented as a generic method \code{sum}, that is
-bound to a derived type with name \code{SimpleSum} which implements
-the interface \code{ISum} as it was given in
-Sect.~\ref{sect:generic_interfaces}, would instead look as follows:
+The same algorithm as that of Sect.~\ref{sect:generic_procedures}, when
+implemented as a generic method \code{sum} that is bound to a derived
+type named \code{SimpleSum}, which implements the interface \code{ISum}
+as it was given in Sect.~\ref{sect:generic_interfaces}, would instead
+look as follows:
 \begin{lstlisting}[language=LFortran,style=boxed]
 module simple_library
    ...
@@ -1379,14 +1382,33 @@ end module simple_library
 In addition to procedures, and methods, generic type parameter lists
 must also be allowed for derived type definitions, as in the following
 example, in which the same interface \code{ISum} from above is
-implemented by another derived-type, named PairwiseSum:
+implemented by another derived-type, named \code{PairwiseSum}:
 \begin{lstlisting}[language=LFortran,style=boxed]
-   type, implements(ISum) :: PairwiseSum{ISum :: U}
+module pairwise_library
+   ...   
+   type, public, implements(ISum) :: PairwiseSum{ISum :: U}
       private
       type(U) :: other
    contains
       procedure :: sum
    end type PairwiseSum
+
+contains
+
+   function sum{INumeric :: T}(self,x) result(s)
+      class(PairwiseSum{U}), intent(in) :: self
+      type(T),               intent(in) :: x(:)
+      type(T)                           :: s
+      integer :: m
+      if (size(x) <= 2) then
+         s = self%other%sum(x)
+      else
+         m = size(x) / 2
+         s = self%sum(x(:m)) + self%sum(x(m+1:))
+      end if
+   end function sum
+
+end module pairwise_library
 \end{lstlisting}
 \code{PairwiseSum} depends on a generic type parameter \code{U}, that
 is used within \code{PairwiseSum} itself in order to declare a field
@@ -1394,6 +1416,15 @@ variable of \code{type(U)}, which is named \code{other}. As is
 indicated by the type constraint on \code{U}, object \code{other}
 conforms to the \code{ISum} interface itself, and therefore contains
 its own implementation of the \code{sum} procedure.
+
+Notice also, how \code{PairwiseSum}'s implementation of method
+\code{sum} has access to the parameter \code{U} through the
+declaration of its \code{self} object, that is declared being of
+\code{class(PairwiseSum\{U\})}. Hence, this method can now, in
+principle, make use of two independently defined generic type
+parameters, \code{T} and \code{U}. This provides increased
+flexibility.
+
 
 
 \section{Updated structure constructors}
@@ -1413,27 +1444,28 @@ must be legal. As in Sect.~\ref{sect:generic_methods},
 \code{ISum} interface, but (in contrast to the \code{PairwiseSum}
 type) is not parameterized by any generic type parameter itself.
 
-We also propose to make a further, small, but important addition:
-namely to introduce the notion that a structure constructor is
-implicitly defined within the same scope that holds the definition of
-its derived type. Assuming that this scope is a module, then the
-structure constructor will always be able to access all the components
-of its derived type, even if these are declared being \code{private}
-to the module's scope. Hence, these components could be initialized
-even by calls to the structure constructor that are being performed
-from outside the module's scope, in complete analogy to how
-user-defined constructors work in Fortran.
+We also propose to make a further, small, but important addition to
+structure constructors: namely to introduce the notion that a
+structure constructor is implicitly defined within the same scope that
+holds the definition of its derived type. Assuming that this scope is
+a module, then the structure constructor will always be able to access
+all the components of its derived type, even if these are declared
+being \code{private} to the module's scope. Hence, these components
+could be initialized even by calls to the structure constructor that
+are being performed from outside the module's scope, in complete
+analogy to how user-defined constructors work in Fortran.
 
-In this way, \code{private}, \code{allocatable} derived type
-components could be initialized by structure constructors, which is
-crucial for concise OO programming. Since such an extension would
-merely add to the capabilities of the language, it would be fully
-backwards compatible. The elegance of the Go and Swift code versions,
-but also of the Fortran code examples that are presented in the next
-chapter is largely due to the use of such enhanced structure
-constructors. Lacking these, user-defined constructors would have to
-be used, leading to overly complex implementations, as e.g. in the
-Rust example code given in Listing~\ref{lst:OORust}.
+In this way, it would become possible to initialize \code{private},
+\code{allocatable} derived type components by structure constructors,
+something that is crucial for concise OO programming. Since such an
+extension would merely add to the capabilities of the language, it
+would be fully backwards compatible. The elegance of the aforegiven Go
+and Swift code versions, but also of the Fortran code examples that
+are presented in the next chapter is largely due to the use of such
+enhanced structure constructors. Lacking these, user-defined
+constructors would have to be used, leading to overly complex
+implementations, as e.g. in the Rust example code given in
+Listing~\ref{lst:OORust}.
 
 
 \section{Extensibility to rank genericity}

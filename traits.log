@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  6 AUG 2023 16:45
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  6 AUG 2023 19:17
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -601,23 +601,23 @@ Overfull \hbox (13.27109pt too wide) in paragraph at lines 959--964
 Chapter 5.
 [31
 
-] [32] [33] [34] [35]
+] [32] [33] [34] [35] [36]
 Chapter 6.
 LaTeX Font Info:    Trying to load font information for T1+cmss on input line 1
-459.
+491.
 (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmss.fd
 File: t1cmss.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
-(./Code/Fortran/mixed.f90 [36
+(./Code/Fortran/mixed.f90 [37
 
-] [37] [38] [39])
+] [38] [39] [40])
 LaTeX Font Info:    Font shape `T1/fvm/b/n' will be
-(Font)              scaled to size 11.80809pt on input line 1521.
+(Font)              scaled to size 11.80809pt on input line 1553.
  (./Code/Fortran/static1.f90
-[40] [41] [42] [43])
+[41] [42] [43] [44])
 LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
-(Font)              scaled to size 7.38007pt on input line 1571.
- [44] (./traits.bbl [45]) [46
+(Font)              scaled to size 7.38007pt on input line 1603.
+ [45] (./traits.bbl [46]) [47
 
 ] (./traits.aux)
 
@@ -627,9 +627,9 @@ Package rerunfilecheck Info: File `traits.out' has not changed.
 (rerunfilecheck)             Checksum: 743EB6EBEDAC62B6180649F7F337E970;8962.
  ) 
 Here is how much of TeX's memory you used:
- 15756 strings out of 480247
- 235850 string characters out of 5896151
- 757864 words of memory out of 5000000
+ 15776 strings out of 480247
+ 236162 string characters out of 5896151
+ 757908 words of memory out of 5000000
  32364 multiletter control sequences out of 15000+600000
  510853 words of font info for 107 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
@@ -641,10 +641,10 @@ onts/type1/public/bera/fvmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
 blic/bera/fvmro8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/u
 plb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></
 usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on traits.pdf (47 pages, 238949 bytes).
+Output written on traits.pdf (48 pages, 241301 bytes).
 PDF statistics:
- 1733 PDF objects out of 2073 (max. 8388607)
- 1623 compressed objects within 17 object streams
- 1092 named destinations out of 1200 (max. 500000)
+ 1761 PDF objects out of 2073 (max. 8388607)
+ 1650 compressed objects within 17 object streams
+ 1112 named destinations out of 1200 (max. 500000)
  369 words of extra memory for PDF output out of 10000 (max. 10000000)
 
