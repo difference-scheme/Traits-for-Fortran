@@ -436,15 +436,15 @@ interface whenever it provides implementations of all the interface's
 function signatures. This way of implementing interfaces requires only
 an object reference of the type to be passed to its methods (by means
 of a separate parameter list, in front of a method's actual name). It
-is otherwise decoupled from the type's definition (i.e. the ADT's
-\code{struct} definition). Limitations in Go are that language
-intrinsic types cannot have methods, and that methods and interfaces
-cannot be directly implemented for user-defined types whose
-definitions are located in other packages. That is, the programmer has
-to write wrappers in the latter case. Go, finally, makes it explicit
-in its type definition syntax that interfaces (like \code{struct}'s)
-are types in their own right, and that hence polymorphic variables
-(i.e. objects) can be declared in terms of them.
+is otherwise decoupled from the type's (i.e. the ADT's \code{struct})
+definition. Limitations in Go are that language intrinsic types cannot
+have methods, and that methods and interfaces cannot be directly
+implemented for user-defined types whose definitions are located in
+other packages. That is, the programmer has to write wrappers in the
+latter case. Go, finally, makes it explicit in its type definition
+syntax that interfaces (like \code{struct}'s) are types in their own
+right, and that hence polymorphic variables (i.e. objects) can be
+declared in terms of them.
 
 Since version 1.18, Go also supports compile-time polymorphism through
 generics. Go's generics make use of ``strong concepts'', since they
@@ -639,8 +639,8 @@ Swift generics support ``strong concepts'', and are thus fully
 type-checked at compile time, and their capabilities are on par with
 those of Go and Rust. In one aspect they are even superior, namely in
 that Swift allows for parameterized \emph{methods}, instead of
-parameterized protocols. This has some interesting, postive
-consequences for the Swift programmer, that will be discussed in
+parameterized protocols. This has some interesting, positive
+implications for the Swift programmer, that will be discussed in
 detail below.
 
 \subsection{Encapsulated version coded in Swift}
@@ -1175,7 +1175,9 @@ and compile-time polymorphism in Fortran. We will now proceed with
 discussing some further enhancements that are required in order to
 further support compile-time polymorphism, i.e. generics.
 
-\section{Interfaces with generic procedure signatures}
+\section{Enhancements to Interfaces}
+
+\subsection{Generic procedure signatures} 
 \label{sect:generic_interfaces}
 
 Abstract interfaces should be allowed to contain signatures of generic
@@ -1208,7 +1210,7 @@ from how Fortran's usual function arguments are declared, appears
 justified as it reflects that, in type parameters, one is dealing with
 different entities.
 
-\section{Interfaces as type sets}
+\subsection{Type sets}
 
 In order to make the interface based generics facility easy to use for
 the programmer, it must be possible, as in the Go language, to define
@@ -1248,7 +1250,7 @@ to be used as a type constraint for type \code{T}. In this particular
 case, to admit only the default \code{integer}, or \code{real(real64)}
 types, for \code{T}, as before.
 
-\section{Predefined interfaces}
+\subsection{Predefined interfaces}
 
 The language should ideally supply some predefined, commonly used generic
 constraints in the form of abstract interfaces that are contained in a
@@ -1287,25 +1289,23 @@ They could then be used as constraints in function and derived type
 implementations, or in other interfaces, like \code{ISum} here, that
 requires the functionality of \code{INumeric}.
 
-\section{Conversions to generic types}
+\section{Built-in facility for conversion to generic types}
 
 A language like Fortran, that is intended for numeric use, where
 conversions between different numeric types are required quite
 frequently, must allow conversions to generic types to be done as
-easily as it is the case in the Go language. That is, by means that
-are built into the language, and without having to rely exclusively on
-external library functionality for this purpose.
+easily as it is the case in the Go language. By means that are built
+into the language, without having to rely exclusively on external
+library functionality.
 
 For instance, generic routines will often have to initialize the
-result of reduction operations. As it is the case in the test problem
-of Sect.~\ref{}, where a variable for summation needs to be
-initialized to the zero constant of type \code{T}. In Go, it is easily
-possible to express this initialization by simply transforming the
-zero constant of the \code{int} type, \code{0}, into the corresponding
-constant of type \code{T} as follows:
-\begin{lstlisting}[language=LFortran,style=boxed]
-   s = T(0)
-\end{lstlisting}
+result of reduction operations, as it is, e.g., the case in the test
+problem implementation of Sect.~\ref{sect:poly_functional}. There, a
+variable for summation needs to be initialized to the zero constant of
+type \code{T}. In Go, it is easily possible to express this
+initialization by transforming the zero constant of the \code{int}
+type, \code{0}, into the corresponding constant of type \code{T}, by
+simply writing \code{s = T(0)}.
 
 If, for instance, \code{T} is then instantiated at compile time with
 the \code{float64} type, the expression \code{T(0)} will simply be
@@ -1313,32 +1313,22 @@ transformed by the compiler into \code{float64(0)}, i.e. a call to the
 correct conversion function. In Fortran's case, the compiler would
 have to translate the above expression into the intrinsic function
 call \code{real(0,kind=real64)}, which should actually be easy to do,
-also for all other cases where conversion is indeed
-possible. Otherwise, the compiler should emit an error, and abort the
-compilation at the generics instantiation step.
+also for all other cases where such conversion is indeed
+possible. Otherwise, the compiler should emit an error message, and
+abort compilation at the generics instantiation step.
 
-\section{Generic type parameters for methods and procedures}
+\section{Generic type parameters}
 
 As already mentioned above, LFortran's basic generics design should
 follow Swift's, if possible, and allow both ordinary and type-bound
-procedures (i.e. methods) to be given their own generic type
-parameters. An implementation of the generic method \code{sum} of
-Sect.~\ref{sect:generic_interfaces}, that is bound to a derived type
-with name \code{SimpleSum}, would look as follows:
-\begin{lstlisting}[language=LFortran,style=boxed]
-   function sum{INumeric :: T}(self,x) result(s)
-      class(SimpleSum), intent(in) :: self
-      type(T),          intent(in) :: x(:)
-      type(T)                      :: s
-      integer :: i
-      s = T(0)
-      do i = 1, size(x)
-         s = s + x(i)
-      end do
-   end function sum
-\end{lstlisting}
-Whereas the next example illustrates how the same procedure would look
-as a stand-alone (i.e. non-encapsulated) generic function:
+procedures (i.e. methods), and derived types to be given their own
+generic type parameters.
+
+\subsection{Procedures}
+
+Using the syntax proposed in this document, an implementation of a
+Fortran function for array summation that is generic over the type of its
+input array argument would look as follows:
 \begin{lstlisting}[language=LFortran,style=boxed]
    function sum{INumeric :: T}(x) result(s)
       type(T), intent(in) :: x(:)
@@ -1351,12 +1341,45 @@ as a stand-alone (i.e. non-encapsulated) generic function:
    end function sum
 \end{lstlisting}
 
-\section{Generic type parameters for derived types}
+\subsection{Methods}
+\label{sect:generic_methods}
 
-In addition to procedures, generic type parameter lists must be allowed
-also for derived types, as in the following example, in which 
-the interface \code{ISum} from above is implemented by a parameterized
-derived-type named PairwiseSum:
+The same algorithm implemented as a generic method \code{sum}, that is
+bound to a derived type with name \code{SimpleSum} which implements
+the interface \code{ISum} as it was given in
+Sect.~\ref{sect:generic_interfaces}, would instead look as follows:
+\begin{lstlisting}[language=LFortran,style=boxed]
+module simple_library
+   ...
+
+   type, public, implements(ISum) :: SimpleSum
+   contains
+      procedure :: sum
+   end type SimpleSum
+
+contains
+   
+   function sum{INumeric :: T}(self,x) result(s)
+      class(SimpleSum), intent(in) :: self
+      type(T),          intent(in) :: x(:)
+      type(T)                      :: s
+      integer :: i
+      s = T(0)
+      do i = 1, size(x)
+         s = s + x(i)
+      end do
+   end function sum
+
+end module simple_library
+\end{lstlisting}
+
+\subsection{Derived types}
+\label{sect:generic_derived_types}
+
+In addition to procedures, and methods, generic type parameter lists
+must also be allowed for derived type definitions, as in the following
+example, in which the same interface \code{ISum} from above is
+implemented by another derived-type, named PairwiseSum:
 \begin{lstlisting}[language=LFortran,style=boxed]
    type, implements(ISum) :: PairwiseSum{ISum :: U}
       private
@@ -1376,19 +1399,41 @@ its own implementation of the \code{sum} procedure.
 \section{Updated structure constructors}
 \label{sect:param_constructors}
 
-If a derived type is parameterized with a generic type, then its
-structure constructor must also be assumed to be parameterized with
-the same generic type. Hence, calls of structure constructors that are
+If a derived type is parameterized over a generic type, as in the
+example of Sect.~\ref{sect:generic_derived_types}, then its structure
+constructor must also be assumed to be parameterized over the same
+generic type. Hence, calls of structure constructors that are
 instantiated with particular argument types replacing the generic type
 parameters of their derived types, like e.g.
 \begin{lstlisting}[language=LFortran,style=boxed]
-   Averager{SimpleSum}()
-   Averager{PairwiseSum{SimpleSum}}()
+   PairwiseSum{SimpleSum}()
 \end{lstlisting}
-must be legal. Here, \code{SimpleSum} would be a derived type that
-implements the \code{ISum} interface, but (in contrast to the
-\code{PairwiseSum} and \code{Averager} types) is not parameterized by
-any generic type parameters itself.
+must be legal. As in Sect.~\ref{sect:generic_methods},
+\code{SimpleSum} would be a derived type that implements the
+\code{ISum} interface, but (in contrast to the \code{PairwiseSum}
+type) is not parameterized by any generic type parameter itself.
+
+We also propose to make a further, small, but important addition:
+namely to introduce the notion that a structure constructor is
+implicitly defined within the same scope that holds the definition of
+its derived type. Assuming that this scope is a module, then the
+structure constructor will always be able to access all the components
+of its derived type, even if these are declared being \code{private}
+to the module's scope. Hence, these components could be initialized
+even by calls to the structure constructor that are being performed
+from outside the module's scope, in complete analogy to how
+user-defined constructors work in Fortran.
+
+In this way, \code{private}, \code{allocatable} derived type
+components could be initialized by structure constructors, which is
+crucial for concise OO programming. Since such an extension would
+merely add to the capabilities of the language, it would be fully
+backwards compatible. The elegance of the Go and Swift code versions,
+but also of the Fortran code examples that are presented in the next
+chapter is largely due to the use of such enhanced structure
+constructors. Lacking these, user-defined constructors would have to
+be used, leading to overly complex implementations, as e.g. in the
+Rust example code given in Listing~\ref{lst:OORust}.
 
 
 \section{Extensibility to rank genericity}
@@ -1398,14 +1443,13 @@ programming, demands that any generics design for the language must
 allow for the possibility to also handle genericity of array rank. The
 present design offers a lot of room in this respect, by means of the
 device of ``associated items'' or ``associated types'' as they are
-implemented in both traits and protocols in Rust and Swift,
-respectively. In addition to different array ranks and array
+implemented in both \code{trait}s and \code{protocol}s in Rust and
+Swift, respectively. In addition to different array ranks and array
 dimensions, also different ``length'' parameters of character
 variables could be treated via this same device. But for the purpose
 of a very first prototype implementation of the generics features
 described here, we consider a discussion of these features to be
-non-essential, and we thus prefer to focus on them in a separate
-document.
+non-essential, and we thus defer them to a separate document.
 
 
 \chapter{Fortran versions of the test example}
@@ -1427,22 +1471,20 @@ other languages.
 
 \begin{itemize}
 \item
-  We employ here the Go borrowed syntax \code{integer | real(real64)}
-  to implement the interface \code{INumeric}, that is used in order to
-  express type genericity for the array \code{x} and the result of the
-  summation \code{s} in our different implementations of method
-  \code{sum}.
+  We employ here the Go borrowed syntax \code{integer | real(real64)},
+  to implement the interface \code{INumeric} as a type set, in order
+  to express type genericity for the input array \code{x} and the
+  result of the summation \code{s} in our different implementations of
+  method \code{sum}.
 \item
   As in the corresponding Go version, \code{INumeric} is defined by
-  the user himself as a type set consisting of the set of intersecting
-  operations defined in Fortran for the \code{integer} and
-  \code{real(real64)} types.  There is thus no need for an external
-  dependency.
+  the user himself. There is thus no need for an external dependency.
 \item
   The remaining interfaces \code{ISum} and \code{IAverager} make use
   of generic methods that are declared in terms of \code{INumeric}.
   However, in contrast to the Go version, none of these interfaces is
-  parameterized itself, since we followed Swift's model of generics.
+  parameterized itself, since we followed Swift's basic model of
+  generics.
 \item
   Interface inheritance is expressed through the presence of the
   \code{implements(...)} specifier in a derived-type definition
@@ -1460,15 +1502,16 @@ other languages.
   dependencies of the different defined classes.
 \end{itemize}
 
-\lstinputlisting[language=LFortran,style=boxed,label={lst:OOFortran},caption={Proposed encapsulated Fortran version of the array averaging example.}]{Code/Fortran/mixed.ft}
+\lstinputlisting[language=LFortran,style=boxed,label={lst:OOFortran},caption={Proposed encapsulated Fortran version of the array averaging example.}]{Code/Fortran/mixed.f90}
 
 The most important point to notice in Listing~\ref{lst:OOFortran} is
 how the main program is the only part of the code that (necessarily)
 depends on implementations. The \emph{entire} rest of the code depends
 merely on abstract interfaces (see the \code{use} statements in the
 above modules). The Fortran version described here is therefore as
-clean as the Go implementation with respect to dependency management,
-and as easy to use as the Swift implementation.
+clean as the Go implementation with respect to dependency management.
+Moreover, it is as easy to read and understand as the Swift
+implementation.
 
 The features described in this document have enabled us to avoid
 rigidity in the program, by both decoupling it and making it operate
@@ -1479,8 +1522,8 @@ reuse.
 
 One of the greatest benefits of the present design is that methods in
 OO programming can be made polymorphic, while still being dispatched
-statically, as opposed to dynamically. This will enable polymorphic
-method inlining by the compiler, to potentially improve code
+statically (as opposed to dynamically). This will enable inlining of
+polymorphic methods by the compiler, to potentially improve code
 performance. Listing~\ref{lst:staticFortran} gives a \emph{minimally}
 changed version of the encapsulated Fortran code of
 Listing~\ref{lst:OOFortran}, to effect static dispatch of the
@@ -1492,9 +1535,9 @@ parameters that are named \code{U}. These type parameters are then
 used in order to declare the field objects \code{other} and \code{drv}
 of these derived types, respectively, by means of the \code{type}
 specifier. This signifies compile-time polymorphism for these objects
-(and hence static dispatch of their methods, as opposed to the
-\code{class} specifier that was used previously in order to effect
-run-time polymorphism and dynamic dispatch. See also
+to the compiler (and hence static dispatch of their methods, as
+opposed to the \code{class} specifier that was used previously in
+order to effect run-time polymorphism and dynamic dispatch. See also
 Table~\ref{tab:dispatch} for a summary of rules regarding method
 dispatch).
 
@@ -1508,7 +1551,7 @@ particular case this is possible, as demonstrated in the next section,
 given that these objects do not contain any other \code{allocatable}
 data fields, like arrays).
 
-\lstinputlisting[language=LFortran,style=boxed,label={lst:staticFortran},caption={Demonstrates static method dispatch for the \code{sum} methods.}]{Code/Fortran/static1.ft}
+\lstinputlisting[language=LFortran,style=boxed,label={lst:staticFortran},caption={Demonstrates static method dispatch for the \code{sum} methods.}]{Code/Fortran/static1.f90}
 
 \begin{table}[h]
 \centering
@@ -1527,8 +1570,8 @@ data fields, like arrays).
 \label{tab:dispatch}
 \end{table}
 
-As in a corresponding Swift code version of the test problem, the
-instantiation of the objects \code{other} and \code{drv}
+As in corresponding Rust and Swift implementations of the test
+problem, the instantiation of the objects \code{other} and \code{drv}
 through constructor calls in the main program has the benefit that the
 compiler should be able to infer the correct type parameters that are
 required to automatically instantiate the involved generic derived
@@ -1584,6 +1627,8 @@ structure constructor, which must now be provided with the types
   avs = Averager{SimpleSum}()
   avp = Averager{PairwiseSum{SimpleSum}}()
 \end{lstlisting}
+The full source code for this version of the test problem can be found
+in the \code{Code} subdirectory that is accompanying this document.
 
 \bibliographystyle{plain}
 \bibliography{traits}
