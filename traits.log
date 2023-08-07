@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  6 AUG 2023 19:17
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  7 AUG 2023 13:53
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -575,10 +575,6 @@ File: lstlang1.sty 2020/03/24 1.8d listings language file
 ) [25
 
 ]
-
-LaTeX Warning: Reference `' on page 26 undefined on input line 884.
-
-
 Overfull \hbox (5.5727pt too wide) in paragraph at lines 887--891
 []\T1/ppl/m/n/10.95 In par-tic-u-lar, in or-der to use ab-stract in-ter-faces t
 o sup-port run-time poly-mor-phic ob-jects through
@@ -592,6 +588,9 @@ Overfull \hbox (2.14284pt too wide) in paragraph at lines 887--891
  []
 
 [26]
+LaTeX Font Info:    Font shape `T1/fvm/b/n' will be
+(Font)              scaled to size 9.84009pt on input line 957.
+
 Overfull \hbox (13.27109pt too wide) in paragraph at lines 959--964
 \T1/ppl/m/n/10.95 User-defined (i.e. de-rived) types can be made to con-form to
  an in-ter-face by in-tro-duc-ing an \T1/fvm/m/n/10.95 implements
@@ -604,7 +603,7 @@ Chapter 5.
 ] [32] [33] [34] [35] [36]
 Chapter 6.
 LaTeX Font Info:    Trying to load font information for T1+cmss on input line 1
-491.
+498.
 (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmss.fd
 File: t1cmss.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
@@ -612,26 +611,22 @@ File: t1cmss.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 
 ] [38] [39] [40])
 LaTeX Font Info:    Font shape `T1/fvm/b/n' will be
-(Font)              scaled to size 11.80809pt on input line 1553.
- (./Code/Fortran/static1.f90
-[41] [42] [43] [44])
+(Font)              scaled to size 11.80809pt on input line 1562.
+ [41] (./Code/Fortran/static1.f90 [42] [43] [44])
 LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
-(Font)              scaled to size 7.38007pt on input line 1603.
+(Font)              scaled to size 7.38007pt on input line 1614.
  [45] (./traits.bbl [46]) [47
 
 ] (./traits.aux)
-
-LaTeX Warning: There were undefined references.
-
 Package rerunfilecheck Info: File `traits.out' has not changed.
-(rerunfilecheck)             Checksum: 743EB6EBEDAC62B6180649F7F337E970;8962.
+(rerunfilecheck)             Checksum: AF7E699A17B9CB91D620819EAF0B634D;8896.
  ) 
 Here is how much of TeX's memory you used:
  15776 strings out of 480247
- 236162 string characters out of 5896151
- 757908 words of memory out of 5000000
- 32364 multiletter control sequences out of 15000+600000
- 510853 words of font info for 107 fonts, out of 8000000 for 9000
+ 236187 string characters out of 5896151
+ 757942 words of memory out of 5000000
+ 32362 multiletter control sequences out of 15000+600000
+ 511473 words of font info for 109 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  60i,16n,68p,7900b,3160s stack positions out of 5000i,500n,10000p,200000b,80000s
  </home/knk/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/ecss1095.600pk
@@ -641,10 +636,10 @@ onts/type1/public/bera/fvmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
 blic/bera/fvmro8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/u
 plb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></
 usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on traits.pdf (48 pages, 241301 bytes).
+Output written on traits.pdf (48 pages, 241443 bytes).
 PDF statistics:
- 1761 PDF objects out of 2073 (max. 8388607)
- 1650 compressed objects within 17 object streams
- 1112 named destinations out of 1200 (max. 500000)
+ 1764 PDF objects out of 2073 (max. 8388607)
+ 1653 compressed objects within 17 object streams
+ 1113 named destinations out of 1200 (max. 500000)
  369 words of extra memory for PDF output out of 10000 (max. 10000000)
 
