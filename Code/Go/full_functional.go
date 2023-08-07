@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-type INumeric interface{ int | float64 }
+type INumeric interface{ int32 | float64 }
 
 func simple_sum[T INumeric](x []T) T {
    var s T
@@ -26,11 +26,11 @@ func average[T INumeric](sum func([]T) T, x []T) T {
 }
 
 func main() {
-   xi := []int{1, 2, 3, 4, 5}
+   xi := []int32{1, 2, 3, 4, 5}
    xf := []float64{1, 2, 3, 4, 5}
 
-   var key int
-   var avi, psi func([]int) int
+   var key int32
+   var avi, psi func([]int32) int32
    var avf, psf func([]float64) float64
 
    fmt.Println("Simple   sum average:", 1)
@@ -40,22 +40,22 @@ func main() {
 
    switch key {
       case 1:
-	 avi = func(x []int) int {
-                  return average(simple_sum[int], x)
+	 avi = func(x []int32) int32 {
+                  return average(simple_sum[int32], x)
                }
          avf = func(x []float64) float64 {
                   return average(simple_sum[float64], x)
                }
       case 2:
-         psi = func(x []int) int {
-                  return pairwise_sum(simple_sum[int], x)
+         psi = func(x []int32) int32 {
+                  return pairwise_sum(simple_sum[int32], x)
                }
 
          psf = func(x []float64) float64 {
                   return pairwise_sum(simple_sum[float64], x)
                }
 
-	 avi = func(x []int) int {
+	 avi = func(x []int32) int32 {
                   return average(psi, x)
                }
 

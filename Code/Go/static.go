@@ -7,7 +7,7 @@ import "fmt"
 // ...........
 
 type INumeric interface {
-   int | float64
+   int32 | float64
 }
 
 type ISum[T INumeric] interface {
@@ -69,13 +69,13 @@ func (self Averager[T,U]) average(x []T) T {
 
 func main() {
 
-   var avi IAverager[int]
+   var avi IAverager[int32]
    var avf IAverager[float64]
 
-   xi := []int{1,2,3,4,5}
+   xi := []int32{1,2,3,4,5}
    xf := []float64{1.,2.,3.,4.,5.}
 
-   var key int
+   var key int32
 
    fmt.Println("Simple   sum average: 1")
    fmt.Println("Pairwise sum average: 2")
@@ -84,10 +84,10 @@ func main() {
 
    switch key {
    case 1:
-      avi = Averager[int,SimpleSum[int]]{}
+      avi = Averager[int32,SimpleSum[int32]]{}
       avf = Averager[float64,SimpleSum[float64]]{}
    case 2:
-      avi = Averager[int,PairwiseSum[int,SimpleSum[int]]]{}
+      avi = Averager[int32,PairwiseSum[int32,SimpleSum[int32]]]{}
       avf = Averager[float64,PairwiseSum[float64,SimpleSum[float64]]]{}
    default:
       fmt.Println("Case not implemented!")

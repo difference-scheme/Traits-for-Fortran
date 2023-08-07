@@ -65,15 +65,15 @@ let avp = Averager(drv: PairwiseSum(other: SimpleSum()))
 
 var av : IAverager = avs
 
-var xi: [Int] = [1,2,3,4,5]
+var xi: [Int32] = [1,2,3,4,5]
 var xf: [Float64] = [1.0,2.0,3.0,4.0,5.0]
 
-var key: Int?
+var key: Int32?
 
 print("Simple   sum average: 1")
 print("Pairwise sum average: 2")
 print("Choose an averaging method: ")
-key = Int(readLine()!)
+key = Int32(readLine()!)
 
 switch key {
 case 1:
@@ -86,5 +86,5 @@ default:
     print("Case not implemented!")
 }
 
-print( av.average(x: xi) / xi.count )
+print( av.average(x: xi) / Int32(xi.count) )
 print( av.average(x: xf) / Float64(xf.count) )

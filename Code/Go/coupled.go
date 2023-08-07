@@ -2,8 +2,8 @@ package main
 
 import "fmt"
 
-func simple_sum(x []int) int {
-   var s int
+func simple_sum(x []int32) int32 {
+   var s int32
    s = 0
    for i := 0; i < len(x); i++ {
      s += x[i]
@@ -11,7 +11,7 @@ func simple_sum(x []int) int {
    return s
 }
 
-func pairwise_sum(x []int) int {
+func pairwise_sum(x []int32) int32 {
    if len(x) <= 2 {
       return simple_sum(x)
    } else {
@@ -20,12 +20,12 @@ func pairwise_sum(x []int) int {
    }
 }
 
-func simple_average(x []int) int {
-   return simple_sum(x) / len(x)
+func simple_average(x []int32) int32 {
+   return simple_sum(x) / int32(len(x))
 }
 
-func pairwise_average(x []int) int {
-   return pairwise_sum(x) / len(x)
+func pairwise_average(x []int32) int32 {
+   return pairwise_sum(x) / int32(len(x))
 }
 
 // ..............
@@ -34,9 +34,9 @@ func pairwise_average(x []int) int {
 
 func main() {
 
-   xi := []int{1,2,3,4,5}
+   xi := []int32{1,2,3,4,5}
 
-   var key int
+   var key int32
 
    fmt.Println("Simple   sum average: 1")
    fmt.Println("Pairwise sum average: 2")

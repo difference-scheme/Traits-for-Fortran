@@ -150,8 +150,8 @@ program main
    case default
       stop 'Case not implemented!'
    end select
-   
+
+   print '(i8)',   av%average([1, 2, 3, 4, 5])   
    print '(f8.5)', av%average([1.d0, 2.d0, 3.d0, 4.d0, 5.d0])
-   print '(i8)',   av%average([1, 2, 3, 4, 5])
 
 end program main
