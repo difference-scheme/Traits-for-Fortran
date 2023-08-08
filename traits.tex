@@ -316,14 +316,14 @@ dependencies. Namely,
   depending on functions' \code{simple\_sum}, and \code{pairwise\_sum}
   implementation, respectively, and
 \item
-  the entire program depending rigidly on the \code{int} data type in
+  the entire program depending rigidly on the \code{int32} data type in
   order to declare both the arrays that it is operating on, and
   the results of its summation and averaging operations.
 \end{enumerate}
 The first two items are dependencies on user-defined implementations,
 while the third is a typical case of rigid dependency on a language
 intrinsic type, which renders the present code incapable of being
-applied to arrays of any other data type than \code{int}s. Given that
+applied to arrays of any other data type than \code{int32}s. Given that
 we are dealing with three levels of dependencies, three levels of
 polymorphism will accordingly be required to remove all these
 dependencies.
@@ -339,7 +339,7 @@ eliminate the last two of the rigid dependencies that were listed in
 Sect.~\ref{sect:mono_functional} (we thank Robert Griesemer of the Go
 team for providing the original code of this particular version of the
 example). The code makes use of Go's generics to admit arrays of both the
-\code{int} and \code{float64} types as arguments to all functions, and
+\code{int32} and \code{float64} types as arguments to all functions, and
 to express the return values of the latter. It also makes use of the
 run-time polymorphism inherent in Go's functional features, namely
 closures and variables of higher-order functions, to replace the two
@@ -363,15 +363,14 @@ Listing~\ref{lst:polyfuncGo}'s code:
   (see the interface \code{INumeric} in the present example).
 \item
   Interfaces consist of either function signatures, or \emph{type
-  sets}, like ``\code{int | float64}'' in the present example. The
+  sets}, like ``\code{int32 | float64}'' in the present example. The
   latter signify a set of function signatures, too, namely the
   signatures of the intersecting set of all the operations/functions
   for which the listed types provide implementations.
 \item
   The code makes use of type conversions to the generic type \code{T},
-  where required. For instance, \code{T(0)} converts the
-  \code{integer} constant \code{0} to the corresponding zero constant
-  of type \code{T}.
+  where required. For instance, \code{T(0)} converts the constant
+  \code{0} to the corresponding zero constant of type \code{T}.
 \item
   The code instantiates closures and stores these by value in two
   variables named \code{avi} and \code{avf} for later use (Fortran
@@ -479,7 +478,7 @@ third interface, \code{INumeric}, that serves exactly the same purpose
 as in the functional polymorphic version given in
 Sect.~\ref{sect:poly_functional}, namely to make all function
 arguments and return values polymorphic, by admitting as input and
-output parameters both the \code{int} and \code{float64} intrinsic
+output parameters both the \code{int32} and \code{float64} intrinsic
 types.
 
 Hence, three polymorphic interfaces were required in this code, in
@@ -497,8 +496,8 @@ and constructor chaining, in order to instantiate objects of the
 required ADTs. In particular, it instantiates run-time polymorphic
 ``\code{Averager}'' objects (depending on whether simple or pairwise
 sum averaging is to take place), and it does so for both the
-\code{int} and \code{float64} types separately, in order to then use
-these objects on \code{int} and \code{float64} data, respectively. The
+\code{int32} and \code{float64} types separately, in order to then use
+these objects on \code{int32} and \code{float64} data, respectively. The
 fact that \code{two} such objects are required (one for each language
 intrinsic data type) is connected to the fact that in order to obtain
 generic methods in Go, one has to parameterize interfaces by generic
@@ -657,7 +656,7 @@ Swift. See the following remarks in order to understand this code:
     Type constraints are formulated by supplying a protocol name after a
     type parameter (separated by a colon).
   \item
-    Swift does not supply an equivalent to Go's \code{int | float64}
+    Swift does not supply an equivalent to Go's \code{int32 | float64}
     syntax. Hence the user must use a \code{Numeric} protocol defined
     by the standard library, as a constraint for numeric types. Which
     leads to reliance on library code.
@@ -715,11 +714,11 @@ enables \code{av} to be polymorphically assigned different
 \code{struct}s that implement \code{IAverager}). Because it contains
 an ``\code{average}'' method that is generic, this \emph{single}
 object can then be straightforwardly used on data of \emph{both} the
-\code{Int} and \code{Float64} types!
+\code{Int32} and \code{Float64} types!
 
 This vastly simplifies client code that needs to make use of objects
 such as \code{av}, especially if such client code needs to work on
-\emph{many} more types than just \code{Int} and
+\emph{many} more types than just \code{Int32} and
 \code{Float64}. Contrast this with Go's and Rust's model, where manual
 instantiation of a different version of \code{IAverager} is required
 for \emph{every} different generic type parameter that the user wishes
@@ -1224,12 +1223,12 @@ abstract interfaces as type sets. The following example
 \end{lstlisting}
 defines the interface \code{INumeric}, that was used as a generics
 constraint in Sect.~\ref{sect:generic_interfaces}, in order to admit
-for the type parameter \code{T} (that was given there) only the
-standard \code{integer} or \code{real(real64)} types. The semantics of
-such a construct is that it implicitly defines a \emph{set of function
-signatures}, namely the signatures of the intersecting (common) set of
-all the operations/functions for which the listed intrinsic types
-provide implementations.
+for the type parameter \code{T} (that was given there) only the (32 bits
+wide) standard \code{integer} or \code{real(real64)} types. The
+semantics of such a construct are that it implicitly defines a
+\emph{set of function signatures}, namely the signatures of the
+intersecting (common) set of all the operations/functions for which
+the listed intrinsic types provide implementations.
 
 For simple use cases, it should be optionally possible for the
 programmer to employ a shorter notation for declaring type constraints
@@ -1305,9 +1304,9 @@ result of reduction operations, as it is, e.g., the case in the test
 problem implementation of Sect.~\ref{sect:poly_functional}. There, a
 variable for summation needs to be initialized to the zero constant of
 type \code{T}. In Go, it is easily possible to express this
-initialization by transforming the zero constant of the \code{int}
-type, \code{0}, into the corresponding constant of type \code{T},
-i.e. by simply writing \code{s = T(0)}.
+initialization by transforming the zero constant,\code{0}, into the
+corresponding constant of type \code{T}, i.e. by simply writing
+\code{s = T(0)}.
 
 If, for instance, \code{T} is then instantiated at compile time with
 the \code{float64} type, the expression \code{T(0)} will be
@@ -1416,21 +1415,27 @@ contains
 
 end module pairwise_library
 \end{lstlisting}
-\code{PairwiseSum} depends on a generic type parameter \code{U}, that
-is used within \code{PairwiseSum} itself in order to declare a field
-variable of \code{type(U)}, which is named \code{other}. As is
+Type \code{PairwiseSum} depends on a generic type parameter \code{U},
+that is used within \code{PairwiseSum} itself in order to declare a
+field variable of \code{type(U)}, which is named \code{other}. As is
 indicated by the type constraint on \code{U}, object \code{other}
 conforms to the \code{ISum} interface itself, and therefore contains
 its own implementation of the \code{sum} procedure.
 
-Notice also, how \code{PairwiseSum}'s implementation of method
-\code{sum} has access to the parameter \code{U} through the
-declaration of its \code{self} object, that is declared being of
-\code{class(PairwiseSum\{U\})}. Hence, this method can now, in
-principle, make use of two independently defined generic type
-parameters, \code{T} and \code{U}. This provides increased
-flexibility.
-
+The above example furthermore demonstrates, how a derived type's
+generic parameters are brought into the scope of its type-bound
+procedures via the latter's passed-object dummy arguments. In this
+example, type \code{PairwiseSum}'s method, \code{sum}, has a
+passed-object dummy argument, \code{self}, that is declared being of
+\code{class(PairwiseSum\{U\})}. Hence, method \code{sum} can now
+access \code{PairwiseSum}'s generic parameter \code{U}. Thereby
+allowing this method to make use of two independently defined generic
+type parameters, \code{T} and \code{U}, which grants it increased
+flexibility. This also means that there is \emph{no} implicit
+mechanism of bringing generic parameters of a derived type into the
+scope of its methods. If a type-bound procedure needs to access the
+generic parameters of its derived type, it must be provided with a
+passed-object dummy argument.
 
 
 \section{Updated structure constructors}
@@ -1493,50 +1498,95 @@ non-essential, and we thus defer them to a separate document.
 
 \chapter{Fortran versions of the test example}
 
+In order to illustrate how the new features, that were discussed in
+the last two chapters, can be used in practice, we will give in the
+present chapter both functional and encapsulated (i.e. OO) Fortran
+code versions of the test problem that was used in our language
+survey, which are all expressed in terms of these new Fortran
+features.
+
 \section{Functional version}
 
-{\sf (What to do about this one, given that Fortran doesn't have Go's
-  functional programming capabilities? In this case, I think it should
-  be sufficient to demonstrate only the decoupling of the argument
-  types through generics, and leave all the other coupling in, as
-  it is the case in the coupled functional Go version.)}
+Fortran presently lacks support for advanced functional programming
+capabilities, like closures and variables of higher-order functions,
+that are, e.g., available in Go and the other modern languages. In
+contrast to the Go code version of Sect.~\ref{sect:poly_functional},
+the functional Fortran code version that is presented in this section
+therefore makes no attempt to eliminate rigid dependencies on
+user-defined function implementations. The purpose of this functional
+Fortran version is merely to demonstrate how the new generics features
+can be used to eliminate rigid dependencies on language intrinsic
+types.
 
-\section{Encapsulated version}
+Despite these differences, there are a number of similarities
+to the Go code version of Listing~\ref{lst:polyfuncGo}, namely:
+\begin{itemize}
+\item
+  We employ the (Go borrowed) syntax \code{integer | real(real64)}, to
+  implement the interface \code{INumeric} as a type set, in order to
+  express type genericity for the array \code{x}, that is input to all
+  our different function implementations, and for the functions'
+  return values.
+\item
+  \code{INumeric} is defined by the user himself, and thus there is no
+  need for an external dependency.
+\item
+  Conversions to generic types are done as in Go.
+\end{itemize}
+
+\lstinputlisting[language=LFortran,style=boxed,label={lst:FuncFortran},caption={Proposed functional, generic Fortran version of the array averaging example.}]{Code/Fortran/functional.f90}
+
+The example demonstrates that using the new generics features with a
+functional programming style is easy, that the syntax is economical,
+and that automatic type inference by the compiler should be
+straightforward and therefore reliable. Hence, we believe that the
+generics features described here will place no burden on the
+programmer.
+
+
+\section{Encapsulated versions}
+
+The present section will demonstrate that using the previously
+described new generics features also in OO programming is not only
+possible, but it is as easy to do as with the functional programming
+style. Moreover, the equal importance that is placed in this document
+on both proper compile-time and run-time polymorphic capabilities
+allows for uniform dependency management of both language intrinsic
+and user-defined types in Fortran, that is on par with the
+capabilities of other modern languages. We believe that this will
+completely transform the way Fortran applications will be written in
+the future. Fully decoupled software plugin architectures with
+enormously improved flexibility, maintainability, reusability, and
+reliability will become possible, without any loss in computational
+performance.
+
+\subsection{Dynamic method dispatch}
 
 Listing~\ref{lst:OOFortran} gives our Fortran version of the
-encapsulated form of the test example that corresponds to the code
-versions that were presented in Chapter~\ref{sect:survey} for all the
-other languages.
+encapsulated form of the test example that corresponds closest to the
+code versions that were presented in Chapter~\ref{sect:survey} for all
+the other languages.
 
 \begin{itemize}
 \item
-  We employ here the Go borrowed syntax \code{integer | real(real64)},
-  to implement the interface \code{INumeric} as a type set, in order
-  to express type genericity for the input array \code{x} and the
-  result of the summation \code{s} in our different implementations of
-  method \code{sum}.
+  As in the encapsulated Go code version, and in order to manage all
+  the source code dependencies in the problem, three interfaces are
+  used: \code{INumeric}, \code{ISum}, and \code{IAverager}.
 \item
-  As in the corresponding Go version, \code{INumeric} is defined by
-  the user himself. There is thus no need for an external dependency.
-\item
-  The remaining interfaces \code{ISum} and \code{IAverager} make use
-  of generic methods that are declared in terms of \code{INumeric}.
-  However, in contrast to the Go version, none of these interfaces is
-  parameterized itself, since we followed Swift's basic model of
+  In contrast to the Go version, none of the aforementioned interfaces
+  is parameterized itself, since we followed Swift's basic model of
   generics.
 \item
   Interface inheritance is expressed through the presence of the
   \code{implements(...)} specifier in a derived-type definition
   (equivalent to Swift).
 \item
-  Conversions to generic types are done as in Go.
-\item
   The example code makes use, in the main program, of the new
   structure constructors, with their enhancements that were discussed
   in Sect.~\ref{sect:param_constructors}, for the classes
   \code{Averager}, \code{SimpleSum}, and \code{PairwiseSum}.
 \item
-  The Fortran version makes use of modules and \code{use} statements
+  This Fortran version makes use of modules and \code{use} statements
   with \code{only} clauses, in order to make explicit the source code
   dependencies of the different defined classes.
 \end{itemize}
@@ -1555,14 +1605,13 @@ reuse.
 Notice, also, that not a single manual instantiation of generics is
 necessary anywhere in the code. The Fortran version described here is
 therefore as clean as the Go implementation with respect to dependency
-management, and it is as easy to read and understand as the Swift
-implementation.
+management, and it is as easy to use, and to read and understand, as
+the Swift implementation.
 
-
-\section{Encapsulated version with static dispatch of \code{sum} methods}
+\subsection{Static method dispatch}
 
 One of the greatest benefits of the present design is that methods in
-OO programming can be made polymorphic, while still being dispatched
+OO programming can be made polymorphic, and still be dispatched
 statically (as opposed to dynamically). This will enable inlining of
 polymorphic methods by the compiler, to potentially improve code
 performance. Listing~\ref{lst:staticFortran} gives a \emph{minimally}
@@ -1638,7 +1687,7 @@ inlining by the compiler). Of course, the use of generics to manage
 dependencies on language intrinsic types remains unaffected by this
 recommendation.
 
-\section{Version with static object declarations}
+\subsection{Static method dispatch and static object declarations}
 
 In the present simple example, and taking Listing~\ref{lst:staticFortran}
 as a baseline, it is actually possible to even avoid of some of the
