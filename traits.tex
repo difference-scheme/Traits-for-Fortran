@@ -267,7 +267,7 @@ monomorphic (i.e. coupled) functional implementation of this test
 problem, followed by a functional implementation that makes use of
 both run-time and compile-time polymorphism to manage source code
 dependencies. In the survey of programming languages presented in
-Chapter~\ref{sect:survey}, we will then recode this test problem in an
+Chapter~\ref{sect:survey}, we will then re-code this test problem in an
 encapsulated fashion, to highlight how the source code dependencies in
 this problem can be managed in different languages even in more
 complex situations, that require OO techniques.
@@ -533,7 +533,7 @@ Comparable to Go, Rust's generics model allows for the generic
 parameterization of functions, traits, and user-defined types like
 \code{struct}s. Rust does not explicitly forbid generic
 methods. However, if one defines such a method within a trait, then
-this will make the trait unuseable for the declaration of any ``trait
+this will make the trait unusable for the declaration of any ``trait
 objects'', i.e. for the employment of run-time polymorphism. Thus, the
 Rust programmer will in general (need to) parameterize traits and
 \code{struct}s rather than any methods themselves. Rust generics are
@@ -663,7 +663,7 @@ Swift. See the following remarks in order to understand this code:
   \item
     Unfortunately, Swift's \code{Numeric} protocol does \emph{not} support
     the division operation! Hence the division that would have been required
-    in function \code{average} of the \code{Averager} struct had to be moved
+    in function \code{average} of the \code{Averager} ADT had to be moved
     out to the calling code of the main program.
   \item
     The Swift version makes use of language built-in, default, structure
@@ -839,7 +839,7 @@ procedure signatures), and to declare instance variables of
 them. Named abstract interfaces are the crucial feature that is
 required in order to uniformly and properly express both run-time and
 compile-time polymorphism (i.e. generics) in the language, and to
-thereby enable a uniform management of dependendencies on both
+thereby enable a uniform management of dependencies on both
 user-defined \emph{and} language-intrinsic types.
 
 \subsection{Interface definitions}
@@ -990,8 +990,8 @@ end module basic
 \end{lstlisting}
 by providing implementations of all the method signatures that are
 contained in that interface. Notice, how \code{BasicMath}, by virtue
-of being an implementor of \code{IBasicMath}, is now also an
-implementor of \code{IAddition}, and \code{ISubtraction}. Hence,
+of being an implementer of \code{IBasicMath}, is now also an
+implementer of \code{IAddition}, and \code{ISubtraction}. Hence,
 \code{BasicMath} can be used in client code that requires conformance
 to either one of the interfaces \code{IBasicMath}, \code{IAddition},
 or \code{ISubtraction}.
@@ -1037,7 +1037,7 @@ Notice, that the \code{implements} statement has \emph{no} relation to
 subclassing, i.e. one derived type being extended into another through
 (rigid) implementation inheritance. Rather, this is a feature that
 adds new capabilities to a single, \emph{given} type. The feature is
-modelled after the ``\code{extension}'' feature of Swift, where it is
+modeled after the ``\code{extension}'' feature of Swift, where it is
 used to enable retroactive implementation of new methods, additional
 constructors, and especially new interfaces for types, in order to
 dynamically change an \emph{interface inheritance hierarchy}, and
@@ -1133,7 +1133,7 @@ required.
 \section{Interoperability with subclassing}
 
 The present multiple interface inheritance (i.e. subtyping) features are
-interoperable with the single implementation inheritance (i.e. subclassing)
+inter-operable with the single implementation inheritance (i.e. subclassing)
 that is already present in the language. That is, code examples like
 the following are possible:
 \begin{lstlisting}[language=LFortran,style=boxed]
@@ -1431,7 +1431,7 @@ passed-object dummy argument, \code{self}, that is declared being of
 access \code{PairwiseSum}'s generic parameter \code{U}. Thereby
 allowing this method to make use of two independently defined generic
 type parameters, \code{T} and \code{U}, which grants it increased
-flexibility. This also means that there is \emph{no} implicit
+flexibility. This also means that there is \emph{no implicit}
 mechanism of bringing generic parameters of a derived type into the
 scope of its methods. If a type-bound procedure needs to access the
 generic parameters of its derived type, it must be provided with a
@@ -1471,8 +1471,8 @@ In this way, it would become possible to initialize \code{private},
 \code{allocatable} derived type components by structure constructors,
 something that is crucial for concise OO programming. Since such an
 extension would merely add to the capabilities of the language, it
-would be fully backwards compatible. The elegance of the aforegiven Go
-and Swift code versions, but also of the Fortran code examples that
+would be fully backwards compatible. The elegance of the afore-given
+Go and Swift code versions, but also of the Fortran code examples that
 are presented in the next chapter is largely due to the use of such
 enhanced structure constructors. Lacking these, user-defined
 constructors would have to be used, leading to overly complex
@@ -1498,12 +1498,11 @@ non-essential, and we thus defer them to a separate document.
 
 \chapter{Fortran versions of the test example}
 
-In order to illustrate how the new features, that were discussed in
-the last two chapters, can be used in practice, we will give in the
-present chapter both functional and encapsulated (i.e. OO) Fortran
-code versions of the test problem that was used in our language
-survey, which are all expressed in terms of these new Fortran
-features.
+In order to comprehensively illustrate how the new features, that were
+discussed in the last two chapters, would be used in practice, we will
+give in the present chapter both complete functional and encapsulated
+(i.e. OO) Fortran code versions of the test problem that was used in
+our language survey.
 
 \section{Functional version}
 
@@ -1528,7 +1527,7 @@ to the Go code version of Listing~\ref{lst:polyfuncGo}, namely:
   our different function implementations, and for the functions'
   return values.
 \item
-  \code{INumeric} is defined by the user himself, and thus there is no
+  \code{INumeric} is defined by the user himself. Thus, there is no
   need for an external dependency.
 \item
   Conversions to generic types are done as in Go.
@@ -1536,10 +1535,10 @@ to the Go code version of Listing~\ref{lst:polyfuncGo}, namely:
 
 \lstinputlisting[language=LFortran,style=boxed,label={lst:FuncFortran},caption={Proposed functional, generic Fortran version of the array averaging example.}]{Code/Fortran/functional.f90}
 
-The example demonstrates that using the new generics features with a
-functional programming style is easy, that the syntax is economical,
-and that automatic type inference by the compiler should be
-straightforward and therefore reliable. Hence, we believe that the
+The example demonstrates that using the new generics features together
+with a functional programming style is easy, that the syntax is
+economical, and that automatic type inference by the compiler should
+be straightforward and therefore reliable. Hence, we believe that the
 generics features described here will place no burden on the
 programmer.
 
@@ -1548,17 +1547,16 @@ programmer.
 
 The present section will demonstrate that using the previously
 described new generics features also in OO programming is not only
-possible, but it is as easy to do as with the functional programming
+possible, but it is as easy to do as using the functional programming
 style. Moreover, the equal importance that is placed in this document
 on both proper compile-time and run-time polymorphic capabilities
 allows for uniform dependency management of both language intrinsic
 and user-defined types in Fortran, that is on par with the
 capabilities of other modern languages. We believe that this will
 completely transform the way Fortran applications will be written in
-the future. Fully decoupled software plugin architectures with
-enormously improved flexibility, maintainability, reusability, and
-reliability will become possible, without any loss in computational
-performance.
+the future. Decoupled software plugin architectures with enormously
+improved flexibility, maintainability, reusability, and reliability
+will become possible, without any loss in computational performance.
 
 \subsection{Dynamic method dispatch}
 
@@ -1611,7 +1609,7 @@ the Swift implementation.
 \subsection{Static method dispatch}
 
 One of the greatest benefits of the present design is that methods in
-OO programming can be made polymorphic, and still be dispatched
+OO programming can both be polymorphic, \emph{and} be dispatched
 statically (as opposed to dynamically). This will enable inlining of
 polymorphic methods by the compiler, to potentially improve code
 performance. Listing~\ref{lst:staticFortran} gives a \emph{minimally}
@@ -1676,7 +1674,7 @@ statement that performs a run-time decision.
 
 As a final remark we'd like to emphasize that, on readability grounds,
 a coding style as that given in Listing~\ref{lst:OOFortran} is
-generally preferrable over that of
+generally preferable over that of
 Listing~\ref{lst:staticFortran}. The use of numerous generic
 parameters can quickly make code unreadable. We'd therefore recommend
 the default use of run-time polymorphism for managing dependencies on
