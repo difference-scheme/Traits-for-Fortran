@@ -44,7 +44,23 @@
 
 \maketitle
 
-\abstract{TBD.}
+\abstract{Starting from conclusions drawn from a survey of modern
+  languages, a trait system for Fortran is developed and described
+  that is fully backwards compatible with the present Fortran
+  language, and allows for the uniform management of source code
+  dependencies on both user-defined and language-intrinsic types, via
+  run-time and compile-time polymorphism (i.e. ``object-oriented'' and
+  ``generic'' programming). The feature set described here is small
+  enough to facilitate a first prototype implementation in an open
+  source compiler, like LFortran, but at the same time comprehensive
+  enough to already endow Fortran with polymorphism capabilities that
+  largely equal those of modern programming languages like Swift,
+  Rust, or Go. The discussed new features are expected to transform
+  the way Fortran applications and libraries will be written in the
+  future. Decoupled software plugin architectures with enormously
+  improved source code flexibility, reusability, maintainability, and
+  reliability will become possible, without any need for run-time type
+  inspections, and without any loss in computational performance.}
 
 \chapter{Introduction}
 
@@ -1576,12 +1592,7 @@ design. The equal importance that has been placed in this document on
 both proper compile-time and run-time polymorphic (i.e. modern-day OO)
 capabilities will allow for uniform dependency management of both
 language intrinsic and user-defined types in Fortran, that is on par
-with other modern languages. We believe that this will completely
-transform the way Fortran applications will be written in the
-future. Decoupled software plugin architectures with enormously
-improved flexibility, maintainability, reusability, and reliability
-will become possible, without any need for run-time type inspection,
-and without any loss in computational performance.
+with other modern languages.
 
 \subsection{Dynamic method dispatch}
 
