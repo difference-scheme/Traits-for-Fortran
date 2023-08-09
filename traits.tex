@@ -267,7 +267,7 @@ monomorphic (i.e. coupled) functional implementation of this test
 problem, followed by a functional implementation that makes use of
 both run-time and compile-time polymorphism to manage source code
 dependencies. In the survey of programming languages presented in
-Chapter~\ref{sect:survey}, we will then re-code this test problem in an
+Chapter~\ref{sect:survey}, we will then recode this test problem in an
 encapsulated fashion, to highlight how the source code dependencies in
 this problem can be managed in different languages even in more
 complex situations, that require OO techniques.
@@ -1133,7 +1133,7 @@ required.
 \section{Interoperability with subclassing}
 
 The present multiple interface inheritance (i.e. subtyping) features are
-inter-operable with the single implementation inheritance (i.e. subclassing)
+interoperable with the single implementation inheritance (i.e. subclassing)
 that is already present in the language. That is, code examples like
 the following are possible:
 \begin{lstlisting}[language=LFortran,style=boxed]
@@ -1253,12 +1253,13 @@ types, for \code{T}, as before.
 
 \subsection{Predefined interfaces}
 
-The language should ideally supply some predefined, commonly used generic
-constraints in the form of abstract interfaces that are contained in a
-language intrinsic module. The actual implementation of these interfaces
-could then, of course, employ the ``interfaces-as-type-sets'' syntax that
-was described above. For instance, a more general \code{INumeric}
-interface than the one given above, could be implemented as follows:
+The language should ideally supply a collection of predefined,
+commonly used generic constraints in the form of abstract interfaces
+that are contained in a language intrinsic module. The actual code of
+these interfaces could then employ the ``interfaces-as-type-sets''
+syntax that was described above, or any other suitable means. For
+instance, a more general \code{INumeric} interface than the one given
+above, could be coded as follows:
 \begin{lstlisting}[language=LFortran,style=boxed]
    abstract interface :: INumeric
       integer(*) | real(*) | complex(*)
@@ -1266,9 +1267,17 @@ interface than the one given above, could be implemented as follows:
 \end{lstlisting}
 Notice how this makes use of kind parameters to include all
 \code{integer}, \code{real}, and \code{complex} types, admitted by the
-language, in a single \code{abstract interface} constraint. Such
-language provided interfaces could be imported from user code through
-a \code{use} statement like in the following example for
+language, in a single \code{abstract interface} constraint.
+
+Importantly, the language should provide interfaces for all its
+numeric and relational operators. Both, for the user to formulate
+generics constraints in terms of them for intrinsic types. But also in
+order to enable the programmer to implement these operators himself
+for any new types where this would be desirable, or where these
+operators are not supported by default.
+
+Language provided interfaces could then be imported from user code
+through a \code{use} statement like in the following example for
 \code{INumeric}:
 \begin{lstlisting}[language=LFortran,style=boxed]
 module user_code
@@ -1286,7 +1295,7 @@ module user_code
 
 end module user_code
 \end{lstlisting}
-They could then be used as constraints in function and derived type
+They could be used as constraints in function and derived type
 implementations, or in other interfaces, like \code{ISum} here, that
 requires the functionality of \code{INumeric}.
 
@@ -1304,9 +1313,9 @@ result of reduction operations, as it is, e.g., the case in the test
 problem implementation of Sect.~\ref{sect:poly_functional}. There, a
 variable for summation needs to be initialized to the zero constant of
 type \code{T}. In Go, it is easily possible to express this
-initialization by transforming the zero constant,\code{0}, into the
-corresponding constant of type \code{T}, i.e. by simply writing
-\code{s = T(0)}.
+initialization by transforming the (typeless) zero constant,\code{0},
+into the corresponding constant of type \code{T}, i.e. by simply
+writing \code{s = T(0)}.
 
 If, for instance, \code{T} is then instantiated at compile time with
 the \code{float64} type, the expression \code{T(0)} will be
@@ -1321,7 +1330,7 @@ abort compilation at the generics instantiation step.
 \section{Generic type parameters}
 \label{sect:generic_parameters}
 
-As already mentioned above, LFortran's basic generics design should
+As already mentioned above, Fortran's basic generics design should
 follow Swift's, if possible, and allow both ordinary and type-bound
 procedures (i.e. methods), and derived types to be given their own
 generic type parameters.
@@ -1428,14 +1437,29 @@ procedures via the latter's passed-object dummy arguments. In this
 example, type \code{PairwiseSum}'s method, \code{sum}, has a
 passed-object dummy argument, \code{self}, that is declared being of
 \code{class(PairwiseSum\{U\})}. Hence, method \code{sum} can now
-access \code{PairwiseSum}'s generic parameter \code{U}. Thereby
-allowing this method to make use of two independently defined generic
+access \code{PairwiseSum}'s generic parameter \code{U}. This
+allows the method to make use of two independently defined generic
 type parameters, \code{T} and \code{U}, which grants it increased
-flexibility. This also means that there is \emph{no implicit}
+flexibility. It also means that there is \emph{no} implicit
 mechanism of bringing generic parameters of a derived type into the
 scope of its methods. If a type-bound procedure needs to access the
 generic parameters of its derived type, it must be provided with a
 passed-object dummy argument.
+
+Notice, finally, that the declaration \code{class(PairwiseSum\{U\})}
+does not imply any ambiguities or contradictions with respect to
+compile-time vs. run-time polymorphism, because substitution semantics
+apply. At compile time, the compiler will substitute a set of
+different actual arguments for the generic parameter \code{U}. Hence,
+the notation \code{PairwiseSum\{U\}} really refers to a set of
+multiple, related, but \emph{different} \code{PairwiseSum} types,
+whose \emph{only} commonality is that they all implement the
+\code{ISum} interface (and furthermore contain different field
+components that do the same). Of course, passed-object dummy arguments
+of any of the different \code{PairwiseSum} types of this set can then
+be run-time polymorphic, in exactly the same manner that passed-object
+dummy arguments of other derived types that implement the same
+interface can be run-time polymorphic.
 
 
 \section{Updated structure constructors}
@@ -1546,17 +1570,18 @@ programmer.
 \section{Encapsulated versions}
 
 The present section will demonstrate that using the previously
-described new generics features also in OO programming is not only
-possible, but it is as easy to do as using the functional programming
-style. Moreover, the equal importance that is placed in this document
-on both proper compile-time and run-time polymorphic capabilities
-allows for uniform dependency management of both language intrinsic
-and user-defined types in Fortran, that is on par with the
-capabilities of other modern languages. We believe that this will
-completely transform the way Fortran applications will be written in
-the future. Decoupled software plugin architectures with enormously
+described new generics features seamlessly and easily in a modern-day
+OO programming setting is one of the great strengths of the present
+design. The equal importance that has been placed in this document on
+both proper compile-time and run-time polymorphic (i.e. modern-day OO)
+capabilities will allow for uniform dependency management of both
+language intrinsic and user-defined types in Fortran, that is on par
+with other modern languages. We believe that this will completely
+transform the way Fortran applications will be written in the
+future. Decoupled software plugin architectures with enormously
 improved flexibility, maintainability, reusability, and reliability
-will become possible, without any loss in computational performance.
+will become possible, without any need for run-time type inspection,
+and without any loss in computational performance.
 
 \subsection{Dynamic method dispatch}
 
@@ -1688,7 +1713,7 @@ recommendation.
 \subsection{Static method dispatch and static object declarations}
 
 In the present simple example, and taking Listing~\ref{lst:staticFortran}
-as a baseline, it is actually possible to even avoid of some of the
+as a baseline, it is actually possible to even avoid some of the
 run-time memory allocation overhead of the program, by having the
 field objects \code{other} and \code{drv}, that are contained within
 the \code{PairwiseSum} and \code{Averager} types, be statically
