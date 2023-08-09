@@ -858,7 +858,7 @@ compile-time polymorphism (i.e. generics) in the language, and to
 thereby enable a uniform management of dependencies on both
 user-defined \emph{and} language-intrinsic types.
 
-\subsection{Interface definitions}
+\subsection{Abstract interface definitions}
 \label{sect:interface_defs}
 
 Fortran already allows the programmer to define unnamed abstract
@@ -926,11 +926,11 @@ backwards compatible with the functionality that is already available
 in the present language.
 
 
-\subsection{Extends specifier for interfaces}
+\subsection{Extends specifier for abstract interfaces}
 
 Abstract interface definitions must allow the programmer to declare
-new interfaces that are the union of \emph{multiple} simpler ones
-(multiple interface inheritance). In the following example, the
+new abstract interfaces that are the union of \emph{multiple} simpler
+ones (multiple interface inheritance). In the following example, the
 interface \code{IBasicMath} inherits the procedure signatures
 contained in both the interfaces \code{IAddition}, and
 \code{ISubtraction}, making \code{IBasicMath} at the same time a
@@ -943,7 +943,7 @@ the \code{IAddition}, or \code{ISubtraction} interfaces.
    end interface
 \end{lstlisting}
 
-\subsection{Short-hand notation for union of interfaces}
+\subsection{Short-hand notation for union of abstract interfaces}
 
 There are often cases where the union of two (or more) interfaces is
 required but where one would not like to go through the labor to
@@ -1104,7 +1104,7 @@ Assume now that the purpose of our addition of the previous two
 methods was to actually make \code{BasicMath} conform to settings
 where implementations of multiplication with, or division by, a
 \code{real} are needed, and where the required functionality is
-described by two interfaces called \code{IMultiplication} and
+described by two abstract interfaces called \code{IMultiplication} and
 \code{IDivision}. So far we have added the code of the required
 methods, but we haven't made \code{BasicMath} pluggable into code that
 is written in terms of either one of these latter interfaces. To fix
