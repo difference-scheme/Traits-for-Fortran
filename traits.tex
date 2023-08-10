@@ -1525,15 +1525,11 @@ Listing~\ref{lst:OORust}.
 Fortran's special role, as a language that caters to numeric
 programming, demands that any generics design for the language must
 allow for the possibility to also handle genericity of array rank. The
-present design offers a lot of room in this respect, by means of the
-device of ``associated items'' or ``associated types'' as they are
-implemented in both \code{trait}s and \code{protocol}s in Rust and
-Swift, respectively. In addition to different array ranks and array
-dimensions, also different \code{length} parameters of character
-variables could be treated via this same device. But for the purpose
-of a very first prototype implementation of the generics features
-described here, we consider a discussion of these features to be
-non-essential, and we thus defer them to a separate document.
+present design offers a lot of room in this respect, but since this a
+largely orthogonal issue, and since we consider a discussion of
+such functionality to be non-essential for the purpose of a very first
+prototype implementation of the generics features described here, we
+defer it to a separate document.
 
 
 \chapter{Fortran versions of the test example}
