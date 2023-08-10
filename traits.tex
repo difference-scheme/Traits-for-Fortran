@@ -44,7 +44,7 @@
 
 \maketitle
 
-\abstract{Starting from conclusions drawn from a survey of modern
+\abstract{Based on conclusions drawn from a survey of modern
   languages, a trait system for Fortran is developed and described
   that is fully backwards compatible with the present Fortran
   language, and allows for the uniform management of source code
@@ -84,7 +84,7 @@ But what is the purpose of polymorphism in a programming language?
 What is polymorphism actually good for? One of the more comprehensive
 answers to this question was given by Robert C. Martin in numerous
 books (e.g. \cite{Martin_17}), as well as in the following quotation
-from his blog:
+from his blog \cite{Martin_14}:
 
 \begin{displayquote}
 ``There really is only one benefit to polymorphism; but it's a big
@@ -121,7 +121,7 @@ answering this question:
   procedures and data types. If the programmer employs encapsulation
   of both a program's procedures and its data, i.e. its state, both
   these dependencies can actually be viewed as dependencies on
-  user-defined abstract data types, i.e. types that contain both
+  user-defined abstract data types. That is, types that contain both
   user-defined state, and implementation code which operates on that
   (hidden) state. These are the dependencies that Martin is concretely
   referring to in the above quotation, and it is these dependencies on
@@ -203,11 +203,12 @@ had to demonstrate that the use of (both single and multiple)
 implementation inheritance breaks encapsulation in OO languages, and
 therefore results in extremely tightly coupled, rigid, fragile, and
 non-reusable code. This led to an entire specialized literature on OO
-design patterns, that aimed at avoiding or mitigating the effects of
-such rigidity, by replacing the use of implementation inheritance with
-the means to formulate run-time polymorphism that are discussed
-below. It also led to the apprehension that implementation inheritance
-(but \emph{not} run-time polymorphism) should be abandoned. In modern
+design patterns \cite{Gamma_et_al_94,Martin_03,Holub_04}, that aimed
+at avoiding or mitigating the effects of such rigidity, by replacing
+the use of implementation inheritance with the means to formulate
+run-time polymorphism that are discussed below. It also led to the
+apprehension that implementation inheritance (but \emph{not} run-time
+polymorphism) should be abandoned \cite{Weck_Szyperski}. In modern
 languages, implementation inheritance is either kept solely for
 backwards compatibility reasons (e.g. in the Swift language), or it is
 foregone altogether (e.g. in Rust, Go, and Carbon).
@@ -215,19 +216,19 @@ foregone altogether (e.g. in Rust, Go, and Carbon).
 The first statically typed mainstream programming language that
 offered a proper separation of run-time polymorphism from
 implementation inheritance was Objective~C. It introduced
-``protocols'' (i.e. polymorphic interfaces) in the year
-1990. Protocols in Objective C consist of pure function signatures,
-that lack implementation code. Objective~C provided a mechanism to
-implement multiple such protocols by a class, and to thus make
-classes conform to protocols. This can be viewed as a restricted form
-of multiple inheritance, namely inheritance of object
+``protocols'' (i.e. polymorphic interfaces) in the year 1990
+\cite{Cox_et_al_20}. Protocols in Objective C consist of pure function
+signatures, that lack implementation code. Objective~C provided a
+mechanism to implement multiple such protocols by a class, and to thus
+make classes conform to protocols. This can be viewed as a restricted
+form of multiple inheritance, namely inheritance of object
 \emph{specification}, which is also known as \emph{subtyping}. Only a
 few years later, in 1995, the Java language hugely popularized these
-ideas under the monikers ``interfaces'' and ``interface
-inheritance''. Today, nearly all modern languages support polymorphic
-interfaces/protocols, and the basic mechanism of multiple interface
-inheritance that was introduced to express run-time polymorphism in
-Objective~C, often in even improved, more flexible,
+ideas using the terms ``interfaces'' and ``interface inheritance''
+\cite{Cox_et_al_20}. Today, nearly all modern languages support
+polymorphic interfaces/protocols, and the basic mechanism of multiple
+interface inheritance that was introduced to express run-time
+polymorphism in Objective~C, often in even improved, more flexible,
 manifestations. The only negative exceptions in this respect being
 modern Fortran, and C++, which both still stick to the obsolescent
 Simula~67 paradigm.
@@ -238,12 +239,12 @@ polymorphism. Early attempts, notably templates in C++, to render
 function arguments and class parameters polymorphic, did not impose
 any constraints on such arguments and parameters, that could be
 checked by C++ compilers. With the known results on compilation times
-and cryptic compiler error messages. Surprisingly, Java, the language
-that truly popularized polymorphic interfaces in OO programming, did
-not provide an interface based mechanism to constrain its
-generics. Within the pool of mainstream programming languages, this
-latter realization was first made with the advent of Rust
-\cite{Matsakis_2014}.
+and cryptic compiler error messages
+\cite{Haveraaen_et_al_19}. Surprisingly, Java, the language that truly
+popularized polymorphic interfaces in OO programming, did not provide
+an interface based mechanism to constrain its generics. Within the
+pool of mainstream programming languages, this latter realization was
+first made with the advent of Rust \cite{Matsakis_2014}.
 
 Rust came with a trait (i.e. polymorphic interface) system with which
 it is possible for the user to uniformly and transparently express
@@ -535,26 +536,26 @@ trait, like e.g. user-defined constructors for \code{struct}s (see the
 functions named ``\code{new}'' in the following code
 Listing~\ref{lst:OORust}).
 
-In contrast to Go, Rust allows the programmer to implement traits for
+Differing from Go, Rust allows the programmer to implement traits for
 both user-defined \emph{and} language intrinsic types, and to do so
 for types that are located in external libraries (called ``crates'' in
 Rust), as long as the traits themselves are defined in the
 programmer's own crate. The reverse, namely implementing an external
 trait for a user-owned type, is also possible. Only the (edge) case of
 implementing an external trait for an external type is not allowed
-(this is called the ``orphan rule''). The latter case requires the use
-of wrappers.
+(this is called the ``orphan rule'' \cite{Klabnik_Nichols}). The
+latter case requires the use of wrappers.
 
 Comparable to Go, Rust's generics model allows for the generic
 parameterization of functions, traits, and user-defined types like
 \code{struct}s. Rust does not explicitly forbid generic
 methods. However, if one defines such a method within a trait, then
 this will make the trait unusable for the declaration of any ``trait
-objects'', i.e. for the employment of run-time polymorphism. Thus, the
-Rust programmer will in general (need to) parameterize traits and
-\code{struct}s rather than any methods themselves. Rust generics are
-fully type-checked at compilation time, i.e. Rust supports ``strong
-concepts''.
+objects'' \cite{Lyon}, i.e. for the employment of run-time
+polymorphism. Thus, the Rust programmer will in general (need to)
+parameterize traits and \code{struct}s rather than any methods
+themselves. Rust generics are fully type-checked at compilation time,
+i.e. Rust supports ``strong concepts''.
 
 \subsection{Encapsulated version coded in Rust}
 
@@ -807,14 +808,14 @@ opinion, Fortran should borrow in some form.
 \subsection{Swift}
 
 Swift's basic model of implementing generics by allowing parameterized
-structures and methods (but not parameterized interfaces) is both the
-easiest to read, and the easiest to use from a programmer's
-perspective. Swift's generics design allows the Swift compiler to
-instantiate generics largely automatically, through inspection of the
-argument types that are passed to functions and methods. In contrast
-to the other languages, in Swift, the user basically never has to
-bother with instantiating a generic function, a method, and often not
-even a structure or a class.
+structures, functions, and methods (but not parameterized interfaces)
+is both the easiest to read, and the easiest to use from a
+programmer's perspective. Swift's generics design allows the Swift
+compiler to instantiate generics largely automatically, through
+inspection of the argument types that are passed to functions,
+methods, and (structure or class) constructors. In contrast to the
+other languages, in Swift, the user basically never has to bother with
+instantiating any generics.
 
 If the Swift programmer knows how to write generic functions, his
 knowledge automatically translates into coding generic methods, since
@@ -1525,9 +1526,9 @@ Listing~\ref{lst:OORust}.
 Fortran's special role, as a language that caters to numeric
 programming, demands that any generics design for the language must
 allow for the possibility to also handle genericity of array rank. The
-present design offers a lot of room in this respect, but since this a
-largely orthogonal issue, and since we consider a discussion of
-such functionality to be non-essential for the purpose of a very first
+present design offers a lot of room in this respect, but since this is
+a largely orthogonal issue, and since we consider a discussion of such
+functionality to be non-essential for the purpose of a very first
 prototype implementation of the generics features described here, we
 defer it to a separate document.
 
@@ -1573,10 +1574,10 @@ to the Go code version of Listing~\ref{lst:polyfuncGo}, namely:
 
 The example demonstrates that using the new generics features together
 with a functional programming style is easy, that the syntax is
-economical, and that automatic type inference by the compiler should
-be straightforward and therefore reliable. Hence, we believe that the
-generics features described here will place no burden on the
-programmer.
+economical, and that automatic type inference for, and instantiation of,
+generics by the compiler should be straightforward and therefore
+reliable. Hence, we believe that the generics features described here
+will place no burden on the programmer.
 
 
 \section{Encapsulated versions}
@@ -1588,23 +1589,24 @@ design. The equal importance that has been placed in this document on
 both proper compile-time and run-time polymorphic (i.e. modern-day OO)
 capabilities will allow for uniform dependency management of both
 language intrinsic and user-defined types in Fortran, that is on par
-with other modern languages.
+with the most modern languages.
 
 \subsection{Dynamic method dispatch}
 
-Listing~\ref{lst:OOFortran} gives our Fortran version of the
-encapsulated form of the test example that corresponds closest to the
-code versions that were presented in Chapter~\ref{sect:survey} for all
-the other languages.
+Listing~\ref{lst:OOFortran} shows our encapsulated Fortran code
+version of the test problem, that corresponds closest to the code
+versions that were presented in Chapter~\ref{sect:survey} for all the
+other languages.
 
 \begin{itemize}
 \item
-  As in the encapsulated Go code version, and in order to manage all
-  the source code dependencies in the problem, three interfaces are
-  used: \code{INumeric}, \code{ISum}, and \code{IAverager}.
+  As in all these other versions, three interfaces are used to manage
+  all the source code dependencies in the problem: \code{INumeric},
+  \code{ISum}, and \code{IAverager}.
 \item
-  In contrast to the Go version, none of the aforementioned interfaces
-  is parameterized itself, since we followed Swift's basic model of
+  In contrast to the Go and Rust versions (Listings~\ref{lst:OOGo}
+  and \ref{lst:OORust}), none of the aforementioned interfaces is
+  parameterized itself, since we followed Swift's basic model of
   generics.
 \item
   Interface inheritance is expressed through the presence of the
@@ -1626,17 +1628,18 @@ the other languages.
 The most important point to notice in Listing~\ref{lst:OOFortran} is
 how the main program is the only part of the code that (necessarily)
 depends on implementations. The \emph{entire} rest of the code depends
-merely on abstract interfaces (see the \code{use} statements in the
-above modules). The features described in this document have enabled
-us to avoid rigidity in the program, by both decoupling it and making
-it operate on multiple data types, thus allowing for a maximum of code
-reuse.
-
-Notice, also, that not a single manual instantiation of generics is
-necessary anywhere in the code. The Fortran version described here is
-therefore as clean as the Go implementation with respect to dependency
-management, and it is as easy to use, and to read and understand, as
-the Swift implementation.
+merely on (user-defined) abstract interfaces (see the \code{use}
+statements in the above modules). The features described in this
+document have enabled us to avoid rigidity in the program, by both
+decoupling it and making it operate on multiple data types, thus
+allowing for a maximum of code reuse. Notice, also, that (as in the
+functional Fortran implementation, i.e.
+Listing~\ref{lst:FuncFortran}) not a single manual instantiation of
+generics is necessary anywhere in the code. The Fortran version
+described here is therefore as clean as the Go implementation of
+Listing~\ref{lst:OOGo} with respect to dependency management, and it
+is as easy to use, and to read and understand, as the Swift
+implementation of Listing~\ref{lst:OOSwift}.
 
 \subsection{Static method dispatch}
 

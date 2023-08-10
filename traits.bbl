@@ -1,9 +1,16 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 
 \bibitem{Cardelli_Wegner_85}
 Luca Cardelli and Peter Wegner.
 \newblock On understanding types, data abstraction, and polymorphism.
 \newblock {\em ACM Computing Surveys}, 17:471--523, 12 1985.
+
+\bibitem{Cox_et_al_20}
+Brad~J. Cox, Steve Naroff, and Hansen Hsu.
+\newblock The origins of objective-c at ppi/stepstone and its evolution at
+  next.
+\newblock {\em Proceedings of the ACM on Programming Languages}, 4:1--74, 6
+  2020.
 
 \bibitem{Dahl_04}
 Ole-Johan Dahl.
@@ -12,10 +19,43 @@ Ole-Johan Dahl.
   Object-Orientation to Formal Methods}, volume 2635 of {\em Lecture Notes in
   Computer Science}, Berlin, Heidelberg, 2004. Springer.
 
+\bibitem{Gamma_et_al_94}
+Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides.
+\newblock {\em Design Patterns. Elements of Reusable Object-Oriented Software}.
+\newblock Prentice Hall, 1994.
+
 \bibitem{Haveraaen_et_al_19}
-M.~Haveraaen, J.~J{\"a}rvi, and D.~Rouson.
+Magne Haveraaen, Jaakko. J{\"a}rvi, and Damian Rouson.
 \newblock Reflecting on generics in fortran.
 \newblock July 2019.
+
+\bibitem{Holub_04}
+Allen Holub.
+\newblock {\em Holub on Patterns, Learning Design Patterns by Looking at Code}.
+\newblock Apress, 2004.
+
+\bibitem{Klabnik_Nichols}
+Steve Klabnik and Carol Nichols.
+\newblock The rust programming language.
+\newblock
+  \url{https://doc.rust-lang.org/stable/book/ch10-02-traits.html#implementing-a-trait-on-a-type}.
+
+\bibitem{Lyon}
+George Lyon.
+\newblock
+  \url{https://gist.github.com/GeorgeLyon/c7b07923f7a800674bc9745ae45ddc7f}.
+
+\bibitem{Martin_03}
+Robert~C. Martin.
+\newblock {\em Agile Software Development: Principles, Patterns, and
+  Practices}.
+\newblock Prentice Hall, 2002.
+
+\bibitem{Martin_14}
+Robert~C. Martin.
+\newblock Oo vs fp.
+\newblock \url{https://blog.cleancoder.com/uncle-bob/2014/11/24/FPvsOO.html},
+  November 2014.
 
 \bibitem{Martin_17}
 Robert~C. Martin.
@@ -28,5 +68,11 @@ Nicholas~D Matsakis and Felix~S Klock~II.
 \newblock The rust language.
 \newblock In {\em ACM SIGAda Ada Letters}, volume~34, pages 103--104. ACM,
   2014.
+
+\bibitem{Weck_Szyperski}
+Wolfgang Weck and Clemens Szyperski.
+\newblock {Do We Need Inheritance?}
+\newblock
+  \url{https://www.researchgate.net/publication/2297653_Do_We_Need_Inheritance}.
 
 \end{thebibliography}
