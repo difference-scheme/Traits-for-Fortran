@@ -458,7 +458,7 @@ have methods, and that methods and interfaces cannot be directly
 implemented for user-defined types whose definitions are located in
 other packages. That is, the programmer has to write wrappers in the
 latter case. Go, finally, makes it explicit in its type definition
-syntax that interfaces (like \code{struct}'s) are types in their own
+syntax that interfaces (like \code{struct}s) are types in their own
 right, and that hence polymorphic variables (i.e. objects) can be
 declared in terms of them.
 
@@ -468,10 +468,6 @@ are bounded by constraints that are expressed through
 interfaces. Hence, the Go compiler will fully type-check generic code.
 In Go, structures, interfaces, and functions, but not methods, can all
 be given their own generic type parameters.
-
-%To allow methods to make use of such parameters one has to
-%parameterize the structures and interfaces to which these methods or,
-%respectively, their signatures belong.
 
 \subsection{Encapsulated version coded in Go}
 
@@ -485,7 +481,7 @@ lower-level objects ``\code{other}'' and ``\code{drv}'' of
 \code{ISum[T]} type as components, to which they delegate calls to
 these objects' \code{sum} methods. Notice how the use of the
 polymorphic interface \code{ISum[T]} in the declarations of
-``\code{other}'' and ``\code{drv}'' enables either \code{SimpleSum} or
+\code{other} and \code{drv} enables either \code{SimpleSum} or
 \code{PairwiseSum} objects to be plugged into their higher-level
 clients.
 
@@ -587,7 +583,7 @@ differences, that are listed in the following notes.
   types wasn't possible. This led to the necessity to move the type
   conversion from method \code{average} to its calls in the main
   program. We also had to import a \code{zero} generic function from
-  the external ``\code{num}'' crate, in order to initialize the
+  the external \code{num} crate, in order to initialize the
   variable \code{s} that is returned by the \code{sum} method of the
   \code{SimpleSum} ADT.
 \item
@@ -595,7 +591,7 @@ differences, that are listed in the following notes.
   Fortran's. That is, they are unable to initialize from an external
   scope, structure components that are declared being private to their
   module. As in Fortran, use of user-defined constructors must be made
-  instead (see the functions named ``\code{new}'' that are defined in
+  instead (see the functions named \code{new} that are defined in
   separate \code{impl} blocks for the ADTs \code{PairwiseSum} and
   \code{Averager}).
 \item
@@ -1330,7 +1326,7 @@ result of reduction operations, as it is, e.g., the case in the test
 problem implementation of Sect.~\ref{sect:poly_functional}. There, a
 variable for summation needs to be initialized to the zero constant of
 type \code{T}. In Go, it is easily possible to express this
-initialization by transforming the (typeless) zero constant,\code{0},
+initialization by transforming the (typeless) zero constant, \code{0},
 into the corresponding constant of type \code{T}, i.e. by simply
 writing \code{s = T(0)}.
 
@@ -1457,7 +1453,7 @@ passed-object dummy argument, \code{self}, that is declared being of
 access \code{PairwiseSum}'s generic parameter \code{U}. This
 allows the method to make use of two independently defined generic
 type parameters, \code{T} and \code{U}, which grants it increased
-flexibility. It also means that there is \emph{no} implicit
+flexibility. This also means that there is \emph{no} implicit
 mechanism of bringing generic parameters of a derived type into the
 scope of its methods. If a type-bound procedure needs to access the
 generic parameters of its derived type, it must be provided with a
