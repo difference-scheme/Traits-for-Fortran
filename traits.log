@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  13 AUG 2023 13:42
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  17 AUG 2023 13:49
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -567,58 +567,51 @@ File: lstlang1.sty 2020/03/24 1.8d listings language file
 File: lstlang1.sty 2020/03/24 1.8d listings language file
 ) [25
 
-]
-Overfull \hbox (5.5727pt too wide) in paragraph at lines 899--903
-[]\T1/ppl/m/n/10.95 In par-tic-u-lar, in or-der to use ab-stract in-ter-faces t
-o sup-port run-time poly-mor-phic ob-jects through
- []
-
-
-Overfull \hbox (2.14284pt too wide) in paragraph at lines 899--903
-\T1/ppl/m/n/10.95 sub-typ-ing, For-tran's \T1/fvm/m/n/10.95 class \T1/ppl/m/n/1
-0.95 spec-i-fier for vari-able dec-la-ra-tions needs to be en-hanced to ac-cept
- named
- []
-
-[26]
+] [26]
 LaTeX Font Info:    Font shape `T1/fvm/b/n' will be
-(Font)              scaled to size 9.84009pt on input line 969.
+(Font)              scaled to size 9.84009pt on input line 979.
 
-Overfull \hbox (13.27109pt too wide) in paragraph at lines 971--976
+Overfull \hbox (13.27109pt too wide) in paragraph at lines 981--986
 \T1/ppl/m/n/10.95 User-defined (i.e. de-rived) types can be made to con-form to
  an in-ter-face by in-tro-duc-ing an \T1/fvm/m/n/10.95 implements
  []
 
-[27] [28] [29] [30]
+[27]
+Overfull \hbox (0.12485pt too wide) in paragraph at lines 1073--1084
+\T1/ppl/m/n/10.95 types through dec-la-ra-tion blocks, rather than by in-clud-i
+ng the ac-tual im-ple-men-ta-tion bod-ies them-
+ []
+
+[28] [29] [30]
 Chapter 5.
 [31
 
-] [32] [33] [34] [35] [36]
+] [32] [33] [34] [35] [36] (./Code/Fortran/vector.f90 [37]) [38]
 Chapter 6.
-(./Code/Fortran/functional.f90 [37
+(./Code/Fortran/functional.f90 [39
 
-] [38]) [39] (./Code/Fortran/mixed.f90
-[40] [41] [42]) [43] (./Code/Fortran/static1.f90 [44] [45] [46])
+] [40]) [41] (./Code/Fortran/mixed.f90
+[42] [43] [44]) [45] (./Code/Fortran/static1.f90 [46] [47] [48])
 LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
-(Font)              scaled to size 7.38007pt on input line 1692.
- [47]
-(./traits.bbl [48]
+(Font)              scaled to size 7.38007pt on input line 1785.
+ [49]
+(./traits.bbl [50]
 Underfull \hbox (badness 1552) in paragraph at lines 73--77
 []\T1/ppl/m/n/10.95 Wolfgang Weck and Clemens Szyper-ski.  Do We Need In-her-i-
 tance?  [][]$\T1/fvm/m/n/10.95 https : / / www .
  []
 
-) [49
+) [51
 
 ] (./traits.aux)
 Package rerunfilecheck Info: File `traits.out' has not changed.
-(rerunfilecheck)             Checksum: 9DEDD312472E93FB0815EF6AC55EE844;9133.
+(rerunfilecheck)             Checksum: 45532223125EC33B62BFD63D2C50E9AF;9431.
  ) 
 Here is how much of TeX's memory you used:
- 15878 strings out of 480247
- 237634 string characters out of 5896151
- 758184 words of memory out of 5000000
- 32380 multiletter control sequences out of 15000+600000
+ 15956 strings out of 480247
+ 238796 string characters out of 5896151
+ 758228 words of memory out of 5000000
+ 32403 multiletter control sequences out of 15000+600000
  510080 words of font info for 106 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  60i,16n,68p,7900b,3160s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -628,10 +621,10 @@ fonts/type1/public/bera/fvmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
 ublic/bera/fvmro8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/
 uplb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb><
 /usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on traits.pdf (50 pages, 248186 bytes).
+Output written on traits.pdf (52 pages, 255969 bytes).
 PDF statistics:
- 1867 PDF objects out of 2073 (max. 8388607)
- 1785 compressed objects within 18 object streams
- 1200 named destinations out of 1200 (max. 500000)
- 377 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1945 PDF objects out of 2073 (max. 8388607)
+ 1860 compressed objects within 19 object streams
+ 1253 named destinations out of 1440 (max. 500000)
+ 393 words of extra memory for PDF output out of 10000 (max. 10000000)
 

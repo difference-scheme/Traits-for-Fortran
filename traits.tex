@@ -896,7 +896,9 @@ polymorphism, or as constraints on generic type parameters in
 compile-time polymorphism (see Sect.~\ref{sect:generic_parameters} for
 examples of the latter).
 
-In particular, in order to use abstract interfaces to support run-time
+\subsubsection{\code{Class} declaration specifier: enhancements}
+
+In order to use abstract interfaces to support run-time
 polymorphic objects through subtyping, Fortran's \code{class}
 specifier for variable declarations needs to be enhanced to accept
 named abstract interfaces, like in the following two examples:
@@ -910,18 +912,26 @@ then all the \code{public} methods of that object, whose signatures
 are prescribed by an adopted interface like \code{IAddition} here,
 will make use of late binding. That is, their calls will be resolved
 by the run-time system of the language (e.g. through a virtual method
-table). Since this requires that such ``trait objects'' (like
-\code{adder} or \code{adderptr} in this example) be instantiated at
-run time, it also entails that such objects be either declared using
-the \code{allocatable}, or the \code{pointer} attribute (as in the
-examples above), or that they be arguments to a procedure (as in the
-example of Sect.~\ref{sect:interface_defs}). This is in full
-accordance with how variables, that make use of run-time polymorphism
-through implementation inheritance (i.e. subclassing), are declared in
-the present Fortran standard. The proposed additions are therefore
-backwards compatible with the functionality that is already available
-in the present language.
+table). In accordance with how objects that make use of run-time
+polymorphism through subclassing (i.e. implementation inheritance) are
+declared in the present Fortran standard, also ``trait objects'' (like
+\code{adder} or \code{adderptr} in the example above) must either be
+declared using the \code{allocatable}, or the \code{pointer}
+attribute, or they must be arguments to a procedure (as in the example
+of Sect.~\ref{sect:interface_defs}). The proposed additions are
+therefore backwards compatible with the functionality that is already
+available in the present language.
 
+\subsubsection{\code{Class} declaration specifier: constraints}
+
+Since the \code{class} declaration specifier is undefined for
+intrinsic types, and since the aforementioned semantics of this
+specifier imply late binding of methods (which is incompatible with
+intrinsic types), a compiler will need to ensure that the \code{class}
+declaration specifier is not used in conjunction with interfaces that
+admit language intrinsic types, like the empty interface,
+\code{IAnyType}, or any interfaces that are formulated in terms of
+type sets, as they are discussed in Sect.~\ref{sect:type_sets}.
 
 \subsection{Extends specifier for abstract interfaces}
 
@@ -1039,12 +1049,16 @@ then provide a full implementation.
 
 In order to avoid having to wrap existing types into wrappers, when
 unforeseen new use cases result, it should be possible (as in Swift or
-Rust) to make \emph{any} type implement new interfaces retroactively,
-regardless of where its original type definition is located, or
-whether the type is a user-defined or a language intrinsic one. This
-means that methods should also be allowed for \emph{intrinsic}
-types. The \code{implements} statement that is described below is aimed
-at accomplishing these capabilities.
+Rust) to make any type implement new interfaces retroactively,
+regardless of where its original type definition is located. It would
+be desirable to provide such a capability for both user-defined and
+language intrinsic types, which would mean that methods would have to
+be allowed also for \emph{intrinsic} types. The \code{implements}
+statement that is described below is aimed at ultimately accomplishing
+these capabilities, but for the purpose of a first prototype
+implementation it has been restricted here to provide such
+functionality for user-defined types \emph{only}, i.e. its use on
+intrinsic types is presently prohibited.
 
 Notice, that the \code{implements} statement has \emph{no} relation to
 subclassing, i.e. one derived type being extended into another through
@@ -1057,8 +1071,8 @@ dynamically change an \emph{interface inheritance hierarchy}, and
 achieve utmost code flexibility.
 
 Swift's \code{extension} blocks fulfill essentially the same purpose
-as Rust's \code{impl} blocks in this respect. They have been somewhat
-simplified (for a first implementation), and adjusted here to
+as Rust's \code{impl} blocks in this respect. They have been
+simplified here (for a first implementation), and adjusted to
 Fortran's syntax that binds methods to types through declaration
 blocks, rather than by including the actual implementation bodies
 themselves into such a block (the implementations need to be supplied
@@ -1102,7 +1116,7 @@ methods was to actually make \code{BasicMath} conform to settings
 where implementations of multiplication with, or division by, a
 \code{real} are needed, and where the required functionality is
 described by two abstract interfaces called \code{IMultiplication} and
-\code{IDivision}. So far we have added the code of the required
+\code{IDivision}. So far, we have added the code of the required
 methods, but we haven't made \code{BasicMath} pluggable into code that
 is written in terms of either one of these latter interfaces. To fix
 this, we simply state that the \code{BasicMath} type already has all
@@ -1225,30 +1239,70 @@ it reflects that, in type parameters, one is dealing with different
 entities.
 
 \subsection{Type sets}
+\label{sect:type_sets}
 
 In order to make the interface based generics facility easy to use for
 the programmer, it must be possible, as in the Go language, to define
-abstract interfaces as type sets. The following example
+abstract interfaces as type sets. The following example shows the
+simplest form of such a type set, by defining an interface
+\code{INumeric}, for use as a generics constraint in the example of
+Sect.~\ref{sect:generic_interfaces}, in order to admit for the type
+parameter \code{T}, that was given there, only the (32 bits wide)
+standard \code{integer} type:
+\begin{lstlisting}[language=LFortran,style=boxed]
+   abstract interface :: INumeric
+      integer
+   end interface
+\end{lstlisting}
+
+\subsubsection{Unions of types}
+
+More useful interfaces can be defined by specifying unions of
+types as a type set, as in the following example
 \begin{lstlisting}[language=LFortran,style=boxed]
    abstract interface :: INumeric
       integer | real(real64)
    end interface
 \end{lstlisting}
-defines the interface \code{INumeric}, that was used as a generics
-constraint in Sect.~\ref{sect:generic_interfaces}, in order to admit
-for the type parameter \code{T} (that was given there) only the (32 bits
-wide) standard \code{integer} or \code{real(real64)} types. The
-semantics of such a construct are that it implicitly defines a
+that defines interface \code{INumeric} such as to admit either the
+standard \code{integer} or the \code{real(real64)} type. The semantics
+of these type set constructs are that they implicitly define a
 \emph{set of function signatures}, namely the signatures of the
 intersecting (common) set of all the operations/functions for which
 the listed intrinsic types provide implementations.
 
+\subsubsection{Kind parameters}
+
+As a further example, a potentially even more useful \code{INumeric}
+interface could be coded as follows:
+\begin{lstlisting}[language=LFortran,style=boxed]
+   abstract interface :: INumeric
+      integer(*) | real(*) | complex(*)
+   end interface
+\end{lstlisting}
+Notice how this makes use of both unions of types, and kind parameters
+for types to include all \code{integer}, \code{real}, and
+\code{complex} types, admitted by the language, in a single
+\code{abstract interface} constraint.
+
+\subsubsection{Empty interface}
+
+A particularly important case is the empty interface, that matches
+all types, because all types have at least zero methods:
+\begin{lstlisting}[language=LFortran,style=boxed]
+   abstract interface :: IAnyType
+   end interface
+\end{lstlisting}
+
+\subsection{Implicit interfaces}
+
 For simple use cases, it should be optionally possible for the
-programmer to employ a shorter notation for declaring type constraints
-than having to define a separate interface, like \code{INumeric}
-above. The following modification of interface \code{ISum}'s original
-declaration, of Sect.~\ref{sect:generic_interfaces}, provides such an
-example:
+programmer to employ a shorter notation for declaring type
+constraints, than having to define a separate interface, like
+\code{INumeric} above, and to then use it as in
+Sect.~\ref{sect:generic_interfaces}.  The following modification of
+interface \code{ISum}'s original declaration of
+Sect.~\ref{sect:generic_interfaces}, provides such an example:
 \begin{lstlisting}[language=LFortran,style=boxed]
    abstract interface :: ISum
       function sum{integer | real(real64) :: T}(self,x) result(s)
@@ -1259,35 +1313,35 @@ example:
       end function sum
    end interface
 \end{lstlisting}
-The above notation would define an abstract interface implicitly, to
-be used as a type constraint for type \code{T}. In this particular
-case, to admit only the default \code{integer}, or \code{real(real64)}
-types, for \code{T}, as before.
+The notation within the generic type parameter list defines an
+abstract interface implicitly, to be used as a type constraint for
+type \code{T}. In this particular case, to admit only the default
+\code{integer}, or \code{real(real64)} types, for \code{T}, as
+discussed above.
 
 \subsection{Predefined interfaces}
 
 The language should ideally supply a collection of predefined,
 commonly used generic constraints in the form of abstract interfaces
-that are contained in a language intrinsic module. The actual code of
-these interfaces could then employ the ``interfaces-as-type-sets''
-syntax that was described above, or any other suitable means. For
-instance, a more general \code{INumeric} interface than the one given
-above, could be coded as follows:
-\begin{lstlisting}[language=LFortran,style=boxed]
-   abstract interface :: INumeric
-      integer(*) | real(*) | complex(*)
-   end interface
-\end{lstlisting}
-Notice how this makes use of kind parameters to include all
-\code{integer}, \code{real}, and \code{complex} types, admitted by the
-language, in a single \code{abstract interface} constraint.
-
-Importantly, the language should provide interfaces for all its
-numeric and relational operators. Both, for the user to formulate
-generics constraints in terms of them for intrinsic types. But also in
-order to enable the programmer to implement these operators himself
-for any new types where this would be desirable, or where these
-operators are not supported by default.
+that are contained in a language intrinsic module, tentatively called
+\code{generic\_constraints} here. The actual code of these interfaces
+could then employ the ``inter\-faces-as-type-sets'' syntax that was
+described above, or any other suitable means. The list of such
+predefined interfaces should include
+\begin{itemize}
+\item
+  an empty interface of the name \code{IAnyType} (as shown above),
+\item
+  a general interface for numeric operations, \code{INumeric}, but also
+\item
+  separate interfaces for all the language's numeric and relational
+  operators.
+\end{itemize}
+The latter interfaces are required for the user to formulate selective
+generics constraints for intrinsic types. But also in order to enable
+the programmer to implement these operators himself for any new types
+where this would be desirable, or where these operators are not
+supported by default.
 
 Language provided interfaces could then be imported from user code
 through a \code{use} statement like in the following example for
@@ -1517,6 +1571,46 @@ implementations, as e.g. in the Rust example code given in
 Listing~\ref{lst:OORust}.
 
 
+\section{Associated types}
+
+It is often the case, that a method signature needs to declare
+arguments that are of exactly the same generic types, over which its
+own derived type was parameterized. This problem can, in principle, be
+solved by making use of generic type parameters in both the derived
+type \emph{and} its method, and then enforcing the consistency of
+these parameters, by passing the same type arguments to them during
+instantiation. A better solution, though, is to allow ``associated
+types'' to be declared within abstract interfaces, as it is possible
+in both the Rust and Swift languages.
+
+The following example illustrates how an associated type is declared
+inside an abstract interface, \code{IAppendable}, that requires any
+implementing type to provide functionality for appending items to
+itself. These items are declared here to be of \code{type(Element)},
+where \code{Element} is an alias, or placeholder, for any actual types
+that will be provided by implementations of that interface.
+
+\lstinputlisting[language=LFortran,style=boxed]{Code/Fortran/vector.f90}
+
+An example of such an implementation of interface \code{IAppendable}
+is provided here by the derived type \code{Vector}, that stores an
+\code{elements} array of generic \code{type(U)}, where the type
+parameter \code{U} conforms to \code{IAnyType}. Notice, that in order
+to maintain consistency between the type of the \code{elements} array,
+and any new item that we wish to append to it, we must force the
+equally named \code{item} argument of method \code{append} to be of
+\code{type(U)} as well, as it is shown in this method's actual
+implementation. In order to be able to do this enforcement without
+contradicting interface \code{IAppendable}'s definition (that doesn't
+know anything about type \code{U}), we made use of the placeholder
+(i.e. associated) type \code{Element} in the latter interface. Given
+method \code{append}'s implementation, the compiler will then
+implicitly assign type \code{U} to the type alias \code{Element}, in
+order to conform to interface \code{IAppendable}'s definition.
+
+
+
+
 \section{Extensibility to rank genericity}
 
 Fortran's special role, as a language that caters to numeric
@@ -1694,7 +1788,7 @@ is still fully decoupled, despite making now use of static dispatch.
 As in corresponding Rust and Swift implementations of the test
 problem, the instantiation of the objects \code{other} and \code{drv}
 through constructor calls in the main program has the benefit that the
-compiler should be able to infer the correct type parameters that are
+compiler should be able to infer the correct type arguments that are
 required to automatically instantiate the involved generic derived
 types. Notice also, that in Listing~\ref{lst:staticFortran}, the
 \code{av} object of \code{IAverager} type still needs to make use of
@@ -1706,7 +1800,7 @@ statement that performs a run-time decision.
 As a final remark we'd like to emphasize that, on readability grounds,
 a coding style as that given in Listing~\ref{lst:OOFortran} is
 generally preferable over that of
-Listing~\ref{lst:staticFortran}. The use of numerous generic
+Listing~\ref{lst:staticFortran}. The use of numerous generic type
 parameters can quickly make code unreadable. We'd therefore recommend
 the default use of run-time polymorphism for managing dependencies on
 user-defined types, and the employment of generics for this latter

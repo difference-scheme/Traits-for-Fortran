@@ -11,6 +11,8 @@ module averager_library
       integer | real(real64)
    end interface
 
+contains
+   
    function simple_sum{INumeric :: T}(x) result(s)
       type(T), intent(in) :: x(:)
       type(T)             :: s
