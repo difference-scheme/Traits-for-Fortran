@@ -23,7 +23,7 @@
 \newcommand{\code}[1]{{\selectfont\ttfamily{#1}}}
 
 \lstdefinelanguage{LFortran}[]{Fortran}{
-  morekeywords={abstract,import,type,class,extends,implements,pass}
+  morekeywords={abstract,import,type,class,extends,implements,pass,associate}
 }
 
 \hypersetup{
@@ -1224,19 +1224,24 @@ intended for a generic type-bound procedure, named \code{sum}:
    end interface
 \end{lstlisting}
 
-The example illustrates the use of a generic type parameter, i.e.  a
-meta-type, or a \emph{type of types}. In this example, this type
-parameter is simply called \code{T}, and it is preceded by the name of
-an abstract interface that expresses a constraint on the type
+The example illustrates the use of a generic type parameter, that is
+simply called \code{T} here. A significant difference of generic type
+parameters as compared to regular function parameters is that the
+former will be substituted by an actual type argument at compile time,
+in a process called instantiation. A similarity is that, in the same
+way that regular function parameters need to be constrained by a
+provided type, type parameters need to be constrained by a provided
+meta-type. This (meta-type) constraint is an abstract interface name
+(\code{INumeric} in the present example), that precedes the type
 parameter. The proposed Fortran generics thus support ``strong
 concepts'', and can be fully type-checked by the compiler. Both, the
 type parameter and its constraint, are part of a generic type
 parameter list that is enclosed in curly braces, and follows
-immediately behind the procedure's name. Notice that, since \code{T}
-is a meta-type, the syntax used above, that deviates slightly from how
-Fortran's usual function arguments are declared, appears justified as
-it reflects that, in type parameters, one is dealing with different
-entities.
+immediately behind the procedure's name. Notice that the syntax used
+above, that deviates slightly from how Fortran's regular function
+arguments are declared, appears justified, as it reflects that,
+despite some similarities, in type parameters one is dealing with
+different entities.
 
 \subsection{Type sets}
 \label{sect:type_sets}
@@ -1257,8 +1262,8 @@ standard \code{integer} type:
 
 \subsubsection{Unions of types}
 
-More useful interfaces can be defined by specifying unions of
-types as a type set, as in the following example
+More useful interfaces as generics constraints can be defined by
+specifying unions of types as a type set, as in the following example
 \begin{lstlisting}[language=LFortran,style=boxed]
    abstract interface :: INumeric
       integer | real(real64)
@@ -1273,16 +1278,16 @@ the listed intrinsic types provide implementations.
 
 \subsubsection{Kind parameters}
 
-As a further example, a potentially even more useful \code{INumeric}
-interface could be coded as follows:
+As a further example, an \code{INumeric} interface that is potentially
+even more useful as a generics constraint could be coded as follows:
 \begin{lstlisting}[language=LFortran,style=boxed]
    abstract interface :: INumeric
       integer(*) | real(*) | complex(*)
    end interface
 \end{lstlisting}
 Notice how this makes use of both unions of types, and kind parameters
-for types to include all \code{integer}, \code{real}, and
-\code{complex} types, admitted by the language, in a single
+for types, to include all \code{integer}, \code{real}, and
+\code{complex} types, that are admitted by the language, in a single
 \code{abstract interface} constraint.
 
 \subsubsection{Empty interface}
@@ -1300,7 +1305,7 @@ For simple use cases, it should be optionally possible for the
 programmer to employ a shorter notation for declaring type
 constraints, than having to define a separate interface, like
 \code{INumeric} above, and to then use it as in
-Sect.~\ref{sect:generic_interfaces}.  The following modification of
+Sect.~\ref{sect:generic_interfaces}. The following modification of
 interface \code{ISum}'s original declaration of
 Sect.~\ref{sect:generic_interfaces}, provides such an example:
 \begin{lstlisting}[language=LFortran,style=boxed]
@@ -1313,11 +1318,11 @@ Sect.~\ref{sect:generic_interfaces}, provides such an example:
       end function sum
    end interface
 \end{lstlisting}
-The notation within the generic type parameter list defines an
-abstract interface implicitly, to be used as a type constraint for
-type \code{T}. In this particular case, to admit only the default
-\code{integer}, or \code{real(real64)} types, for \code{T}, as
-discussed above.
+The notation within the generic type parameter list in curly braces
+defines an abstract interface implicitly, to be used as a type
+constraint for type \code{T}. In this particular case, to admit only
+the default \code{integer}, or \code{real(real64)} types, for
+\code{T}, as discussed above.
 
 \subsection{Predefined interfaces}
 
@@ -1363,8 +1368,8 @@ module user_code
 end module user_code
 \end{lstlisting}
 They could be used as constraints in function and derived type
-implementations, or in other interfaces, like \code{ISum} here, that
-requires the functionality of \code{INumeric}.
+implementations, or as constraints in other interfaces, like
+\code{ISum} here, that requires the functionality of \code{INumeric}.
 
 \section{Built-in facility for conversion to generic types}
 
@@ -1419,16 +1424,57 @@ input array argument would look as follows:
       end do
    end function sum
 \end{lstlisting}
-Generic subroutines can be coded completely analogously.
+Generic subroutines can be coded completely analogously. To actually
+use the \code{sum} generic function, one simply needs to call it with
+arguments of (different) ``numeric'' types (in its regular arguments
+list), e.g. as in the two following examples:
+\begin{lstlisting}[language=LFortran,style=boxed]
+  integer_total = sum([1,2,3,4,5])
+  float_total   = sum([1.d0,2.d0,3.d0,4.d0,5.d0])
+\end{lstlisting}
+Here, the compiler will automatically instantiate appropriate versions
+of the \code{sum} generic function by using type inference on the
+regular arguments list. Alternatively, generic instantiation can be
+accomplished manually by the user, by the additional provision of a
+generic type argument in curly braces, as in the following two calls:
+\begin{lstlisting}[language=LFortran,style=boxed]
+  integer_total = sum{integer}([1,2,3,4,5])
+  float_total   = sum{real(real64)}([1.d0,2.d0,3.d0,4.d0,5.d0])
+\end{lstlisting}
+Such manual instantiation of generic procedures can be useful
+for combination with \code{associate} statements
+\begin{lstlisting}[language=LFortran,style=boxed]
+  associate( sumf => sum{real(real64)} )
+     total1 = sumf([1.d0,2.d0,3.d0,4.d0,5.d0])
+     total2 = sumf([2.d0,4.d0,6.d0,8.d0])
+  end associate
+\end{lstlisting}
+or for use with procedure pointers, as in the following example:
+\begin{lstlisting}[language=LFortran,style=boxed]
+  procedure(sum_real64), pointer :: sumf
+
+  abstract interface
+     function sum_real64(x) result(s)
+        real(real64), intent(in) :: x(:)
+        real(real64)             :: s
+     end function sum_real64  
+  end interface
+  
+  sumf => sum{real(real64)}
+
+  total1 = sumf([1.d0,2.d0,3.d0,4.d0,5.d0])
+  total2 = sumf([2.d0,4.d0,6.d0,8.d0])
+\end{lstlisting}
 
 \subsection{Methods}
 \label{sect:generic_methods}
 
-The same algorithm as that of Sect.~\ref{sect:generic_procedures}, when
-implemented as a generic method, \code{sum}, that is bound to a derived
-type named \code{SimpleSum}, which implements the interface \code{ISum}
-as it was given in Sect.~\ref{sect:generic_interfaces}, would instead
-look as follows:
+The same summation algorithm as that of
+Sect.~\ref{sect:generic_procedures}, when implemented as a generic
+method, \code{sum}, that is bound to a derived type named
+\code{SimpleSum}, which implements the interface \code{ISum} as it was
+given in Sect.~\ref{sect:generic_interfaces}, would instead look as
+follows:
 \begin{lstlisting}[language=LFortran,style=boxed]
 module simple_library
    ...
@@ -1452,6 +1498,16 @@ contains
    end function sum
 
 end module simple_library
+\end{lstlisting}
+Generic methods are used completely analogous to generic
+procedures. The automatic instantiation use case of
+Sect.~\ref{sect:generic_procedures} would, for instance, look as
+follows:
+\begin{lstlisting}[language=LFortran,style=boxed]
+  type(SimpleSum) :: simple
+
+  integer_total = simple%sum([1,2,3,4,5])
+  float_total   = simple%sum([1.d0,2.d0,3.d0,4.d0,5.d0])
 \end{lstlisting}
 
 \subsection{Derived types}
@@ -1536,8 +1592,8 @@ If a derived type is parameterized over a generic type, as in the
 example of Sect.~\ref{sect:generic_derived_types}, then its structure
 constructor must also be assumed to be parameterized over the same
 generic type. Hence, calls of structure constructors that are
-instantiated with particular argument types replacing the generic type
-parameters of their derived types, like in the following
+instantiated with particular argument types substituting the generic
+type parameters of their derived types, like in the following
 initialization of an object called \code{drv},
 \begin{lstlisting}[language=LFortran,style=boxed]
  drv = PairwiseSum{SimpleSum}()
@@ -1574,7 +1630,7 @@ Listing~\ref{lst:OORust}.
 \section{Associated types}
 
 It is often the case, that a method signature needs to declare
-arguments that are of exactly the same generic types, over which its
+arguments that are of exactly the same generic type(s), over which its
 own derived type was parameterized. This problem can, in principle, be
 solved by making use of generic type parameters in both the derived
 type \emph{and} its method, and then enforcing the consistency of
@@ -1600,7 +1656,7 @@ to maintain consistency between the type of the \code{elements} array,
 and any new item that we wish to append to it, we must force the
 equally named \code{item} argument of method \code{append} to be of
 \code{type(U)} as well, as it is shown in this method's actual
-implementation. In order to be able to do this enforcement without
+implementation. In order to accomplish this enforcement without
 contradicting interface \code{IAppendable}'s definition (that doesn't
 know anything about type \code{U}), we made use of the placeholder
 (i.e. associated) type \code{Element} in the latter interface. Given
@@ -1723,13 +1779,12 @@ statements in the above modules). The features described in this
 document have enabled us to avoid rigidity in the program, by both
 decoupling it and making it operate on multiple data types, thus
 allowing for a maximum of code reuse. Notice, also, that (as in the
-functional Fortran implementation, i.e.
-Listing~\ref{lst:FuncFortran}) not a single manual instantiation of
-generics is necessary anywhere in the code. The Fortran version
-described here is therefore as clean as the Go implementation of
-Listing~\ref{lst:OOGo} with respect to dependency management, and it
-is as easy to use, and to read and understand, as the Swift
-implementation of Listing~\ref{lst:OOSwift}.
+functional Fortran implementation of Listing~\ref{lst:FuncFortran}) not a
+single manual instantiation of generics is necessary anywhere in the
+code. The Fortran version described here is therefore as clean as the
+Go implementation of Listing~\ref{lst:OOGo} with respect to dependency
+management, and it is as easy to use, and to read and understand, as
+the Swift implementation of Listing~\ref{lst:OOSwift}.
 
 \subsection{Static method dispatch}
 
