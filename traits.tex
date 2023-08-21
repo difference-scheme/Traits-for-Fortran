@@ -923,15 +923,17 @@ therefore backwards compatible with the functionality that is already
 available in the present language.
 
 \subsubsection{\code{Class} declaration specifier: constraints}
+\label{sect:class_specifier_constraints}
 
 Since the \code{class} declaration specifier is undefined for
 intrinsic types, and since the aforementioned semantics of this
 specifier imply late binding of methods (which is incompatible with
 intrinsic types), a compiler will need to ensure that the \code{class}
 declaration specifier is not used in conjunction with interfaces that
-admit language intrinsic types, like the empty interface,
-\code{IAnyType}, or any interfaces that are formulated in terms of
-type sets, as they are discussed in Sect.~\ref{sect:type_sets}.
+admit language intrinsic types, i.e. interfaces that are formulated in
+terms of type sets to enforce generics constraints, as they are
+discussed in Sect.~\ref{sect:type_sets}. These include the empty
+interface, \code{IAnyType}.
 
 \subsection{Extends specifier for abstract interfaces}
 
@@ -1225,23 +1227,24 @@ intended for a generic type-bound procedure, named \code{sum}:
 \end{lstlisting}
 
 The example illustrates the use of a generic type parameter, that is
-simply called \code{T} here. A significant difference of generic type
-parameters as compared to regular function parameters is that the
+simply called \code{T} here, and in terms of which the regular
+function parameters are declared. A significant difference of generic
+type parameters as compared to regular function parameters is that the
 former will be substituted by an actual type argument at compile time,
 in a process called instantiation. A similarity is that, in the same
 way that regular function parameters need to be constrained by a
 provided type, type parameters need to be constrained by a provided
-meta-type. This (meta-type) constraint is an abstract interface name
-(\code{INumeric} in the present example), that precedes the type
-parameter. The proposed Fortran generics thus support ``strong
-concepts'', and can be fully type-checked by the compiler. Both, the
-type parameter and its constraint, are part of a generic type
-parameter list that is enclosed in curly braces, and follows
-immediately behind the procedure's name. Notice that the syntax used
-above, that deviates slightly from how Fortran's regular function
-arguments are declared, appears justified, as it reflects that,
-despite some similarities, in type parameters one is dealing with
-different entities.
+meta-type. This (meta-type) constraint must be an abstract interface
+name (like \code{INumeric} in the present example), that precedes the
+actual type parameter. The proposed Fortran generics thus support
+``strong concepts'', and can be fully type-checked by the
+compiler. Both, the type parameter and its constraint, are part of a
+generic type parameter list that is enclosed in curly braces, and
+follows immediately behind the procedure's name. Notice that the
+syntax used above, that deviates slightly from how Fortran's regular
+function arguments are declared, appears justified, as it reflects
+that, despite some similarities, in type parameters one is dealing
+with different entities.
 
 \subsection{Type sets}
 \label{sect:type_sets}
@@ -1270,11 +1273,30 @@ specifying unions of types as a type set, as in the following example
    end interface
 \end{lstlisting}
 that defines interface \code{INumeric} such as to admit either the
-standard \code{integer} or the \code{real(real64)} type. The semantics
-of these type set constructs are that they implicitly define a
+standard \code{integer} or the \code{real(real64)} type.
+
+The semantics of a type set construct is that it implicitly defines a
 \emph{set of function signatures}, namely the signatures of the
-intersecting (common) set of all the operations/functions for which
-the listed intrinsic types provide implementations.
+intersecting (common) set of all the operations/intrinsic functions
+that work with the types that are listed in the type set. This can
+also be restated, by saying that each type of the type set
+\emph{implements} the interface that contains this type set. The
+\code{complex} type, for instance, does not implement the interface
+\code{INumeric}, as it was given in this section, because it does not
+support, i.e. ``implement'', the relational operators \code{<} and
+\code{>} that are implemented by the \code{integer} and
+\code{real(real64)} types.
+ 
+Notice also, that interfaces that are formulated in terms of type sets
+are merely intended for use as generics constraints. In particular,
+they cannot be used in variable declarations that involve the
+\code{class} specifier (Sect.~\ref{sect:class_specifier_constraints}),
+and they are not intended to be implemented by derived
+(i.e. user-defined) types (Since any new intrinsic function that would
+have to be added to the language for some intrinsic type, would change
+the set of methods of all type sets in which this type appears. Thus
+breaking user-defined types that would implement interfaces which
+contain these type sets).
 
 \subsubsection{Kind parameters}
 
@@ -1573,7 +1595,7 @@ Notice, finally, that the declaration \code{class(PairwiseSum\{U\})}
 does not imply any ambiguities or contradictions with respect to
 compile-time vs. run-time polymorphism, because substitution semantics
 apply. At compile time, the compiler will substitute a set of
-different actual arguments for the generic parameter \code{U}. Hence,
+different type arguments for the generic parameter \code{U}. Hence,
 the notation \code{PairwiseSum\{U\}} really refers to a set of
 multiple, related, but \emph{different} \code{PairwiseSum} types,
 whose \emph{only} commonality is that they all implement the
@@ -1884,16 +1906,24 @@ following two code lines:
   type(U) :: drv
 \end{lstlisting}
 
-Correspondingly, the object instantiations that are to be carried out
-from the main program need to be changed from
+Notice that, because the compiler should be able to automatically
+infer generic type arguments from the types of regular arguments in
+constructor calls, the object instantiations that are to be carried
+out from the main program can remain the same, i.e.:
 \begin{lstlisting}[language=LFortran,style=boxed]
   avs = Averager(drv = SimpleSum())
   avp = Averager(drv = PairwiseSum(other = SimpleSum()))
 \end{lstlisting}
-into the following two calls of \code{Averager}'s parameterized
-structure constructor (cf. Sect.~\ref{sect:param_constructors}), which
-must now be provided with the types \code{SimpleSum}, and
-\code{PairwiseSum} as generic type parameters:
+Alternatively, the two calls of \code{Averager}'s structure
+constructor can be manually given generic type arguments to confirm
+the types of the regular arguments:
+\begin{lstlisting}[language=LFortran,style=boxed]
+  avs = Averager{SimpleSum}(drv = SimpleSum())
+  avp = Averager{PaiwiseSum{SimpleSum}}(drv = PairwiseSum(other = SimpleSum()))
+\end{lstlisting}
+Or one can delete the regular arguments to the constructor
+altogether, and provide only the generic type arguments, as follows
+(see Sect.~\ref{sect:param_constructors}):
 \begin{lstlisting}[language=LFortran,style=boxed]
   avs = Averager{SimpleSum}()
   avp = Averager{PairwiseSum{SimpleSum}}()

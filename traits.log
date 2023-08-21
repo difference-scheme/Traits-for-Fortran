@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  20 AUG 2023 15:33
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  21 AUG 2023 16:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -569,9 +569,9 @@ File: lstlang1.sty 2020/03/24 1.8d listings language file
 
 ] [26]
 LaTeX Font Info:    Font shape `T1/fvm/b/n' will be
-(Font)              scaled to size 9.84009pt on input line 979.
+(Font)              scaled to size 9.84009pt on input line 981.
 
-Overfull \hbox (13.27109pt too wide) in paragraph at lines 981--986
+Overfull \hbox (13.27109pt too wide) in paragraph at lines 983--988
 \T1/ppl/m/n/10.95 User-defined (i.e. de-rived) types can be made to con-form to
  an in-ter-face by in-tro-duc-ing an \T1/fvm/m/n/10.95 implements
  []
@@ -580,14 +580,14 @@ Overfull \hbox (13.27109pt too wide) in paragraph at lines 981--986
 Chapter 5.
 [31
 
-] [32] [33] [34] [35] [36] [37] (./Code/Fortran/vector.f90) [38] [39]
+] [32] [33] [34] [35] [36] [37] (./Code/Fortran/vector.f90 [38]) [39]
 Chapter 6.
 (./Code/Fortran/functional.f90 [40
 
 ] [41]) [42] (./Code/Fortran/mixed.f90
 [43] [44] [45]) [46] (./Code/Fortran/static1.f90 [47] [48] [49])
 LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
-(Font)              scaled to size 7.38007pt on input line 1841.
+(Font)              scaled to size 7.38007pt on input line 1863.
  [50]
 (./traits.bbl [51]
 Underfull \hbox (badness 1552) in paragraph at lines 73--77
@@ -602,10 +602,10 @@ Package rerunfilecheck Info: File `traits.out' has not changed.
 (rerunfilecheck)             Checksum: 45532223125EC33B62BFD63D2C50E9AF;9431.
  ) 
 Here is how much of TeX's memory you used:
- 16003 strings out of 480247
- 239472 string characters out of 5896151
- 758238 words of memory out of 5000000
- 32419 multiletter control sequences out of 15000+600000
+ 16009 strings out of 480247
+ 239582 string characters out of 5896151
+ 758310 words of memory out of 5000000
+ 32422 multiletter control sequences out of 15000+600000
  510080 words of font info for 106 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  60i,16n,68p,7900b,3160s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -615,10 +615,10 @@ fonts/type1/public/bera/fvmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
 ublic/bera/fvmro8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/
 uplb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb><
 /usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on traits.pdf (53 pages, 259229 bytes).
+Output written on traits.pdf (53 pages, 261086 bytes).
 PDF statistics:
- 1986 PDF objects out of 2073 (max. 8388607)
- 1900 compressed objects within 19 object streams
- 1284 named destinations out of 1440 (max. 500000)
+ 1992 PDF objects out of 2073 (max. 8388607)
+ 1905 compressed objects within 20 object streams
+ 1287 named destinations out of 1440 (max. 500000)
  393 words of extra memory for PDF output out of 10000 (max. 10000000)
 
