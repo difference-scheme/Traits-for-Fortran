@@ -69,6 +69,10 @@ Nicholas~D Matsakis and Felix~S Klock~II.
 \newblock In {\em ACM SIGAda Ada Letters}, volume~34, pages 103--104. ACM,
   2014.
 
+\bibitem{Taylor_21}
+Ian~Lance Taylor.
+\newblock \url{https://github.com/golang/go/issues/45346}.
+
 \bibitem{Weck_Szyperski}
 Wolfgang Weck and Clemens Szyperski.
 \newblock {Do We Need Inheritance?}

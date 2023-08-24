@@ -351,21 +351,20 @@ dependencies.
 \label{sect:poly_functional}
 
 Listing~\ref{lst:polyfuncGo} gives an implementation of our test
-problem, that employs Go's generics and functional features in order to
-eliminate the last two of the rigid dependencies that were listed in
-Sect.~\ref{sect:mono_functional} (we thank Robert Griesemer of the Go
-team for providing the original code of this particular version of the
-example). The code makes use of Go's generics to admit arrays of both the
-\code{int32} and \code{float64} types as arguments to all functions, and
-to express the return values of the latter. It also makes use of the
-run-time polymorphism inherent in Go's functional features, namely
-closures and variables of higher-order functions, to replace the two
-previous versions of function \code{average} (that depended on
-specific implementations), by a single polymorphic version. Only the
-rigid dependency of function \code{pairwise\_sum} on function
-\code{simple\_sum} has not been removed, in order to keep the code
-more readable. In the OO code versions, that will be presented in
-Chapter~\ref{sect:survey}, even this dependency is eliminated.
+problem, that employs Go's generics and functional features in order
+to eliminate the last two of the rigid dependencies that were listed
+in Sect.~\ref{sect:mono_functional}. The code makes use of Go's
+generics to admit arrays of both the \code{int32} and \code{float64}
+types as arguments to all functions, and to express the return values
+of the latter. It also makes use of the run-time polymorphism inherent
+in Go's functional features, namely closures and variables of
+higher-order functions, to replace the two previous versions of
+function \code{average} (that depended on specific implementations),
+by a single polymorphic version. Only the rigid dependency of function
+\code{pairwise\_sum} on function \code{simple\_sum} has not been
+removed, in order to keep the code more readable. In the OO code
+versions, that will be presented in Chapter~\ref{sect:survey}, even
+this dependency is eliminated.
 
 A few remarks are in order for a better understanding of
 Listing~\ref{lst:polyfuncGo}'s code:
@@ -399,7 +398,7 @@ Listing~\ref{lst:polyfuncGo}'s code:
 \lstinputlisting[language=Go,style=boxed,label={lst:polyfuncGo},caption={Polymorphic functional version of the array averaging example in Go.}]{Code/Go/functional.go}
 
 The motivation to code the example as in Listing~\ref{lst:polyfuncGo}
-is that once the two closures \code{avi}, and \code{avf}, are properly
+is that once the two closures, \code{avi}, and \code{avf}, are properly
 instantiated (by means of the \code{switch} statement), they may be
 passed from the main program to any other client code that may need to
 make use of the particular averaging algorithm that was selected by
@@ -930,10 +929,11 @@ intrinsic types, and since the aforementioned semantics of this
 specifier imply late binding of methods (which is incompatible with
 intrinsic types), a compiler will need to ensure that the \code{class}
 declaration specifier is not used in conjunction with interfaces that
-admit language intrinsic types, i.e. interfaces that are formulated in
-terms of type sets to enforce generics constraints, as they are
-discussed in Sect.~\ref{sect:type_sets}. These include the empty
-interface, \code{IAnyType}.
+are intended for use as generics constraints and therefore admit
+language intrinsic types, i.e. interfaces that are formulated in terms
+of type sets, as they are discussed in
+Sect.~\ref{sect:type_sets}. These include the empty interface,
+\code{IAnyType}.
 
 \subsection{Extends specifier for abstract interfaces}
 
@@ -1170,7 +1170,7 @@ the following are possible:
    contains  
       procedure :: method1
       procedure :: method2
-   end type Child
+   end type Parent
 
    type, extends(Parent), implements(IChild) :: Child
    contains  
@@ -1227,9 +1227,9 @@ intended for a generic type-bound procedure, named \code{sum}:
 \end{lstlisting}
 
 The example illustrates the use of a generic type parameter, that is
-simply called \code{T} here, and in terms of which the regular
-function parameters are declared. A significant difference of generic
-type parameters as compared to regular function parameters is that the
+simply called \code{T} here, in terms of which the regular function
+parameters are declared. A significant difference of generic type
+parameters as compared to regular function parameters is that the
 former will be substituted by an actual type argument at compile time,
 in a process called instantiation. A similarity is that, in the same
 way that regular function parameters need to be constrained by a
@@ -1251,9 +1251,10 @@ with different entities.
 
 In order to make the interface based generics facility easy to use for
 the programmer, it must be possible, as in the Go language, to define
-abstract interfaces as type sets. The following example shows the
-simplest form of such a type set, by defining an interface
-\code{INumeric}, for use as a generics constraint in the example of
+generics constraints by means of abstract interfaces that consist of
+type sets. The following example shows the simplest form of such a
+type set, by defining an interface \code{INumeric}, for use as a
+generics constraint in the example of
 Sect.~\ref{sect:generic_interfaces}, in order to admit for the type
 parameter \code{T}, that was given there, only the (32 bits wide)
 standard \code{integer} type:
@@ -1265,38 +1266,53 @@ standard \code{integer} type:
 
 \subsubsection{Unions of types}
 
-More useful interfaces as generics constraints can be defined by
-specifying unions of types as a type set, as in the following example
+More useful interfaces for constraining generic type parameters can be
+obtained by specifying unions of member types as a type set, as in
+the following example
 \begin{lstlisting}[language=LFortran,style=boxed]
    abstract interface :: INumeric
       integer | real(real64)
    end interface
 \end{lstlisting}
 that defines interface \code{INumeric} such as to admit either the
-standard \code{integer} or the \code{real(real64)} type.
+standard \code{integer} or the \code{real(real64)} type as a generics
+constraint.
 
 The semantics of a type set construct is that it implicitly defines a
 \emph{set of function signatures}, namely the signatures of the
 intersecting (common) set of all the operations/intrinsic functions
-that work with the types that are listed in the type set. This can
-also be restated, by saying that each type of the type set
-\emph{implements} the interface that contains this type set. The
-\code{complex} type, for instance, does not implement the interface
-\code{INumeric}, as it was given in this section, because it does not
-support, i.e. ``implement'', the relational operators \code{<} and
-\code{>} that are implemented by the \code{integer} and
-\code{real(real64)} types.
+that work with all the member types of the type set. This can also be
+restated, by saying that a type \code{T} \emph{implements} an
+interface consisting of such a type set, if (and only if) it is a
+member of this type set. The \code{complex} type, for instance, is not
+a member of interface \code{INumeric}'s type set (as it is given in
+this section), because it does not appear anywhere within this
+interface. Hence, \code{complex} also does \emph{not} implement the
+\code{INumeric} interface. In particular, the \code{complex} type does
+not support, i.e. ``implement'', the relational operators \code{<} and
+\code{>} that are required for conformance to this interface, given
+that these operators are implemented by the \code{integer} and
+\code{real(real64)} member types.
  
-Notice also, that interfaces that are formulated in terms of type sets
-are merely intended for use as generics constraints. In particular,
-they cannot be used in variable declarations that involve the
-\code{class} specifier (Sect.~\ref{sect:class_specifier_constraints}),
-and they are not intended to be implemented by derived
-(i.e. user-defined) types (Since any new intrinsic function that would
-have to be added to the language for some intrinsic type, would change
-the set of methods of all type sets in which this type appears. Thus
-breaking user-defined types that would implement interfaces which
-contain these type sets).
+Interfaces that are formulated in terms of type sets are presently
+\emph{exclusively} intended for use as generics constraints. Hence, a
+compiler must ensure that they are not used for any other purpose.  In
+particular, they are not intended to be implemented by derived
+(i.e. user-defined) types\footnote{One of the problems here is that
+any new intrinsic function that would have to be added to the language
+for some intrinsic type, would change the set of methods of all the
+type sets of which this type is a member. This would break any
+user-defined types that would implement interfaces which are based on
+these type sets.}, and they cannot be used in variable declarations
+that involve the \code{class} specifier
+(Sect.~\ref{sect:class_specifier_constraints}).
+
+In a future language revision such interfaces could, however, be
+admitted for use with the \code{type} declaration specifier, in order
+to support compile-time polymorphism through union (also called sum)
+types \cite{Taylor_21} (which would take this design to its logical
+conclusion and fill a present gap in the later to be discussed
+Table~\ref{tab:dispatch}).
 
 \subsubsection{Kind parameters}
 
@@ -1405,11 +1421,11 @@ library functionality.
 For instance, generic routines will often have to initialize the
 result of reduction operations, as it is, e.g., the case in the test
 problem implementation of Sect.~\ref{sect:poly_functional}. There, a
-variable for summation needs to be initialized to the zero constant of
-type \code{T}. In Go, it is easily possible to express this
-initialization by transforming the (typeless) zero constant, \code{0},
-into the corresponding constant of type \code{T}, i.e. by simply
-writing \code{s = T(0)}.
+reduction variable for summation, \code{s}, needs to be initialized to
+the zero constant of type \code{T}. In Go, it is easily possible to
+express this initialization by transforming the (typeless) zero
+constant, \code{0}, into the corresponding constant of type \code{T},
+i.e. by simply writing \code{s = T(0)}.
 
 If, for instance, \code{T} is then instantiated at compile time with
 the \code{float64} type, the expression \code{T(0)} will be
@@ -1425,9 +1441,8 @@ abort compilation at the generics instantiation step.
 \label{sect:generic_parameters}
 
 As already mentioned above, Fortran's basic generics design should
-follow Swift's, if possible, and allow both ordinary and type-bound
-procedures (i.e. methods), and derived types to be given their own
-generic type parameters.
+allow both ordinary and type-bound procedures (i.e. methods), and
+derived types to be given their own generic type parameters.
 
 \subsection{Procedures}
 \label{sect:generic_procedures}
@@ -1446,10 +1461,11 @@ input array argument would look as follows:
       end do
    end function sum
 \end{lstlisting}
-Generic subroutines can be coded completely analogously. To actually
-use the \code{sum} generic function, one simply needs to call it with
-arguments of (different) ``numeric'' types (in its regular arguments
-list), e.g. as in the two following examples:
+Generic subroutines can be coded completely analogously.
+
+To actually use the \code{sum} generic function, one simply needs to
+call it with arguments of (different) ``numeric'' types (in its
+regular arguments list), e.g. as in the two following examples:
 \begin{lstlisting}[language=LFortran,style=boxed]
   integer_total = sum([1,2,3,4,5])
   float_total   = sum([1.d0,2.d0,3.d0,4.d0,5.d0])
@@ -1623,7 +1639,8 @@ initialization of an object called \code{drv},
 must be legal. As in Sect.~\ref{sect:generic_methods},
 \code{SimpleSum} would be a derived type that implements the
 \code{ISum} interface, but (in contrast to the \code{PairwiseSum}
-type) is not parameterized by any generic type parameter itself.
+type, as implemented in Sect.~\ref{sect:generic_derived_types}) is not
+parameterized by any generic type parameter itself.
 
 We also propose to make a further, small, but important addition to
 structure constructors: namely to introduce the notion that a
@@ -1673,18 +1690,19 @@ that will be provided by implementations of that interface.
 An example of such an implementation of interface \code{IAppendable}
 is provided here by the derived type \code{Vector}, that stores an
 \code{elements} array of generic \code{type(U)}, where the type
-parameter \code{U} conforms to \code{IAnyType}. Notice, that in order
-to maintain consistency between the type of the \code{elements} array,
-and any new item that we wish to append to it, we must force the
-equally named \code{item} argument of method \code{append} to be of
-\code{type(U)} as well, as it is shown in this method's actual
-implementation. In order to accomplish this enforcement without
-contradicting interface \code{IAppendable}'s definition (that doesn't
-know anything about type \code{U}), we made use of the placeholder
-(i.e. associated) type \code{Element} in the latter interface. Given
-method \code{append}'s implementation, the compiler will then
-implicitly assign type \code{U} to the type alias \code{Element}, in
-order to conform to interface \code{IAppendable}'s definition.
+parameter \code{U} conforms to the \code{IAnyType} constraint. Notice,
+that in order to maintain consistency between the type of the
+\code{elements} array, and any new item that we wish to append to it,
+we must force the equally named \code{item} argument of method
+\code{append} to be of \code{type(U)} as well, as it is shown in this
+method's actual implementation. In order to accomplish this
+enforcement without contradicting interface \code{IAppendable}'s
+definition (that doesn't know anything about type \code{U}), we made
+use of the placeholder (i.e. associated) type \code{Element} in the
+latter interface. Given method \code{append}'s implementation, the
+compiler will then implicitly assign type \code{U} to the type alias
+\code{Element}, in order to conform to interface \code{IAppendable}'s
+definition.
 
 
 
@@ -1933,5 +1951,17 @@ in the \code{Code} subdirectory that is accompanying this document.
 
 \bibliographystyle{plain}
 \bibliography{traits}
+
+\renewcommand{\abstractname}{Acknowledgements}
+
+\begin{abstract}
+We thank Robert Griesemer of the Go language team for providing the
+original code version from which Listing~\ref{lst:polyfuncGo} was
+derived, and for his and the Go team's inspirational work on type sets
+in Go generics, on which a good fraction of the present design for
+Fortran is based. In the same vein, we also thank the many developers
+of the Swift, Rust, and Carbon languages who, through their work, have
+also influenced the present design.
+\end{abstract}
 
 \end{document}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  21 AUG 2023 16:07
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  24 AUG 2023 12:05
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -520,13 +520,13 @@ LaTeX Font Info:    Font shape `T1/fvm/b/n' will be
  [7]) [8] (./Code/Go/functional.go [9]) [10]
 Chapter 3.
 
-Overfull \hbox (5.81958pt too wide) in paragraph at lines 440--449
+Overfull \hbox (5.81958pt too wide) in paragraph at lines 439--448
 \T1/ppl/m/n/10.95 Go has sup-ported run-time poly-mor-phism through (poly-mor-p
 hic) ``in-ter-faces'' (and hence modern-
  []
 
 
-Overfull \hbox (0.76628pt too wide) in paragraph at lines 465--471
+Overfull \hbox (0.76628pt too wide) in paragraph at lines 464--470
 []\T1/ppl/m/n/10.95 Since ver-sion 1.18, Go also sup-ports compile-time poly-mo
 r-phism through gener-ics. Go's gener-
  []
@@ -534,7 +534,7 @@ r-phism through gener-ics. Go's gener-
 [11
 
 ] (./Code/Go/mixed.go [12] [13]) [14]
-Overfull \hbox (8.59001pt too wide) in paragraph at lines 598--603
+Overfull \hbox (8.59001pt too wide) in paragraph at lines 597--602
 []\T1/ppl/m/n/10.95 To de-clare run-time poly-mor-phic vari-ables one has to pu
 t so-called ``trait ob-jects'' into ``Boxes'',
  []
@@ -587,25 +587,30 @@ Chapter 6.
 ] [41]) [42] (./Code/Fortran/mixed.f90
 [43] [44] [45]) [46] (./Code/Fortran/static1.f90 [47] [48] [49])
 LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
-(Font)              scaled to size 7.38007pt on input line 1863.
+(Font)              scaled to size 7.38007pt on input line 1881.
  [50]
 (./traits.bbl [51]
-Underfull \hbox (badness 1552) in paragraph at lines 73--77
+Underfull \hbox (badness 1552) in paragraph at lines 77--81
 []\T1/ppl/m/n/10.95 Wolfgang Weck and Clemens Szyper-ski.  Do We Need In-her-i-
 tance?  [][]$\T1/fvm/m/n/10.95 https : / / www .
  []
 
 ) [52
 
-] (./traits.aux)
+]pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
+ been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.1965 \end{abstract}
+                      [1] (./traits.aux)
 Package rerunfilecheck Info: File `traits.out' has not changed.
 (rerunfilecheck)             Checksum: 45532223125EC33B62BFD63D2C50E9AF;9431.
  ) 
 Here is how much of TeX's memory you used:
- 16009 strings out of 480247
- 239582 string characters out of 5896151
- 758310 words of memory out of 5000000
- 32422 multiletter control sequences out of 15000+600000
+ 16014 strings out of 480247
+ 239658 string characters out of 5896151
+ 758326 words of memory out of 5000000
+ 32425 multiletter control sequences out of 15000+600000
  510080 words of font info for 106 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  60i,16n,68p,7900b,3160s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -615,10 +620,10 @@ fonts/type1/public/bera/fvmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
 ublic/bera/fvmro8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/
 uplb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb><
 /usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on traits.pdf (53 pages, 261086 bytes).
+Output written on traits.pdf (54 pages, 262899 bytes).
 PDF statistics:
- 1992 PDF objects out of 2073 (max. 8388607)
- 1905 compressed objects within 20 object streams
- 1287 named destinations out of 1440 (max. 500000)
+ 2003 PDF objects out of 2073 (max. 8388607)
+ 1915 compressed objects within 20 object streams
+ 1289 named destinations out of 1440 (max. 500000)
  393 words of extra memory for PDF output out of 10000 (max. 10000000)
 
