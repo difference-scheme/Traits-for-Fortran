@@ -1246,78 +1246,60 @@ function arguments are declared, appears justified, as it reflects
 that, despite some similarities, in type parameters one is dealing
 with different entities.
 
-\subsection{Type sets}
+\subsection{Interfaces based on type sets}
 \label{sect:type_sets}
 
 In order to make the interface based generics facility easy to use for
 the programmer, it must be possible, as in the Go language, to define
 generics constraints by means of abstract interfaces that consist of
-type sets. The following example shows the simplest form of such a
-type set, by defining an interface \code{INumeric}, for use as a
-generics constraint in the example of
-Sect.~\ref{sect:generic_interfaces}, in order to admit for the type
-parameter \code{T}, that was given there, only the (32 bits wide)
-standard \code{integer} type:
+type sets.
+
+\subsubsection{Unions of types}
+
+The following example shows the simplest form of such a type set, by
+defining an interface \code{INumeric}, for use as a generics
+constraint in the example of Sect.~\ref{sect:generic_interfaces}, in
+order to admit for the type parameter \code{T}, that was given there,
+only the (32 bits wide) standard \code{integer} type:
 \begin{lstlisting}[language=LFortran,style=boxed]
    abstract interface :: INumeric
       integer
    end interface
 \end{lstlisting}
 
-\subsubsection{Unions of types}
-
-More useful interfaces for constraining generic type parameters can be
-obtained by specifying unions of member types as a type set, as in
-the following example
+The above example is actually a special case of specifying entire
+\emph{unions} of member types as a type set. Such a union of types is
+demonstrated in the following example
 \begin{lstlisting}[language=LFortran,style=boxed]
    abstract interface :: INumeric
       integer | real(real64)
    end interface
 \end{lstlisting}
-that defines interface \code{INumeric} such as to admit either the
+that redefines interface \code{INumeric} such as to admit either the
 standard \code{integer} or the \code{real(real64)} type as a generics
 constraint.
 
-The semantics of a type set construct is that it implicitly defines a
-\emph{set of function signatures}, namely the signatures of the
-intersecting (common) set of all the operations/intrinsic functions
-that work with all the member types of the type set. This can also be
-restated, by saying that a type \code{T} \emph{implements} an
-interface consisting of such a type set, if (and only if) it is a
-member of this type set. The \code{complex} type, for instance, is not
-a member of interface \code{INumeric}'s type set (as it is given in
-this section), because it does not appear anywhere within this
-interface. Hence, \code{complex} also does \emph{not} implement the
-\code{INumeric} interface. In particular, the \code{complex} type does
-not support, i.e. ``implement'', the relational operators \code{<} and
-\code{>} that are required for conformance to this interface, given
-that these operators are implemented by the \code{integer} and
+The semantics of such a type set union construct is that it implicitly
+defines a \emph{set of function signatures}, namely the signatures of
+the intersecting (common) set of all the operations/intrinsic
+functions that work with all the member types of this union. This can
+also be restated, by saying that a type \code{T} \emph{implements} an
+interface consisting of such a type set union, if (and only if) it is
+a member of this union. The \code{complex} type, for instance, is not
+a member of interface \code{INumeric}'s type set union (as it is given
+in this section), because it does not appear within it. Hence,
+\code{complex} also does \emph{not} implement the \code{INumeric}
+interface. In particular, the \code{complex} type does not support,
+i.e. ``implement'', the relational operators \code{<} and \code{>}
+that are required for conformance to this interface, given that these
+operators are implemented by the \code{integer} and
 \code{real(real64)} member types.
- 
-Interfaces that are formulated in terms of type sets are presently
-\emph{exclusively} intended for use as generics constraints. Hence, a
-compiler must ensure that they are not used for any other purpose.  In
-particular, they are not intended to be implemented by derived
-(i.e. user-defined) types\footnote{One of the problems here is that
-any new intrinsic function that would have to be added to the language
-for some intrinsic type, would change the set of methods of all the
-type sets of which this type is a member. This would break any
-user-defined types that would implement interfaces which are based on
-these type sets.}, and they cannot be used in variable declarations
-that involve the \code{class} specifier
-(Sect.~\ref{sect:class_specifier_constraints}).
-
-In a future language revision such interfaces could, however, be
-admitted for use with the \code{type} declaration specifier, in order
-to support compile-time polymorphism through union (also called sum)
-types \cite{Taylor_21} (which would take this design to its logical
-conclusion and fill a present gap in the later to be discussed
-Table~\ref{tab:dispatch}).
 
 \subsubsection{Kind parameters}
 
-As a further example, an \code{INumeric} interface that is potentially
-even more useful as a generics constraint could be coded as follows:
+Expanding on the previous case, an \code{INumeric} interface that is
+potentially even more useful as a generics constraint could be coded
+as follows:
 \begin{lstlisting}[language=LFortran,style=boxed]
    abstract interface :: INumeric
       integer(*) | real(*) | complex(*)
@@ -1328,21 +1310,32 @@ for types, to include all \code{integer}, \code{real}, and
 \code{complex} types, that are admitted by the language, in a single
 \code{abstract interface} constraint.
 
+The use of kind parameters here is merely syntactic sugar that allows
+one to avoid having to write out a type union for all the involved
+kinds of a type. For instance, if the particular Fortran
+implementation supports \code{real(real32)} and \code{real(real64)} as
+its only \code{real} types, then \code{real(*)} is understood to mean
+the type union ``\code{real(real32) | real(real64)}''. Notice, also,
+that the more types are added to an interface in this fashion, the
+smaller the set of intersecting methods will usually become.
+
 \subsubsection{Empty interface}
 
-A particularly important case is the empty interface, that matches
-all types, because all types have at least zero methods:
+In the limit of adding all possible types to a type union, there won't
+be any common methods left that are implemented by all its types. This
+results in the important case of the empty interface, that matches all
+types (since any type has at least zero methods):
 \begin{lstlisting}[language=LFortran,style=boxed]
    abstract interface :: IAnyType
    end interface
 \end{lstlisting}
 
-\subsection{Implicit interfaces}
+\subsubsection{Implicit notation}
 
 For simple use cases, it should be optionally possible for the
-programmer to employ a shorter notation for declaring type
-constraints, than having to define a separate interface, like
-\code{INumeric} above, and to then use it as in
+programmer to employ a shorter notation for declaring type constraints
+for generics, than having to define an explicit interface of type
+unions, like \code{INumeric} above, and to then have to use it as in
 Sect.~\ref{sect:generic_interfaces}. The following modification of
 interface \code{ISum}'s original declaration of
 Sect.~\ref{sect:generic_interfaces}, provides such an example:
@@ -1357,38 +1350,34 @@ Sect.~\ref{sect:generic_interfaces}, provides such an example:
    end interface
 \end{lstlisting}
 The notation within the generic type parameter list in curly braces
-defines an abstract interface implicitly, to be used as a type
+defines an interface of type unions implicitly, to be used as a type
 constraint for type \code{T}. In this particular case, to admit only
 the default \code{integer}, or \code{real(real64)} types, for
 \code{T}, as discussed above.
 
-\subsection{Predefined interfaces}
+\subsubsection{Predefined constraints}
 
-The language should ideally supply a collection of predefined,
-commonly used generic constraints in the form of abstract interfaces
-that are contained in a language intrinsic module, tentatively called
-\code{generic\_constraints} here. The actual code of these interfaces
-could then employ the ``inter\-faces-as-type-sets'' syntax that was
-described above, or any other suitable means. The list of such
-predefined interfaces should include
+The facilities described in this section are flexible enough for the
+user to be able to construct generic constraints himself the way he
+needs them. Nevertheless, the language should ideally also supply a
+collection of predefined, commonly used generic constraints in the
+form of abstract interfaces that are contained in a language intrinsic
+module, tentatively called \code{generic\_constraints} here. The list
+of such predefined interfaces could include
 \begin{itemize}
 \item
   an empty interface of the name \code{IAnyType} (as shown above),
 \item
-  a general interface for numeric operations, \code{INumeric}, but also
+  some predefined numeric interfaces allowing for different
+  numeric operations, but also
 \item
-  separate interfaces for all the language's numeric and relational
-  operators.
+  some predefined interfaces to allow for the use of relational
+  operators with different types.
 \end{itemize}
-The latter interfaces are required for the user to formulate selective
-generics constraints for intrinsic types. But also in order to enable
-the programmer to implement these operators himself for any new types
-where this would be desirable, or where these operators are not
-supported by default.
 
-Language provided interfaces could then be imported from user code
-through a \code{use} statement like in the following example for
-\code{INumeric}:
+Such interfaces could then be imported from user code through a
+\code{use} statement like in the following example that assumes the
+existence of a language defined interface \code{INumeric}:
 \begin{lstlisting}[language=LFortran,style=boxed]
 module user_code
 
@@ -1405,9 +1394,29 @@ module user_code
 
 end module user_code
 \end{lstlisting}
-They could be used as constraints in function and derived type
-implementations, or as constraints in other interfaces, like
-\code{ISum} here, that requires the functionality of \code{INumeric}.
+
+\subsubsection{Limitations}
+
+Interfaces that are formulated in terms of type union sets are
+presently \emph{exclusively} intended for use as generics
+constraints. Hence, a compiler must ensure that they are not used for
+any other purpose. In particular, they are not intended to be
+implemented by derived (i.e. user-defined) types\footnote{One of the
+problems here is that any new intrinsic function that would have to be
+added to the language for some intrinsic type, would change the set of
+methods of all the type sets of which this type is a member. This
+would break any user-defined types that would implement interfaces
+which are based on these type sets.}, and they cannot be used in
+variable declarations that involve the \code{class} specifier
+(Sect.~\ref{sect:class_specifier_constraints}).
+
+In a future language revision such interfaces could, however, be
+admitted for use with the \code{type} declaration specifier, in order
+to support compile-time polymorphism through union (also called sum)
+types \cite{Taylor_21} (which would take this design to its logical
+conclusion and fill a present gap in the later to be discussed
+Table~\ref{tab:dispatch}).
+
 
 \section{Built-in facility for conversion to generic types}
 
@@ -1479,15 +1488,9 @@ generic type argument in curly braces, as in the following two calls:
   integer_total = sum{integer}([1,2,3,4,5])
   float_total   = sum{real(real64)}([1.d0,2.d0,3.d0,4.d0,5.d0])
 \end{lstlisting}
-Such manual instantiation of generic procedures can be useful
-for combination with \code{associate} statements
-\begin{lstlisting}[language=LFortran,style=boxed]
-  associate( sumf => sum{real(real64)} )
-     total1 = sumf([1.d0,2.d0,3.d0,4.d0,5.d0])
-     total2 = sumf([2.d0,4.d0,6.d0,8.d0])
-  end associate
-\end{lstlisting}
-or for use with procedure pointers, as in the following example:
+Such manual instantiation of generic procedures can be useful for
+combination with \code{associate} statements, or for use with
+procedure pointers, as in the following example:
 \begin{lstlisting}[language=LFortran,style=boxed]
   procedure(sum_real64), pointer :: sumf
 
@@ -1537,6 +1540,7 @@ contains
 
 end module simple_library
 \end{lstlisting}
+
 Generic methods are used completely analogous to generic
 procedures. The automatic instantiation use case of
 Sect.~\ref{sect:generic_procedures} would, for instance, look as
@@ -1934,10 +1938,10 @@ out from the main program can remain the same, i.e.:
 \end{lstlisting}
 Alternatively, the two calls of \code{Averager}'s structure
 constructor can be manually given generic type arguments to confirm
-the types of the regular arguments:
+the types of the regular arguments (deleting here their keywords):
 \begin{lstlisting}[language=LFortran,style=boxed]
-  avs = Averager{SimpleSum}(drv = SimpleSum())
-  avp = Averager{PaiwiseSum{SimpleSum}}(drv = PairwiseSum(other = SimpleSum()))
+  avs = Averager{SimpleSum}(SimpleSum())
+  avp = Averager{PaiwiseSum{SimpleSum}}(PairwiseSum(SimpleSum()))
 \end{lstlisting}
 Or one can delete the regular arguments to the constructor
 altogether, and provide only the generic type arguments, as follows
