@@ -4,45 +4,46 @@ The top-level auxiliary file: traits.aux
 The style file: plain.bst
 Database file #1: traits.bib
 Warning--empty journal in Haveraaen_et_al_19
-You've used 14 entries,
+Warning--empty booktitle in Pierce_91
+You've used 15 entries,
             2118 wiz_defined-function locations,
-            581 strings with 5927 characters,
-and the built_in function-call counts, 3796 in all, are:
-= -- 354
-> -- 171
+            586 strings with 6034 characters,
+and the built_in function-call counts, 4024 in all, are:
+= -- 373
+> -- 178
 < -- 3
-+ -- 71
-- -- 53
-* -- 208
-:= -- 647
-add.period$ -- 43
-call.type$ -- 14
-change.case$ -- 61
++ -- 74
+- -- 55
+* -- 216
+:= -- 685
+add.period$ -- 46
+call.type$ -- 15
+change.case$ -- 65
 chr.to.int$ -- 0
-cite$ -- 15
-duplicate$ -- 153
-empty$ -- 334
-format.name$ -- 53
-if$ -- 809
+cite$ -- 17
+duplicate$ -- 166
+empty$ -- 360
+format.name$ -- 55
+if$ -- 858
 int.to.chr$ -- 0
-int.to.str$ -- 14
-missing$ -- 13
-newline$ -- 71
-num.names$ -- 30
-pop$ -- 104
+int.to.str$ -- 15
+missing$ -- 14
+newline$ -- 76
+num.names$ -- 32
+pop$ -- 113
 preamble$ -- 1
-purify$ -- 53
+purify$ -- 56
 quote$ -- 0
-skip$ -- 111
+skip$ -- 118
 stack$ -- 0
-substring$ -- 139
-swap$ -- 26
+substring$ -- 144
+swap$ -- 27
 text.length$ -- 3
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 48
-warning$ -- 1
-while$ -- 34
-width$ -- 16
-write$ -- 143
-(There was 1 warning)
+type$ -- 52
+warning$ -- 2
+while$ -- 36
+width$ -- 17
+write$ -- 152
+(There were 2 warnings)

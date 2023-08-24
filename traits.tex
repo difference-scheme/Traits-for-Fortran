@@ -1279,21 +1279,29 @@ that redefines interface \code{INumeric} such as to admit either the
 standard \code{integer} or the \code{real(real64)} type as a generics
 constraint.
 
-The semantics of such a type set union construct is that it implicitly
+The semantics of such a type union construct is that it implicitly
 defines a \emph{set of function signatures}, namely the signatures of
 the intersecting (common) set of all the operations/intrinsic
 functions that work with all the member types of this union. This can
 also be restated, by saying that a type \code{T} \emph{implements} an
-interface consisting of such a type set union, if (and only if) it is
-a member of this union. The \code{complex} type, for instance, is not
-a member of interface \code{INumeric}'s type set union (as it is given
-in this section), because it does not appear within it. Hence,
-\code{complex} also does \emph{not} implement the \code{INumeric}
-interface. In particular, the \code{complex} type does not support,
-i.e. ``implement'', the relational operators \code{<} and \code{>}
-that are required for conformance to this interface, given that these
-operators are implemented by the \code{integer} and
+interface consisting of such a type union, if (and only if) it is a
+member of this union. The \code{complex} type, for instance, is not a
+member of interface \code{INumeric}'s type union (as it is given in
+this section), because it does not appear within its
+definition. Hence, \code{complex} also does \emph{not} implement the
+\code{INumeric} interface. In particular, the \code{complex} type does
+not support, i.e. ``implement'', the relational operators \code{<} and
+\code{>} that are required for conformance to this interface, given
+that these operators are implemented by the \code{integer} and
 \code{real(real64)} member types.
+
+Another way to formulate the above relation is to say that the
+interface is the dual (or intersection) type \cite{Pierce_91}, of the
+type union that it contains. It is this dual view, that makes it
+possible to easily select multiple types for potential use, while
+still being able to rigorously check for conformance to only a single
+type (namely the interface dual of the set), and to thereby enforce
+the idea of ``strong concepts''.
 
 \subsubsection{Kind parameters}
 
@@ -1305,7 +1313,7 @@ as follows:
       integer(*) | real(*) | complex(*)
    end interface
 \end{lstlisting}
-Notice how this makes use of both unions of types, and kind parameters
+Notice how this makes use of both type unions, and kind parameters
 for types, to include all \code{integer}, \code{real}, and
 \code{complex} types, that are admitted by the language, in a single
 \code{abstract interface} constraint.
@@ -1395,7 +1403,7 @@ module user_code
 end module user_code
 \end{lstlisting}
 
-\subsubsection{Limitations}
+\subsubsection{Present limitations}
 
 Interfaces that are formulated in terms of type union sets are
 presently \emph{exclusively} intended for use as generics
@@ -1412,10 +1420,10 @@ variable declarations that involve the \code{class} specifier
 
 In a future language revision such interfaces could, however, be
 admitted for use with the \code{type} declaration specifier, in order
-to support compile-time polymorphism through union (also called sum)
-types \cite{Taylor_21} (which would take this design to its logical
-conclusion and fill a present gap in the later to be discussed
-Table~\ref{tab:dispatch}).
+to enable compile-time polymorphism through union (also called sum)
+types \cite{Taylor_21} (which would ultimately take this design to its
+logical conclusion, provide an alternative to generics, and fill a
+present gap in the later to be discussed Table~\ref{tab:dispatch}).
 
 
 \section{Built-in facility for conversion to generic types}
@@ -1877,6 +1885,7 @@ is still fully decoupled, despite making now use of static dispatch.
   \code{class(DerivedType)} &  if \code{DerivedType} is \code{extend}ed &
   if \code{DerivedType} is un\code{extend}ed\tablefootnote{Or the method is declared as \code{non\_overridable}.} \\
   \code{type(DerivedType)}  &  never              & always \\
+  \code{type(Interface)}  &  presently undefined  & presently undefined \\
   \bottomrule
 \end{tabular}
 \caption{Correspondence between object declarations and method

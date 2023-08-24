@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  24 AUG 2023 14:53
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  24 AUG 2023 18:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -580,17 +580,24 @@ Overfull \hbox (13.27109pt too wide) in paragraph at lines 983--988
 Chapter 5.
 [31
 
-] [32] [33] [34] [35] [36] [37] (./Code/Fortran/vector.f90 [38]) [39]
+]
+Overfull \hbox (3.13026pt too wide) in paragraph at lines 1316--1320
+\T1/fvm/m/n/10.95 integer\T1/ppl/m/n/10.95 , \T1/fvm/m/n/10.95 real\T1/ppl/m/n/
+10.95 , and \T1/fvm/m/n/10.95 complex \T1/ppl/m/n/10.95 types, that are ad-mit-
+ted by the lan-guage, in a sin-gle \T1/fvm/m/n/10.95 abstract interface
+ []
+
+[32] [33] [34] [35] [36] [37] (./Code/Fortran/vector.f90 [38]) [39]
 Chapter 6.
 (./Code/Fortran/functional.f90 [40
 
 ] [41]) [42] (./Code/Fortran/mixed.f90
 [43] [44] [45]) [46] (./Code/Fortran/static1.f90 [47] [48] [49])
 LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
-(Font)              scaled to size 7.38007pt on input line 1885.
+(Font)              scaled to size 7.38007pt on input line 1894.
  [50]
 (./traits.bbl [51]
-Underfull \hbox (badness 1552) in paragraph at lines 77--81
+Underfull \hbox (badness 1552) in paragraph at lines 82--86
 []\T1/ppl/m/n/10.95 Wolfgang Weck and Clemens Szyper-ski.  Do We Need In-her-i-
 tance?  [][]$\T1/fvm/m/n/10.95 https : / / www .
  []
@@ -601,16 +608,16 @@ tance?  [][]$\T1/fvm/m/n/10.95 https : / / www .
  been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1969 \end{abstract}
+l.1978 \end{abstract}
                       [1] (./traits.aux)
 Package rerunfilecheck Info: File `traits.out' has not changed.
 (rerunfilecheck)             Checksum: A5C96A301A5FD97217476432B6336D39;9210.
  ) 
 Here is how much of TeX's memory you used:
- 16007 strings out of 480247
- 239532 string characters out of 5896151
- 758346 words of memory out of 5000000
- 32422 multiletter control sequences out of 15000+600000
+ 16011 strings out of 480247
+ 239597 string characters out of 5896151
+ 758362 words of memory out of 5000000
+ 32425 multiletter control sequences out of 15000+600000
  510080 words of font info for 106 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  60i,16n,68p,7900b,3160s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -620,10 +627,10 @@ fonts/type1/public/bera/fvmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
 ublic/bera/fvmro8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/
 uplb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb><
 /usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on traits.pdf (54 pages, 263174 bytes).
+Output written on traits.pdf (54 pages, 263425 bytes).
 PDF statistics:
- 1993 PDF objects out of 2073 (max. 8388607)
- 1905 compressed objects within 20 object streams
- 1285 named destinations out of 1440 (max. 500000)
+ 1995 PDF objects out of 2073 (max. 8388607)
+ 1907 compressed objects within 20 object streams
+ 1286 named destinations out of 1440 (max. 500000)
  377 words of extra memory for PDF output out of 10000 (max. 10000000)
 

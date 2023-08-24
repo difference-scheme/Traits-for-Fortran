@@ -69,6 +69,11 @@ Nicholas~D Matsakis and Felix~S Klock~II.
 \newblock In {\em ACM SIGAda Ada Letters}, volume~34, pages 103--104. ACM,
   2014.
 
+\bibitem{Pierce_91}
+Benjamin~C. Pierce.
+\newblock Programming with intersection types, union types, and polymorphism.
+\newblock 1991.
+
 \bibitem{Taylor_21}
 Ian~Lance Taylor.
 \newblock \url{https://github.com/golang/go/issues/45346}.
