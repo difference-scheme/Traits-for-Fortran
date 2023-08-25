@@ -938,7 +938,7 @@ Sect.~\ref{sect:type_sets}. These include the empty interface,
 \subsection{Extends specifier for abstract interfaces}
 
 Abstract interface definitions must allow the programmer to declare
-new abstract interfaces that are the union of \emph{multiple} simpler
+new abstract interfaces that are the merger of \emph{multiple} simpler
 ones (multiple interface inheritance). In the following example, the
 interface \code{IBasicMath} inherits the procedure signatures
 contained in both the interfaces \code{IAddition}, and
@@ -952,9 +952,9 @@ the \code{IAddition}, or \code{ISubtraction} interfaces.
    end interface
 \end{lstlisting}
 
-\subsection{Short-hand notation for union of abstract interfaces}
+\subsection{Short-hand notation for merged abstract interfaces}
 
-There are often cases where the union of two (or more) interfaces is
+There are often cases where the merger of two (or more) interfaces is
 required but where one would not like to go through the labor to
 explicitly set up a separate derived interface, like \code{IBasicMath}
 above. This can be useful in variable declarations. In such cases, it
@@ -1268,7 +1268,7 @@ only the (32 bits wide) standard \code{integer} type:
 \end{lstlisting}
 
 The above example is actually a special case of specifying entire
-\emph{unions} of member types as a type set. Such a union of types is
+\emph{unions} of member types as a type set. Such a type set is
 demonstrated in the following example
 \begin{lstlisting}[language=LFortran,style=boxed]
    abstract interface :: INumeric
@@ -1279,14 +1279,14 @@ that redefines interface \code{INumeric} such as to admit either the
 standard \code{integer} or the \code{real(real64)} type as a generics
 constraint.
 
-The semantics of such a type union construct is that it implicitly
+The semantics of such a type set construct is that it implicitly
 defines a \emph{set of function signatures}, namely the signatures of
 the intersecting (common) set of all the operations/intrinsic
-functions that work with all the member types of this union. This can
+functions that work with all the member types of the type set. This can
 also be restated, by saying that a type \code{T} \emph{implements} an
-interface consisting of such a type union, if (and only if) it is a
-member of this union. The \code{complex} type, for instance, is not a
-member of interface \code{INumeric}'s type union (as it is given in
+interface consisting of such a type set, if (and only if) it is a
+member of this set. The \code{complex} type, for instance, is not a
+member of interface \code{INumeric}'s type set (as it is given in
 this section), because it does not appear within its
 definition. Hence, \code{complex} also does \emph{not} implement the
 \code{INumeric} interface. In particular, the \code{complex} type does
@@ -1295,13 +1295,13 @@ not support, i.e. ``implement'', the relational operators \code{<} and
 that these operators are implemented by the \code{integer} and
 \code{real(real64)} member types.
 
-Another way to formulate the above relation is to say that the
-interface is the dual (or intersection) type \cite{Pierce_91}, of the
-type union that it contains. It is this dual view, that makes it
-possible to easily select multiple types for potential use, while
-still being able to rigorously check for conformance to only a single
-type (namely the interface dual of the set), and to thereby enforce
-the idea of ``strong concepts''.
+%Another way to formulate the above relation is to say that the
+%interface is the dual (or intersection) type \cite{Pierce_91}, of the
+%type union that it contains. It is this dual view, that makes it
+%possible to easily select multiple types for potential use, while
+%still being able to rigorously check for conformance to only a single
+%type (namely the interface dual of the set), and to thereby enforce
+%the idea of ``strong concepts''.
 
 \subsubsection{Kind parameters}
 
@@ -1313,23 +1313,23 @@ as follows:
       integer(*) | real(*) | complex(*)
    end interface
 \end{lstlisting}
-Notice how this makes use of both type unions, and kind parameters
+Notice how this makes use of both unions of types, and kind parameters
 for types, to include all \code{integer}, \code{real}, and
 \code{complex} types, that are admitted by the language, in a single
 \code{abstract interface} constraint.
 
 The use of kind parameters here is merely syntactic sugar that allows
-one to avoid having to write out a type union for all the involved
+one to avoid having to write out a type set for all the involved
 kinds of a type. For instance, if the particular Fortran
 implementation supports \code{real(real32)} and \code{real(real64)} as
 its only \code{real} types, then \code{real(*)} is understood to mean
-the type union ``\code{real(real32) | real(real64)}''. Notice, also,
+the type set ``\code{real(real32) | real(real64)}''. Notice, also,
 that the more types are added to an interface in this fashion, the
 smaller the set of intersecting methods will usually become.
 
 \subsubsection{Empty interface}
 
-In the limit of adding all possible types to a type union, there won't
+In the limit of adding all possible types to a type set, there won't
 be any common methods left that are implemented by all its types. This
 results in the important case of the empty interface, that matches all
 types (since any type has at least zero methods):
@@ -1343,7 +1343,7 @@ types (since any type has at least zero methods):
 For simple use cases, it should be optionally possible for the
 programmer to employ a shorter notation for declaring type constraints
 for generics, than having to define an explicit interface of type
-unions, like \code{INumeric} above, and to then have to use it as in
+sets, like \code{INumeric} above, and to then have to use it as in
 Sect.~\ref{sect:generic_interfaces}. The following modification of
 interface \code{ISum}'s original declaration of
 Sect.~\ref{sect:generic_interfaces}, provides such an example:
@@ -1358,7 +1358,7 @@ Sect.~\ref{sect:generic_interfaces}, provides such an example:
    end interface
 \end{lstlisting}
 The notation within the generic type parameter list in curly braces
-defines an interface of type unions implicitly, to be used as a type
+defines a type set interface implicitly, to be used as a type
 constraint for type \code{T}. In this particular case, to admit only
 the default \code{integer}, or \code{real(real64)} types, for
 \code{T}, as discussed above.
@@ -1405,25 +1405,26 @@ end module user_code
 
 \subsubsection{Present limitations}
 
-Interfaces that are formulated in terms of type union sets are
-presently \emph{exclusively} intended for use as generics
-constraints. Hence, a compiler must ensure that they are not used for
-any other purpose. In particular, they are not intended to be
-implemented by derived (i.e. user-defined) types\footnote{One of the
-problems here is that any new intrinsic function that would have to be
-added to the language for some intrinsic type, would change the set of
-methods of all the type sets of which this type is a member. This
-would break any user-defined types that would implement interfaces
-which are based on these type sets.}, and they cannot be used in
-variable declarations that involve the \code{class} specifier
+Interfaces that are formulated in terms of type sets are presently
+\emph{exclusively} intended for use as generics constraints. Hence, a
+compiler must ensure that they are not used for any other purpose. In
+particular, they are not intended to be implemented by derived
+(i.e. user-defined) types\footnote{One of the problems here is that
+any new intrinsic function that would have to be added to the language
+for some intrinsic type, would change the set of methods of all the
+type sets of which this type is a member. This would break any
+user-defined types that would implement interfaces which are based on
+these type sets.}, and they cannot be used in variable declarations
+that involve the \code{class} specifier
 (Sect.~\ref{sect:class_specifier_constraints}).
 
 In a future language revision such interfaces could, however, be
 admitted for use with the \code{type} declaration specifier, in order
 to enable compile-time polymorphism through union (also called sum)
-types \cite{Taylor_21} (which would ultimately take this design to its
-logical conclusion, provide an alternative to generics, and fill a
-present gap in the later to be discussed Table~\ref{tab:dispatch}).
+types \cite{Taylor_21,Pierce_91} (which would ultimately take this
+design to its logical conclusion, offer an alternative to generic
+parameters for certain use cases, and fill a present gap in the later
+to be discussed Table~\ref{tab:dispatch}).
 
 
 \section{Built-in facility for conversion to generic types}
