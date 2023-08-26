@@ -938,27 +938,29 @@ Sect.~\ref{sect:type_sets}. These include the empty interface,
 \subsection{Extends specifier for abstract interfaces}
 
 Abstract interface definitions must allow the programmer to declare
-new abstract interfaces that are the merger of \emph{multiple} simpler
-ones (multiple interface inheritance). In the following example, the
-interface \code{IBasicMath} inherits the procedure signatures
-contained in both the interfaces \code{IAddition}, and
-\code{ISubtraction}, making \code{IBasicMath} at the same time a
-\emph{subtype} of both these simpler interfaces. That is, objects that
-adopt or implement the \code{IBasicMath} interface (i.e. conform to
-it), can also be used in settings that require conformance to either
-the \code{IAddition}, or \code{ISubtraction} interfaces.
+new abstract interfaces that inherit procedure signatures from
+\emph{multiple} simpler interfaces (multiple interface
+inheritance). In the following example, the interface
+\code{IBasicMath} inherits the procedure signatures contained in both
+the interfaces \code{IAddition}, and \code{ISubtraction}, making
+\code{IBasicMath} at the same time a \emph{subtype} of both these
+simpler interfaces. That is, objects that adopt or implement the
+\code{IBasicMath} interface (i.e. conform to it), can also be used in
+settings that require conformance to either the \code{IAddition}, or
+\code{ISubtraction} interfaces.
 \begin{lstlisting}[language=LFortran,style=boxed]
    abstract interface, extends(IAddition,ISubtraction) :: IBasicMath
    end interface
 \end{lstlisting}
 
-\subsection{Short-hand notation for merged abstract interfaces}
+\subsection{Short-hand notation for combination of abstract interfaces}
 
-There are often cases where the merger of two (or more) interfaces is
-required but where one would not like to go through the labor to
-explicitly set up a separate derived interface, like \code{IBasicMath}
-above. This can be useful in variable declarations. In such cases, it
-should be possible to specify the following
+There are often cases where the combined functionality of two (or more)
+interfaces is required but where one would not like to go through the
+labor to explicitly set up a separate derived interface, like
+\code{IBasicMath} above. This can be useful in variable
+declarations. In such cases, it should be possible to specify the
+following
 \begin{lstlisting}[language=LFortran,style=boxed]
    class(IAddition + ISubtraction), allocatable :: addsub
 \end{lstlisting}
@@ -974,8 +976,8 @@ follows:
 
 The language must make it possible not only for named abstract
 interfaces to conform to other named abstract interfaces, but also for
-\emph{other types} to do the same, regardless of whether such types
-are user-defined or intrinsic to the language.
+\emph{other types} to do the same, preferably regardless of whether
+such types are user-defined or intrinsic to the language.
 
 
 \subsection{\code{Implements} specifier for derived type definitions}
@@ -1059,7 +1061,7 @@ be allowed also for \emph{intrinsic} types. The \code{implements}
 statement that is described below is aimed at ultimately accomplishing
 these capabilities, but for the purpose of a first prototype
 implementation it has been restricted here to provide such
-functionality for user-defined types \emph{only}, i.e. its use on
+functionality for user-defined types only, i.e. its use on
 intrinsic types is presently prohibited.
 
 Notice, that the \code{implements} statement has \emph{no} relation to
@@ -1229,7 +1231,7 @@ intended for a generic type-bound procedure, named \code{sum}:
 The example illustrates the use of a generic type parameter, that is
 simply called \code{T} here, in terms of which the regular function
 parameters are declared. A significant difference of generic type
-parameters as compared to regular function parameters is that the
+parameters, as compared to regular function parameters, is that the
 former will be substituted by an actual type argument at compile time,
 in a process called instantiation. A similarity is that, in the same
 way that regular function parameters need to be constrained by a
@@ -1268,8 +1270,8 @@ only the (32 bits wide) standard \code{integer} type:
 \end{lstlisting}
 
 The above example is actually a special case of specifying entire
-\emph{unions} of member types as a type set. Such a type set is
-demonstrated in the following example
+\emph{unions} of member types as a type set. A type set consisting of
+such a union of types is demonstrated in the following example
 \begin{lstlisting}[language=LFortran,style=boxed]
    abstract interface :: INumeric
       integer | real(real64)
@@ -1305,7 +1307,7 @@ that these operators are implemented by the \code{integer} and
 
 \subsubsection{Kind parameters}
 
-Expanding on the previous case, an \code{INumeric} interface that is
+Expanding on the previous example, an \code{INumeric} interface that is
 potentially even more useful as a generics constraint could be coded
 as follows:
 \begin{lstlisting}[language=LFortran,style=boxed]
@@ -1421,10 +1423,10 @@ that involve the \code{class} specifier
 In a future language revision such interfaces could, however, be
 admitted for use with the \code{type} declaration specifier, in order
 to enable compile-time polymorphism through union (also called sum)
-types \cite{Taylor_21,Pierce_91} (which would ultimately take this
-design to its logical conclusion, offer an alternative to generic
-parameters for certain use cases, and fill a present gap in the later
-to be discussed Table~\ref{tab:dispatch}).
+types \cite{Taylor_21,Pierce_91} (which would take the present design
+to its logical conclusion, offer an alternative to generic parameters
+for certain use cases, and fill a present gap in the later to be
+discussed Table~\ref{tab:dispatch}).
 
 
 \section{Built-in facility for conversion to generic types}
@@ -1550,7 +1552,7 @@ contains
 end module simple_library
 \end{lstlisting}
 
-Generic methods are used completely analogous to generic
+Generic methods are used completely analogously to generic
 procedures. The automatic instantiation use case of
 Sect.~\ref{sect:generic_procedures} would, for instance, look as
 follows:
@@ -1643,7 +1645,7 @@ If a derived type is parameterized over a generic type, as in the
 example of Sect.~\ref{sect:generic_derived_types}, then its structure
 constructor must also be assumed to be parameterized over the same
 generic type. Hence, calls of structure constructors that are
-instantiated with particular argument types substituting the generic
+instantiated with specific argument types substituting the generic
 type parameters of their derived types, like in the following
 initialization of an object called \code{drv},
 \begin{lstlisting}[language=LFortran,style=boxed]
@@ -1717,9 +1719,6 @@ compiler will then implicitly assign type \code{U} to the type alias
 \code{Element}, in order to conform to interface \code{IAppendable}'s
 definition.
 
-
-
-
 \section{Extensibility to rank genericity}
 
 Fortran's special role, as a language that caters to numeric
@@ -1732,7 +1731,7 @@ prototype implementation of the generics features described here, we
 defer it to a separate document.
 
 
-\chapter{Fortran versions of the test example}
+\chapter{Fortran versions of the test problem}
 
 In order to comprehensively illustrate how the new features, that were
 discussed in the last two chapters, would be used in practice, we will
@@ -1740,52 +1739,78 @@ give in the present chapter both complete functional and encapsulated
 (i.e. OO) Fortran code versions of the test problem that was used in
 our language survey.
 
-\section{Functional version}
+\section{Functional versions}
 
 Fortran presently lacks support for advanced functional programming
 capabilities, like closures and variables of higher-order functions,
 that are, e.g., available in Go and the other modern languages. In
 contrast to the Go code version of Sect.~\ref{sect:poly_functional},
-the functional Fortran code version that is presented in this section
-therefore makes no attempt to eliminate rigid dependencies on
-user-defined function implementations. The purpose of this functional
-Fortran version is merely to demonstrate how the new generics features
-can be used to eliminate rigid dependencies on language intrinsic
-types.
+the functional Fortran code versions that are presented in this
+section therefore make no attempt to eliminate rigid dependencies on
+user-defined function implementations, and content themselves with
+demonstrating how the new generics features can be used to eliminate
+rigid dependencies on language intrinsic types.
 
-Despite these differences, there are a number of similarities
-to the Go code version of Listing~\ref{lst:polyfuncGo}, namely:
+\subsection{Automatic instantiation of generic procedures}
+
+Listing~\ref{lst:Func1Fortran} shows a straightforward generic
+functional implementation of the test problem, that uses automatic
+type inference by the compiler. The following additional remarks
+should help to better understand this code:
 \begin{itemize}
 \item
-  We employ the (Go borrowed) syntax \code{integer | real(real64)}, to
-  implement the interface \code{INumeric} as a type set, in order to
-  express type genericity for the array \code{x}, that is input to all
-  our different function implementations, and for the functions'
-  return values.
+  To express type genericity for the arguments and return values of our
+  different generic functions, we make use of a type constraint
+  expressed by the interface \code{INumeric}, that is implemented as the
+  type set \code{integer | real(real64)}.
 \item
-  \code{INumeric} is defined by the user himself. Thus, there is no
-  need for an external dependency.
+  Interface \code{INumeric} is defined by the user himself. Thus,
+  there is no need for an external dependency.
 \item
-  Conversions to generic types are done as in Go.
+  Any required conversions to generic types are done using explicit
+  casts, as in Go.
+\item
+  All the required instantiations of generic procedures are done
+  automatically by the compiler, based on type inference of the
+  actual arguments that are passed to these procedures.
 \end{itemize}
 
-\lstinputlisting[language=LFortran,style=boxed,label={lst:FuncFortran},caption={Proposed functional, generic Fortran version of the array averaging example.}]{Code/Fortran/functional.f90}
+\lstinputlisting[language=LFortran,style=boxed,label={lst:Func1Fortran},caption={Fortran version of the array averaging problem with
+automatic generics instantiation.}]{Code/Fortran/functional1.f90}
 
 The example demonstrates that using the new generics features together
 with a functional programming style is easy, that the syntax is
-economical, and that automatic type inference for, and instantiation of,
-generics by the compiler should be straightforward and therefore
-reliable. Hence, we believe that the generics features described here
-will place no burden on the programmer.
+economical, and that type inference by the compiler should be
+straightforward and therefore reliable. Hence, we believe that the
+generics features described here will place no burden on the
+programmer.
+
+
+\subsection{Manual instantiation of generic procedures}
+
+It is actually possible to make the Fortran code version that was
+given in Listing~\ref{lst:Func1Fortran}, resemble the Go code version
+of Listing~\ref{lst:polyfuncGo} a bit closer, by having two procedure
+pointers stand in, within the \code{select case} statement of the main
+program, for the closures that were used in the Go code. As this is a
+good example for demonstrating how generics can be instantiated
+manually by the programmer, we give in Listing~\ref{lst:Func2Fortran}
+an alternative form of the main program of
+Listing~\ref{lst:Func1Fortran} that makes use of such manual
+instantiation (as it was discussed in
+Sect.~\ref{sect:generic_procedures}).
+
+\lstinputlisting[linerange={53-101},language=LFortran,style=boxed,label={lst:Func2Fortran},caption={Main program using procedure pointers and manual generics instantiation.}]{Code/Fortran/functional2.f90}
+
 
 
 \section{Encapsulated versions}
 
-The present section will demonstrate that using the previously
-described new generics features seamlessly and easily in a modern-day
-OO programming setting is one of the great strengths of the present
-design. The equal importance that has been placed in this document on
-both proper compile-time and run-time polymorphic (i.e. modern-day OO)
+The present section will demonstrate that using the new generics
+features seamlessly and easily in a modern-day OO programming setting
+is one of the great strengths of the present design. The equal
+importance that has been placed in this document on both proper
+compile-time and run-time polymorphic (i.e. modern-day OO)
 capabilities will allow for uniform dependency management of both
 language intrinsic and user-defined types in Fortran, that is on par
 with the most modern languages.
@@ -1801,7 +1826,9 @@ other languages.
 \item
   As in all these other versions, three interfaces are used to manage
   all the source code dependencies in the problem: \code{INumeric},
-  \code{ISum}, and \code{IAverager}.
+  \code{ISum}, and \code{IAverager}. Interface \code{INumeric} is
+  defined by the user himself as a type set, similar to the
+  corresponding Go code.
 \item
   In contrast to the Go and Rust versions (Listings~\ref{lst:OOGo}
   and \ref{lst:OORust}), none of the aforementioned interfaces is
@@ -1830,14 +1857,15 @@ depends on implementations. The \emph{entire} rest of the code depends
 merely on (user-defined) abstract interfaces (see the \code{use}
 statements in the above modules). The features described in this
 document have enabled us to avoid rigidity in the program, by both
-decoupling it and making it operate on multiple data types, thus
-allowing for a maximum of code reuse. Notice, also, that (as in the
-functional Fortran implementation of Listing~\ref{lst:FuncFortran}) not a
-single manual instantiation of generics is necessary anywhere in the
-code. The Fortran version described here is therefore as clean as the
-Go implementation of Listing~\ref{lst:OOGo} with respect to dependency
-management, and it is as easy to use, and to read and understand, as
-the Swift implementation of Listing~\ref{lst:OOSwift}.
+decoupling it and making it operate on multiple intrinsic data types,
+thus allowing for a maximum of code reuse. Notice, also, that (as in
+the functional Fortran implementation of
+Listing~\ref{lst:Func1Fortran}) not a single manual instantiation of
+generics is necessary anywhere in the code. The Fortran version
+described here is therefore as clean as the Go implementation of
+Listing~\ref{lst:OOGo} with respect to dependency management, and it
+is as easy to use, and to read and understand, as the Swift
+implementation of Listing~\ref{lst:OOSwift}.
 
 \subsection{Static method dispatch}
 

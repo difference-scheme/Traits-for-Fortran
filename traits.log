@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  25 AUG 2023 11:45
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  26 AUG 2023 12:50
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -569,9 +569,9 @@ File: lstlang1.sty 2020/03/24 1.8d listings language file
 
 ] [26]
 LaTeX Font Info:    Font shape `T1/fvm/b/n' will be
-(Font)              scaled to size 9.84009pt on input line 981.
+(Font)              scaled to size 9.84009pt on input line 983.
 
-Overfull \hbox (13.27109pt too wide) in paragraph at lines 983--988
+Overfull \hbox (13.27109pt too wide) in paragraph at lines 985--990
 \T1/ppl/m/n/10.95 User-defined (i.e. de-rived) types can be made to con-form to
  an in-ter-face by in-tro-duc-ing an \T1/fvm/m/n/10.95 implements
  []
@@ -582,35 +582,42 @@ Chapter 5.
 
 ] [32] [33] [34] [35] [36] [37] (./Code/Fortran/vector.f90 [38]) [39]
 Chapter 6.
-(./Code/Fortran/functional.f90 [40
 
-] [41]) [42] (./Code/Fortran/mixed.f90
-[43] [44] [45]) [46] (./Code/Fortran/static1.f90 [47] [48] [49])
+Overfull \hbox (5.38133pt too wide) in paragraph at lines 1744--1753
+\T1/ppl/m/n/10.95 defined func-tion im-ple-men-ta-tions, and con-tent them-selv
+es with demon-strat-ing how the new gener-
+ []
+
+(./Code/Fortran/functional1.f90 [40
+
+] [41]) (./Code/Fortran/functional2.f90
+consecutive:
+[42]) [43] (./Code/Fortran/mixed.f90 [44] [45] [46]) [47]
+(./Code/Fortran/static1.f90 [48] [49] [50]) [51]
 LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
-(Font)              scaled to size 7.38007pt on input line 1895.
- [50]
-(./traits.bbl [51]
+(Font)              scaled to size 7.38007pt on input line 1923.
+ [52] (./traits.bbl [53]
 Underfull \hbox (badness 1552) in paragraph at lines 82--86
 []\T1/ppl/m/n/10.95 Wolfgang Weck and Clemens Szyper-ski.  Do We Need In-her-i-
 tance?  [][]$\T1/fvm/m/n/10.95 https : / / www .
  []
 
-) [52
+) [54
 
 ]pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
  been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1979 \end{abstract}
+l.2007 \end{abstract}
                       [1] (./traits.aux)
 Package rerunfilecheck Info: File `traits.out' has not changed.
-(rerunfilecheck)             Checksum: D939F0943C2DB50B0D733DDA3ABF1180;9197.
+(rerunfilecheck)             Checksum: 97A6C28F69D6850A4BD02F5367166535;9828.
  ) 
 Here is how much of TeX's memory you used:
- 16011 strings out of 480247
- 239597 string characters out of 5896151
- 758362 words of memory out of 5000000
- 32425 multiletter control sequences out of 15000+600000
+ 16091 strings out of 480247
+ 240855 string characters out of 5896151
+ 758476 words of memory out of 5000000
+ 32443 multiletter control sequences out of 15000+600000
  510080 words of font info for 106 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  60i,16n,68p,7900b,3160s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -620,10 +627,10 @@ fonts/type1/public/bera/fvmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
 ublic/bera/fvmro8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/
 uplb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb><
 /usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on traits.pdf (54 pages, 263203 bytes).
+Output written on traits.pdf (56 pages, 269296 bytes).
 PDF statistics:
- 1995 PDF objects out of 2073 (max. 8388607)
- 1907 compressed objects within 20 object streams
- 1286 named destinations out of 1440 (max. 500000)
- 377 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 2085 PDF objects out of 2487 (max. 8388607)
+ 1995 compressed objects within 20 object streams
+ 1344 named destinations out of 1440 (max. 500000)
+ 393 words of extra memory for PDF output out of 10000 (max. 10000000)
 

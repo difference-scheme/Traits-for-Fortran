@@ -52,10 +52,16 @@ end module averager_library
 
 program main
 
+   ! dependencies on intrinsic constants
+   use, intrinsic :: iso_fortran_env, only: real64
+
    ! dependencies on implementations
    use averager_library, only: simple_average, pairwise_average
    
    ! declarations
+   integer,      parameter :: xi(:) = [1, 2, 3, 4, 5]
+   real(real64), parameter :: xf(:) = [1.d0, 2.d0, 3.d0, 4.d0, 5.d0]
+
    integer :: key
 
    write(*,'(a)') 'Simple   sum average: 1'
@@ -65,11 +71,11 @@ program main
 
    select case (key)
    case (1)
-      print '(i8)',   simple_average([1, 2, 3, 4, 5])     
-      print '(f8.5)', simple_average([1.d0, 2.d0, 3.d0, 4.d0, 5.d0])
+      print '(i8)',   simple_average(xi)
+      print '(f8.5)', simple_average(xf)
    case (2)
-      print '(i8)',   pairwise_average([1, 2, 3, 4, 5])
-      print '(f8.5)', pairwise_average([1.d0, 2.d0, 3.d0, 4.d0, 5.d0])
+      print '(i8)',   pairwise_average(xi)
+      print '(f8.5)', pairwise_average(xf)
    case default
       stop 'Case not implemented!'
    end select
