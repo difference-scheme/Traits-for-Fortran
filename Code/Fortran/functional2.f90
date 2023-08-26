@@ -57,6 +57,8 @@ program main
 
    ! dependencies on implementations
    use averager_library, only: simple_average, pairwise_average
+
+   implicit none
    
    ! declarations
    integer,      parameter :: xi(:) = [1, 2, 3, 4, 5]

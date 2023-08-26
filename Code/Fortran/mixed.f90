@@ -2,8 +2,9 @@ module interfaces
 
    use, intrinsic :: iso_fortran_env, only: real64
 
-   private   
-
+   implicit none
+   private
+   
    public :: INumeric, ISum, IAverager
    
    abstract interface :: INumeric
@@ -127,6 +128,8 @@ program main
    use pairwise_library, only: PairwiseSum
    use averager_library, only: Averager
 
+   implicit none
+   
    ! declarations
    integer :: key
    class(IAverager), allocatable :: avs, avp, av
@@ -151,7 +154,7 @@ program main
       stop 'Case not implemented!'
    end select
 
-   print '(i8)',   av%average([1, 2, 3, 4, 5])   
+   print '(i8)',   av%average([1, 2, 3, 4, 5])
    print '(f8.5)', av%average([1.d0, 2.d0, 3.d0, 4.d0, 5.d0])
 
 end program main
