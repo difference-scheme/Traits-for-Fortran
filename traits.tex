@@ -509,12 +509,12 @@ required ADTs. In particular, it instantiates run-time polymorphic
 ``\code{Averager}'' objects (depending on whether simple or pairwise
 sum averaging is to take place), and it does so for both the
 \code{int32} and \code{float64} types separately, in order to then use
-these objects on \code{int32} and \code{float64} data, respectively. The
-fact that \code{two} such objects are required (one for each language
-intrinsic data type) is connected to the fact that in order to obtain
-generic methods in Go, one has to parameterize interfaces by generic
-parameters, and instantiate them with different actual data types, as
-in \code{func main}'s first two code lines. A single
+these objects on \code{int32} and \code{float64} data,
+respectively. That \code{two} such objects are required (one for each
+language intrinsic data type) is connected to the fact that in order
+to obtain generic methods in Go, one has to parameterize interfaces by
+generic parameters, and instantiate them with different actual data
+types, as in \code{func main}'s first two code lines. A single
 (i.e. unparameterized) \code{IAverager} interface therefore doesn't
 suffice, which is unfortunate from the user's perspective, as some
 code duplication in client code cannot be avoided in this way.
@@ -1405,7 +1405,7 @@ module user_code
 end module user_code
 \end{lstlisting}
 
-\subsubsection{Present limitations}
+\subsubsection{Present restrictions}
 
 Interfaces that are formulated in terms of type sets are presently
 \emph{exclusively} intended for use as generics constraints. Hence, a
@@ -1622,21 +1622,32 @@ scope of its methods. If a type-bound procedure needs to access the
 generic parameters of its derived type, it must be provided with a
 passed-object dummy argument.
 
-Notice, finally, that the declaration \code{class(PairwiseSum\{U\})}
-does not imply any ambiguities or contradictions with respect to
-compile-time vs. run-time polymorphism, because substitution semantics
-apply. At compile time, the compiler will substitute a set of
-different type arguments for the generic parameter \code{U}. Hence,
-the notation \code{PairwiseSum\{U\}} really refers to a set of
-multiple, related, but \emph{different} \code{PairwiseSum} types,
-whose \emph{only} commonality is that they all implement the
-\code{ISum} interface (and furthermore contain different field
-components that do the same). Of course, passed-object dummy arguments
-of any of the different \code{PairwiseSum} types of this set can then
-be run-time polymorphic, in exactly the same manner that passed-object
-dummy arguments of other derived types that implement the same
-interface can be run-time polymorphic.
+Notice, that the declaration \code{class(PairwiseSum\{U\})} does not
+imply any ambiguities or contradictions with respect to compile-time
+vs. run-time polymorphism, because substitution semantics apply. At
+compile time, the compiler will substitute a set of different type
+arguments for the generic parameter \code{U}. Hence, the notation
+\code{PairwiseSum\{U\}} really refers to a set of multiple, related,
+but \emph{different} \code{PairwiseSum} types, whose \emph{only}
+commonality is that they all implement the \code{ISum} interface (and
+furthermore contain different field components that do the same). Of
+course, passed-object dummy arguments of any of the different
+\code{PairwiseSum} types of this set can then be run-time polymorphic,
+in exactly the same manner that passed-object dummy arguments of other
+derived types that implement the same interface can be run-time
+polymorphic.
 
+The following code snippet finally shows how an object of the
+\code{PaiwiseSum} type could be declared statically (by substituting
+its generic type parameter \code{U} by the \code{SimpleSum} type of
+Sect.~\ref{sect:generic_methods}), and how its generic \code{sum}
+method would be employed using automatic type inference:
+\begin{lstlisting}[language=LFortran,style=boxed]
+  type(PairwiseSum{SimpleSum}) :: pairwise
+
+  integer_total = pairwise%sum([1,2,3,4,5])
+  float_total   = pairwise%sum([1.d0,2.d0,3.d0,4.d0,5.d0])
+\end{lstlisting}
 
 \section{Updated structure constructors}
 \label{sect:param_constructors}
@@ -1647,9 +1658,13 @@ constructor must also be assumed to be parameterized over the same
 generic type. Hence, calls of structure constructors that are
 instantiated with specific argument types substituting the generic
 type parameters of their derived types, like in the following
-initialization of an object called \code{drv},
+(optional, because superfluous) initialization of the object
+\code{pairwise} that was given above
 \begin{lstlisting}[language=LFortran,style=boxed]
- drv = PairwiseSum{SimpleSum}()
+  type(PairwiseSum{SimpleSum}) :: pairwise
+
+  pairwise = PairwiseSum{SimpleSum}()
+  ...
 \end{lstlisting}
 must be legal. As in Sect.~\ref{sect:generic_methods},
 \code{SimpleSum} would be a derived type that implements the
