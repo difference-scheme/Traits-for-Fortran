@@ -61,8 +61,8 @@ program main
    implicit none
    
    ! declarations
-   integer,      parameter :: xi(:) = [1, 2, 3, 4, 5]
-   real(real64), parameter :: xf(:) = [1.d0, 2.d0, 3.d0, 4.d0, 5.d0]
+   integer,      parameter :: xi(5) = [1, 2, 3, 4, 5]
+   real(real64), parameter :: xf(5) = [1.d0, 2.d0, 3.d0, 4.d0, 5.d0]
 
    integer :: key
 
