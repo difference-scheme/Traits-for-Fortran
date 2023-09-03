@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  27 AUG 2023 19:24
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  3 SEP 2023 15:48
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -541,9 +541,9 @@ t so-called ``trait ob-jects'' into ``Boxes'',
 
 (./Code/Rust/mixed_poly/src/main.rs [15] [16] [17]
 LaTeX Font Info:    Font shape `T1/fvm/m/it' in size <10.95> not available
-(Font)              Font shape `T1/fvm/m/sl' tried instead on input line 109.
+(Font)              Font shape `T1/fvm/m/sl' tried instead on input line 107.
 LaTeX Font Info:    Font shape `T1/fvm/m/sl' will be
-(Font)              scaled to size 8.97906pt on input line 109.
+(Font)              scaled to size 8.97906pt on input line 107.
  [18])
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2020/03/24 1.8d listings language file
@@ -615,10 +615,10 @@ Package rerunfilecheck Info: File `traits.out' has not changed.
 (rerunfilecheck)             Checksum: 97A6C28F69D6850A4BD02F5367166535;9828.
  ) 
 Here is how much of TeX's memory you used:
- 16112 strings out of 480247
- 241175 string characters out of 5896151
- 758476 words of memory out of 5000000
- 32445 multiletter control sequences out of 15000+600000
+ 16108 strings out of 480247
+ 241129 string characters out of 5896151
+ 757276 words of memory out of 5000000
+ 32443 multiletter control sequences out of 15000+600000
  510080 words of font info for 106 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  60i,16n,68p,7900b,3160s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -628,10 +628,10 @@ fonts/type1/public/bera/fvmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
 ublic/bera/fvmro8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/
 uplb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb><
 /usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on traits.pdf (57 pages, 271132 bytes).
+Output written on traits.pdf (57 pages, 271058 bytes).
 PDF statistics:
- 2113 PDF objects out of 2487 (max. 8388607)
- 2021 compressed objects within 21 object streams
- 1363 named destinations out of 1440 (max. 500000)
+ 2110 PDF objects out of 2487 (max. 8388607)
+ 2018 compressed objects within 21 object streams
+ 1361 named destinations out of 1440 (max. 500000)
  393 words of extra memory for PDF output out of 10000 (max. 10000000)
 

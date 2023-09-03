@@ -16,7 +16,7 @@ pub mod interfaces {
 pub mod simple_library {
 
     use num::{zero,Num};    
-    use crate::interfaces::{ISum};
+    use crate::interfaces::ISum;
 
     // ..............
     // SimpleSum ADT
@@ -39,8 +39,8 @@ pub mod simple_library {
 
 pub mod pairwise_library {
 
-    use num::{Num};
-    use crate::interfaces::{ISum};
+    use num::Num;
+    use crate::interfaces::ISum;
     
     // ................
     // PairwiseSum ADT
@@ -60,13 +60,11 @@ pub mod pairwise_library {
     
     impl<T> ISum<T> for PairwiseSum<T> where T: Num {
         fn sum(&self, x: &[T]) -> T {
-            let n = 2;
-            let l = x.len();
-            if  l <= n {
+            if  x.len() <= 2 {
                 return self.other.sum(x);
             } else {
                 let m = x.len() / 2;
-                return self.sum(&x[0..m+1]) + self.sum(&x[m+1..l]);
+                return self.sum(&x[..m+1]) + self.sum(&x[m+1..]);
             }
         }
     }
@@ -75,7 +73,7 @@ pub mod pairwise_library {
 
 pub mod averager_library {
 
-    use num::{Num};
+    use num::Num;
     use crate::interfaces::{ISum,IAverager};
     
     // .............
@@ -109,10 +107,10 @@ pub mod averager_library {
 #[macro_use] extern crate text_io;
 
 fn main() {
-    use crate::interfaces::{IAverager};
-    use crate::simple_library::{SimpleSum};
-    use crate::pairwise_library::{PairwiseSum};
-    use crate::averager_library::{Averager};
+    use crate::interfaces::IAverager;
+    use crate::simple_library::SimpleSum;
+    use crate::pairwise_library::PairwiseSum;
+    use crate::averager_library::Averager;
 
     let avsi = Averager::new( Box::new( SimpleSum{} ));
     let avsf = Averager::new( Box::new( SimpleSum{} ));
