@@ -880,11 +880,11 @@ type-bound procedures, named \code{add} and \code{sub}:
       end subroutine sub
    end interface
 \end{lstlisting}
-Since this is a simple addition to Fortran, that merely aims to
-further extend the use cases of abstract interfaces in the language
-(which presently serve as bounds on the signatures of procedure
-pointers, and \code{deferred}, i.e. abstract, methods), it is fully
-backwards compatible.
+Since named abstract interfaces are merely a simple addition to
+Fortran, that aims to extend the present use cases of abstract
+interfaces in the language (which presently serve as bounds on the
+signatures of procedure pointers, and \code{deferred}, i.e. abstract,
+methods), this new feature is fully backwards compatible.
 
 \subsection{Variable declarations}
 
@@ -907,19 +907,19 @@ named abstract interfaces, like in the following two examples:
 \end{lstlisting}
 The semantics here are that whenever a named abstract interface
 appears within the \code{class} specifier of an object's declaration,
-then all the \code{public} methods of that object, whose signatures
-are prescribed by an adopted interface like \code{IAddition} here,
-will make use of late binding. That is, their calls will be resolved
-by the run-time system of the language (e.g. through a virtual method
-table). In accordance with how objects that make use of run-time
-polymorphism through subclassing (i.e. implementation inheritance) are
-declared in the present Fortran standard, also ``trait objects'' (like
-\code{adder} or \code{adderptr} in the example above) must either be
-declared using the \code{allocatable}, or the \code{pointer}
-attribute, or they must be arguments to a procedure (as in the example
-of Sect.~\ref{sect:interface_defs}). The proposed additions are
-therefore backwards compatible with the functionality that is already
-available in the present language.
+then all the \code{public} methods of that object whose signatures
+are prescribed by the adopted interface (like \code{IAddition} in the
+present example), will make use of late binding. That is, their calls
+will be resolved by the run-time system of the language (e.g. through
+a virtual method table). In accordance with how objects that make use
+of run-time polymorphism through subclassing (i.e. implementation
+inheritance) are declared in the present Fortran standard, also
+``trait objects'' (like \code{adder} or \code{adderptr} in the example
+above) must either be declared using the \code{allocatable}, or the
+\code{pointer} attribute, or they must be arguments to a procedure (as
+in the example of Sect.~\ref{sect:interface_defs}). The proposed
+additions are therefore backwards compatible with the functionality
+that is already available in the present language.
 
 \subsubsection{\code{Class} declaration specifier: constraints}
 \label{sect:class_specifier_constraints}
@@ -929,7 +929,7 @@ intrinsic types, and since the aforementioned semantics of this
 specifier imply late binding of methods (which is incompatible with
 intrinsic types), a compiler will need to ensure that the \code{class}
 declaration specifier is not used in conjunction with interfaces that
-are intended for use as generics constraints and therefore admit
+are intended for use as generics constraints, and reduce to a set of
 language intrinsic types, i.e. interfaces that are formulated in terms
 of type sets, as they are discussed in
 Sect.~\ref{sect:type_sets}. These include the empty interface,
@@ -956,9 +956,9 @@ settings that require conformance to either the \code{IAddition}, or
 \subsection{Short-hand notation for combination of abstract interfaces}
 
 There are often cases where the combined functionality of two (or more)
-interfaces is required but where one would not like to go through the
-labor to explicitly set up a separate derived interface, like
-\code{IBasicMath} above. This can be useful in variable
+interfaces is required, but where one would not like to go through the
+labor of explicitly setting up a separate derived interface, like
+\code{IBasicMath} from above. This can be useful in variable
 declarations. In such cases, it should be possible to specify the
 following
 \begin{lstlisting}[language=LFortran,style=boxed]
@@ -977,16 +977,18 @@ follows:
 The language must make it possible not only for named abstract
 interfaces to conform to other named abstract interfaces, but also for
 \emph{other types} to do the same, preferably regardless of whether
-such types are user-defined or intrinsic to the language.
+such types are user-defined, or intrinsic to the language.
 
 
 \subsection{\code{Implements} specifier for derived type definitions}
 
 User-defined (i.e. derived) types can be made to conform to an
 interface by introducing an \code{implements} specifier for derived
-type definitions. In the following example the derived type
+type definitions. In the following example, the derived type
 \code{BasicMath} implements (i.e. conforms to, or adopts) the
-interface \code{IBasicMath} that was defined above
+interface \code{IBasicMath} that was defined above, by providing
+implementations of all the method signatures that are contained in
+that interface:
 \begin{lstlisting}[language=LFortran,style=boxed]
 module basic
    ...
@@ -1015,8 +1017,7 @@ contains
       
 end module basic      
 \end{lstlisting}
-by providing implementations of all the method signatures that are
-contained in that interface. Notice, how \code{BasicMath}, by virtue
+Notice, how \code{BasicMath}, by virtue
 of being an implementer of \code{IBasicMath}, is now also an
 implementer of \code{IAddition}, and \code{ISubtraction}. Hence,
 \code{BasicMath} can be used in client code that requires conformance
@@ -1029,8 +1030,8 @@ interfaces. For instance, if one wouldn't have defined the interface
 \code{IBasicMath} from above, and would nevertheless need to use
 objects of type \code{BasicMath} in settings that require conformance
 to either the \code{IAddition}, or \code{ISubtraction} interfaces,
-then the language must allow one to define type \code{BasicMath} as
-follows (skipping, for brevity, the implementation of the actual
+then the language must allow one to define the \code{BasicMath} type
+as follows (skipping, for brevity, the implementation of the actual
 methods, that would be done exactly as in the previous example):
 \begin{lstlisting}[language=LFortran,style=boxed]
    ...
@@ -1042,11 +1043,11 @@ methods, that would be done exactly as in the previous example):
    ...
 \end{lstlisting}
 
-In case the ``implementing'' type is \code{abstract}, it is allowed to
-provide an only partial implementation of the interface(s) that it
-adopts. However, any non-abstract type that is derived from this
-abstract type through implementation inheritance (subclassing) must
-then provide a full implementation.
+In case the ``implementing'' type is \code{abstract}, it must be
+allowed to provide an only partial implementation of the interface(s)
+that it adopts. However, any non-abstract type that is derived from
+this abstract type through implementation inheritance (subclassing)
+must then provide a full implementation.
 
 
 \subsection{\code{Implements} statement}
@@ -1135,10 +1136,10 @@ of the required functionality, by acknowledging this using an
 
 \end{lstlisting}
 
-We could have also skipped the latter two code examples, to instead
-adopt the interfaces and provide the method implementations
-simultaneously, splitting the \code{implements} statements into two, to
-conform to one interface at a time, like so:
+Alternatively, we could have skipped the latter two code examples, to
+instead adopt the interfaces and provide the method implementations
+simultaneously, splitting, for instance, the \code{implements}
+statements into two, to conform to one interface at a time, like so:
 \begin{lstlisting}[language=LFortran,style=boxed]
    ...
    use basic, only: BasicMath
@@ -1150,12 +1151,14 @@ conform to one interface at a time, like so:
    implements IDivision :: BasicMath
       procedure, public, pass(self) :: div
    end implements BasicMath
+
+contains   
    ...
 \end{lstlisting}
 The result would have been the same. Such splitting of
 \code{implements} statements can be useful to improve readability, if
 different interfaces contain multiple procedure signatures, that would
-all have to be implemented. These two statements (together with the
+all need to be implemented. These two statements (together with the
 required implementations), could then even be distributed among
 different modules and files. Notice, also, how parentheses around
 interface lists in \code{implements} statements are optional, but not
@@ -1215,7 +1218,7 @@ Abstract interfaces should be allowed to contain signatures of generic
 procedures, as in Swift. The approach taken in Go and Rust to
 parameterize abstract interfaces themselves, appears not as attractive
 from a user's perspective. The following code shows, as an example, an
-abstract interface named \code{ISum} that contains the signature
+abstract interface called \code{ISum} that contains the signature
 intended for a generic type-bound procedure, named \code{sum}:
 \begin{lstlisting}[language=LFortran,style=boxed]
    abstract interface :: ISum
@@ -1262,7 +1265,7 @@ The following example shows the simplest form of such a type set, by
 defining an interface \code{INumeric}, for use as a generics
 constraint in the example of Sect.~\ref{sect:generic_interfaces}, in
 order to admit for the type parameter \code{T}, that was given there,
-only the (32 bits wide) standard \code{integer} type:
+only the (32 bits wide) default \code{integer} type:
 \begin{lstlisting}[language=LFortran,style=boxed]
    abstract interface :: INumeric
       integer
@@ -1278,20 +1281,20 @@ such a union of types is demonstrated in the following example
    end interface
 \end{lstlisting}
 that redefines interface \code{INumeric} such as to admit either the
-standard \code{integer} or the \code{real(real64)} type as a generics
-constraint.
+default 32 bit \code{integer}, or the 64 bit \code{real} type as a
+generics constraint.
 
 The semantics of such a type set construct is that it implicitly
 defines a \emph{set of function signatures}, namely the signatures of
 the intersecting (common) set of all the operations/intrinsic
-functions that work with all the member types of the type set. This can
-also be restated, by saying that a type \code{T} \emph{implements} an
-interface consisting of such a type set, if (and only if) it is a
-member of this set. The \code{complex} type, for instance, is not a
-member of interface \code{INumeric}'s type set (as it is given in
-this section), because it does not appear within its
-definition. Hence, \code{complex} also does \emph{not} implement the
-\code{INumeric} interface. In particular, the \code{complex} type does
+functions that work with all the member types of the type set. This
+can also be restated, by saying that a type \code{T} \emph{implements}
+an interface consisting of such a type set, if (and only if) it is a
+member of this set. For instance, Fortran's various \code{complex}
+types are not members of interface \code{INumeric}'s type set (as it
+is given in this section), because they do not appear within its
+definition. Hence, none of the \code{complex} types implements the
+\code{INumeric} interface. In particular, the \code{complex} types do
 not support, i.e. ``implement'', the relational operators \code{<} and
 \code{>} that are required for conformance to this interface, given
 that these operators are implemented by the \code{integer} and
@@ -1362,8 +1365,8 @@ Sect.~\ref{sect:generic_interfaces}, provides such an example:
 The notation within the generic type parameter list in curly braces
 defines a type set interface implicitly, to be used as a type
 constraint for type \code{T}. In this particular case, to admit only
-the default \code{integer}, or \code{real(real64)} types, for
-\code{T}, as discussed above.
+the 32 bit \code{integer}, or 64 bit \code{real} type, for \code{T},
+as discussed above.
 
 \subsubsection{Predefined constraints}
 
@@ -1412,21 +1415,21 @@ Interfaces that are formulated in terms of type sets are presently
 compiler must ensure that they are not used for any other purpose. In
 particular, they are not intended to be implemented by derived
 (i.e. user-defined) types\footnote{One of the problems here is that
-any new intrinsic function that would have to be added to the language
+any new intrinsic function that would be added to the language
 for some intrinsic type, would change the set of methods of all the
 type sets of which this type is a member. This would break any
 user-defined types that would implement interfaces which are based on
 these type sets.}, and they cannot be used in variable declarations
 that involve the \code{class} specifier
-(Sect.~\ref{sect:class_specifier_constraints}).
+(see Sect.~\ref{sect:class_specifier_constraints}).
 
-In a future language revision such interfaces could, however, be
+In a future language revision, such interfaces could, however, be
 admitted for use with the \code{type} declaration specifier, in order
 to enable compile-time polymorphism through union (also called sum)
-types \cite{Taylor_21,Pierce_91} (which would take the present design
-to its logical conclusion, offer an alternative to generic parameters
-for certain use cases, and fill a present gap in the later to be
-discussed Table~\ref{tab:dispatch}).
+types \cite{Taylor_21,Pierce_91}. This would take the present design
+to its logical conclusion, offer an alternative to generic type
+parameters for certain use cases, and fill a present gap in the later
+to be discussed Table~\ref{tab:dispatch}.
 
 
 \section{Built-in facility for conversion to generic types}
@@ -1434,9 +1437,9 @@ discussed Table~\ref{tab:dispatch}).
 A language like Fortran, that is intended for numeric use, where
 conversions between different numeric types are required rather
 frequently, must allow conversions to generic types to be done as
-easily as it is the case in the Go language. By means that are built
-into the language, without having to rely exclusively on external
-library functionality.
+easily as it is the case in the Go language. That is, by means that
+are built into the language, without having to rely exclusively on
+external library functionality.
 
 For instance, generic routines will often have to initialize the
 result of reduction operations, as it is, e.g., the case in the test
@@ -1484,8 +1487,8 @@ input array argument would look as follows:
 Generic subroutines can be coded completely analogously.
 
 To actually use the \code{sum} generic function, one simply needs to
-call it with arguments of (different) ``numeric'' types (in its
-regular arguments list), e.g. as in the two following examples:
+call it with arguments of (different) ``numeric'' types in its
+regular arguments list, e.g. as in the following two examples:
 \begin{lstlisting}[language=LFortran,style=boxed]
   integer_total = sum([1,2,3,4,5])
   float_total   = sum([1.d0,2.d0,3.d0,4.d0,5.d0])
@@ -1600,12 +1603,13 @@ contains
 
 end module pairwise_library
 \end{lstlisting}
-Type \code{PairwiseSum} depends on a generic type parameter \code{U},
-that is used within \code{PairwiseSum} itself in order to declare a
-field variable of \code{type(U)}, which is named \code{other}. As is
-indicated by the type constraint on \code{U}, object \code{other}
-conforms to the \code{ISum} interface itself, and therefore contains
-its own implementation of the \code{sum} procedure.
+Notice, how type \code{PairwiseSum} depends on a generic type
+parameter, \code{U}, that is used within type \code{PairwiseSum}
+itself in order to declare a field variable of \code{type(U)}, which
+is named \code{other}. As is indicated by the type constraint on
+\code{U}, object \code{other} conforms to the \code{ISum} interface
+itself, and therefore contains its own implementation of the
+\code{sum} procedure.
 
 The above example furthermore demonstrates, how a derived type's
 generic parameters are brought into the scope of its type-bound
@@ -1655,22 +1659,25 @@ method would be employed using automatic type inference:
 If a derived type is parameterized over a generic type, as in the
 example of Sect.~\ref{sect:generic_derived_types}, then its structure
 constructor must also be assumed to be parameterized over the same
-generic type. Hence, calls of structure constructors that are
+generic type. Hence, calls of structure constructors, that are
 instantiated with specific argument types substituting the generic
-type parameters of their derived types, like in the following
-(optional, because superfluous) initialization of the object
-\code{pairwise} that was given above,
+type parameters of their derived types, must be legal. The following
+(optional, because superfluous, as demonstrated above) initialization
+of object \code{pairwise} by the structure constructor of type
+\code{PairwiseSum} provides such an example:
 \begin{lstlisting}[language=LFortran,style=boxed]
   type(PairwiseSum{SimpleSum}) :: pairwise
 
   pairwise = PairwiseSum{SimpleSum}()
-  ...
+
+  integer_total = pairwise%sum([1,2,3,4,5])
+  float_total   = pairwise%sum([1.d0,2.d0,3.d0,4.d0,5.d0])
 \end{lstlisting}
-must be legal. As in Sect.~\ref{sect:generic_methods},
-\code{SimpleSum} would be a derived type that implements the
-\code{ISum} interface, but (in contrast to the \code{PairwiseSum}
-type, as implemented in Sect.~\ref{sect:generic_derived_types}) is not
-parameterized by any generic type parameter itself.
+As in Sect.~\ref{sect:generic_methods}, \code{SimpleSum} is a
+derived type that implements the \code{ISum} interface, but (in
+contrast to the \code{PairwiseSum} type, as implemented in
+Sect.~\ref{sect:generic_derived_types}) is not parameterized by any
+generic type parameter itself.
 
 We also propose to make a further, small, but important addition to
 structure constructors: namely to introduce the notion that a
@@ -1821,9 +1828,9 @@ Sect.~\ref{sect:generic_procedures}).
 
 \section{Encapsulated versions}
 
-The present section will demonstrate that using the new generics
-features seamlessly and easily in a modern-day OO programming setting
-is one of the great strengths of the present design. The equal
+The present section will demonstrate that being able to use the new
+generics features seamlessly and easily within a modern-day OO programming
+setting is one of the great strengths of the present design. The equal
 importance that has been placed in this document on both proper
 compile-time and run-time polymorphic (i.e. modern-day OO)
 capabilities will allow for uniform dependency management of both
@@ -1991,7 +1998,8 @@ out from the main program can remain the same, i.e.:
 \end{lstlisting}
 Alternatively, the two calls of \code{Averager}'s structure
 constructor can be manually given generic type arguments to confirm
-the types of the regular arguments (deleting here their keywords):
+the types of the regular arguments (deleting here the latter's
+keywords):
 \begin{lstlisting}[language=LFortran,style=boxed]
   avs = Averager{SimpleSum}(SimpleSum())
   avp = Averager{PaiwiseSum{SimpleSum}}(PairwiseSum(SimpleSum()))
