@@ -882,18 +882,18 @@ type-bound procedures, named \code{add} and \code{sub}:
 \end{lstlisting}
 Since named abstract interfaces are merely a simple addition to
 Fortran, that aims to extend the present use cases of abstract
-interfaces in the language (which presently serve as bounds on the
+interfaces in the language (which currently serve as bounds on the
 signatures of procedure pointers, and \code{deferred}, i.e. abstract,
 methods), this new feature is fully backwards compatible.
 
 \subsection{Variable declarations}
 
 Named abstract interfaces/traits are types in their own right. Their
-purpose is to allow the programmer to declare variables in terms of
-them. Either directly, i.e. as objects of such interfaces in run-time
-polymorphism, or indirectly as constraints on generic type parameters
-in compile-time polymorphism (see Sect.~\ref{sect:generic_parameters}
-for examples of the latter).
+purpose is to allow the programmer to declare polymorphic variables in
+terms of them. Either directly, i.e. as objects of such interfaces in
+run-time polymorphism, or indirectly as constraints on generic type
+parameters in compile-time polymorphism (see
+Sect.~\ref{sect:generic_parameters} for examples of the latter).
 
 \subsubsection{\code{Class} declaration specifier: enhancements}
 
