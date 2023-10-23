@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  25 SEP 2023 15:09
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  23 OCT 2023 16:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -520,13 +520,13 @@ LaTeX Font Info:    Font shape `T1/fvm/b/n' will be
  [7]) [8] (./Code/Go/functional.go [9]) [10]
 Chapter 3.
 
-Overfull \hbox (5.81958pt too wide) in paragraph at lines 439--448
+Overfull \hbox (5.81958pt too wide) in paragraph at lines 438--447
 \T1/ppl/m/n/10.95 Go has sup-ported run-time poly-mor-phism through (poly-mor-p
 hic) ``in-ter-faces'' (and hence modern-
  []
 
 
-Overfull \hbox (0.76628pt too wide) in paragraph at lines 464--470
+Overfull \hbox (0.76628pt too wide) in paragraph at lines 465--471
 []\T1/ppl/m/n/10.95 Since ver-sion 1.18, Go also sup-ports compile-time poly-mo
 r-phism through gener-ics. Go's gener-
  []
@@ -534,7 +534,7 @@ r-phism through gener-ics. Go's gener-
 [11
 
 ] (./Code/Go/mixed.go [12] [13]) [14]
-Overfull \hbox (8.59001pt too wide) in paragraph at lines 597--602
+Overfull \hbox (8.59001pt too wide) in paragraph at lines 598--603
 []\T1/ppl/m/n/10.95 To de-clare run-time poly-mor-phic vari-ables one has to pu
 t so-called ``trait ob-jects'' into ``Boxes'',
  []
@@ -544,7 +544,7 @@ LaTeX Font Info:    Font shape `T1/fvm/m/it' in size <10.95> not available
 (Font)              Font shape `T1/fvm/m/sl' tried instead on input line 107.
 LaTeX Font Info:    Font shape `T1/fvm/m/sl' will be
 (Font)              scaled to size 8.97906pt on input line 107.
- [18])
+) [18]
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2020/03/24 1.8d listings language file
 )
@@ -569,15 +569,15 @@ File: lstlang1.sty 2020/03/24 1.8d listings language file
 
 ] [26]
 LaTeX Font Info:    Font shape `T1/fvm/b/n' will be
-(Font)              scaled to size 9.84009pt on input line 983.
+(Font)              scaled to size 9.84009pt on input line 986.
 
-Overfull \hbox (13.27109pt too wide) in paragraph at lines 985--992
+Overfull \hbox (13.27109pt too wide) in paragraph at lines 988--995
 \T1/ppl/m/n/10.95 User-defined (i.e. de-rived) types can be made to con-form to
  an in-ter-face by in-tro-duc-ing an \T1/fvm/m/n/10.95 implements
  []
 
 [27] [28]
-Overfull \hbox (12.94183pt too wide) in paragraph at lines 1139--1143
+Overfull \hbox (12.94183pt too wide) in paragraph at lines 1142--1146
 \T1/ppl/m/n/10.95 faces and pro-vide the method im-ple-men-ta-tions si-mul-ta-n
 e-ously, split-ting, for in-stance, the \T1/fvm/m/n/10.95 implements
  []
@@ -596,7 +596,7 @@ consecutive:
 [44]) (./Code/Fortran/mixed.f90 [45] [46] [47] [48])
 (./Code/Fortran/static1.f90 [49] [50] [51] [52])
 LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
-(Font)              scaled to size 7.38007pt on input line 1952.
+(Font)              scaled to size 7.38007pt on input line 1961.
  [53] (./traits.bbl [54]
 Underfull \hbox (badness 1552) in paragraph at lines 82--86
 []\T1/ppl/m/n/10.95 Wolfgang Weck and Clemens Szyper-ski.  Do We Need In-her-i-
@@ -609,15 +609,15 @@ tance?  [][]$\T1/fvm/m/n/10.95 https : / / www .
  been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2037 \end{abstract}
+l.2046 \end{abstract}
                       [1] (./traits.aux)
 Package rerunfilecheck Info: File `traits.out' has not changed.
 (rerunfilecheck)             Checksum: 97A6C28F69D6850A4BD02F5367166535;9828.
  ) 
 Here is how much of TeX's memory you used:
  16117 strings out of 480247
- 241263 string characters out of 5896151
- 757276 words of memory out of 5000000
+ 241267 string characters out of 5896151
+ 758908 words of memory out of 5000000
  32443 multiletter control sequences out of 15000+600000
  510080 words of font info for 106 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
@@ -628,7 +628,7 @@ fonts/type1/public/bera/fvmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
 ublic/bera/fvmro8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/
 uplb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb><
 /usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on traits.pdf (57 pages, 272173 bytes).
+Output written on traits.pdf (57 pages, 272505 bytes).
 PDF statistics:
  2123 PDF objects out of 2487 (max. 8388607)
  2031 compressed objects within 21 object streams

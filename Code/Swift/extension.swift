@@ -1,7 +1,7 @@
-protocol IPrinter {
+protocol IPrintable {
     func out()
 }
-extension Float64: IPrinter {
+extension Float64: IPrintable {
     func out() {
         print("I am \(self)")
     }
