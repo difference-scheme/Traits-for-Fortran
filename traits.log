@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  23 OCT 2023 16:26
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  28 OCT 2023 16:47
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -544,7 +544,10 @@ LaTeX Font Info:    Font shape `T1/fvm/m/it' in size <10.95> not available
 (Font)              Font shape `T1/fvm/m/sl' tried instead on input line 107.
 LaTeX Font Info:    Font shape `T1/fvm/m/sl' will be
 (Font)              scaled to size 8.97906pt on input line 107.
-) [18]
+)
+LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
+(Font)              scaled to size 7.38007pt on input line 624.
+ [18]
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2020/03/24 1.8d listings language file
 )
@@ -569,15 +572,15 @@ File: lstlang1.sty 2020/03/24 1.8d listings language file
 
 ] [26]
 LaTeX Font Info:    Font shape `T1/fvm/b/n' will be
-(Font)              scaled to size 9.84009pt on input line 986.
+(Font)              scaled to size 9.84009pt on input line 997.
 
-Overfull \hbox (13.27109pt too wide) in paragraph at lines 988--995
+Overfull \hbox (13.27109pt too wide) in paragraph at lines 999--1006
 \T1/ppl/m/n/10.95 User-defined (i.e. de-rived) types can be made to con-form to
  an in-ter-face by in-tro-duc-ing an \T1/fvm/m/n/10.95 implements
  []
 
 [27] [28]
-Overfull \hbox (12.94183pt too wide) in paragraph at lines 1142--1146
+Overfull \hbox (12.94183pt too wide) in paragraph at lines 1153--1157
 \T1/ppl/m/n/10.95 faces and pro-vide the method im-ple-men-ta-tions si-mul-ta-n
 e-ously, split-ting, for in-stance, the \T1/fvm/m/n/10.95 implements
  []
@@ -594,10 +597,7 @@ Chapter 6.
 ] [42]) [43] (./Code/Fortran/functional2.f90
 consecutive:
 [44]) (./Code/Fortran/mixed.f90 [45] [46] [47] [48])
-(./Code/Fortran/static1.f90 [49] [50] [51] [52])
-LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
-(Font)              scaled to size 7.38007pt on input line 1961.
- [53] (./traits.bbl [54]
+(./Code/Fortran/static1.f90 [49] [50] [51] [52]) [53] (./traits.bbl [54]
 Underfull \hbox (badness 1552) in paragraph at lines 82--86
 []\T1/ppl/m/n/10.95 Wolfgang Weck and Clemens Szyper-ski.  Do We Need In-her-i-
 tance?  [][]$\T1/fvm/m/n/10.95 https : / / www .
@@ -609,16 +609,16 @@ tance?  [][]$\T1/fvm/m/n/10.95 https : / / www .
  been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2046 \end{abstract}
+l.2068 \end{abstract}
                       [1] (./traits.aux)
 Package rerunfilecheck Info: File `traits.out' has not changed.
 (rerunfilecheck)             Checksum: 97A6C28F69D6850A4BD02F5367166535;9828.
  ) 
 Here is how much of TeX's memory you used:
- 16117 strings out of 480247
- 241267 string characters out of 5896151
- 758908 words of memory out of 5000000
- 32443 multiletter control sequences out of 15000+600000
+ 16121 strings out of 480247
+ 241363 string characters out of 5896151
+ 760029 words of memory out of 5000000
+ 32446 multiletter control sequences out of 15000+600000
  510080 words of font info for 106 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  60i,16n,68p,7900b,3160s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -628,10 +628,10 @@ fonts/type1/public/bera/fvmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
 ublic/bera/fvmro8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/
 uplb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb><
 /usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on traits.pdf (57 pages, 272505 bytes).
+Output written on traits.pdf (57 pages, 273907 bytes).
 PDF statistics:
- 2123 PDF objects out of 2487 (max. 8388607)
- 2031 compressed objects within 21 object streams
- 1370 named destinations out of 1440 (max. 500000)
+ 2129 PDF objects out of 2487 (max. 8388607)
+ 2036 compressed objects within 21 object streams
+ 1371 named destinations out of 1440 (max. 500000)
  393 words of extra memory for PDF output out of 10000 (max. 10000000)
 

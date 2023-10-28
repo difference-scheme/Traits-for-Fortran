@@ -104,7 +104,7 @@ from his blog \cite{Martin_14}:
 Notice the absence of the words ``code reuse'' in these statements.
 The purpose of polymorphism, according to Martin, is the ``inversion''
 (i.e. replacement, or management) of source code dependencies by
-(means of) particular abstractions, i.e. polymorphic interfaces (or
+means of particular abstractions, i.e. polymorphic interfaces (or
 protocols/traits, as they are also known today). The possibility to
 reuse code is then merely the logical consequence of such proper
 dependency management.
@@ -612,7 +612,16 @@ Rust doesn't allow the programmer to declare variables that aren't
 initialized upon declaration, and because of the aforementioned
 necessity to move the required type conversions out of method
 \code{average}, and into the calls of this method. Otherwise the codes
-are pretty much identical.
+are pretty much identical\footnote{Notice that the present Rust
+version makes universal use of dynamic method dispatch via trait
+objects, in order to correspond most closely to all the other
+implementations that we provide in both the present chapter, and in
+Sect.~\ref{sect:Fortran_dynamic_dispatch}. An alternative, more
+idiomatic, Rust version that is equivalent to the Fortran version
+which we give in Sect.~\ref{sect:Fortran_static_dispatch}, and that
+effects static dispatch of the various \code{sum} methods through the
+use of generics, can be found in the \code{Code} subdirectory that is
+accompanying this document.}.
 
 
 \section{Swift}
@@ -636,15 +645,15 @@ in Go and Rust, respectively.
 Given Swift's backwards compatible design, implementation of a
 protocol (i.e. interface inheritance) is usually done as in
 ``classical'' OO languages, i.e. within a structure's or a class's
-definition. A colon (\code{:}) followed by one or more
-interface names must be supplied for this purpose after the
-structure's or class's own name. However, a very powerful facility for
-types to implement protocols retroactively is also provided, through
-so-called ``\code{extension}s'', that work even if the types' source
-code is inaccessible (because one is, e.g., working with a library in
-binary form). This same facility also allows the implementation of
-protocols for language-intrinsic types. For instance, the following
-little program prints out ``\code{I am 4.9}'':
+definition. A colon (\code{:}) followed by one or more interface names
+must be supplied for this purpose after the structure's or class's own
+name. However, a very powerful facility for types to implement
+protocols retroactively is also provided, through so-called
+``\code{extension}s'', that work even if the types' source code is
+inaccessible (because one is, e.g., working with a library in binary
+form). This same facility also allows for protocols to be implemented
+by language-intrinsic types. For instance, the following little
+program prints out ``\code{I am 4.9}'':
 \lstinputlisting[language=Swift,style=boxed]{Code/Swift/extension.swift}
 
 Swift generics support ``strong concepts'', and are thus fully
@@ -698,11 +707,12 @@ Swift. See the following remarks in order to understand this code:
 \lstinputlisting[language=Swift,style=boxed,label={lst:OOSwift},caption={Encapsulated Swift version of the array averaging example.}]{Code/Swift/mixed.swift}
 
 Even a casual glance at the Swift version will show that the Swift
-code is the easiest to read and understand among all the encapsulated
-implementations. This is largely the result of Swift supporting
-generic methods, and hence not requiring the programmer to
-parameterize and instantiate any generic interfaces (protocols), in
-contrast to both Go and Rust. The consequences are
+code is the easiest to read and understand among the encapsulated
+implementations that were presented in this chapter. This is largely
+the result of Swift supporting generic methods, and hence not
+requiring the programmer to parameterize and instantiate any generic
+interfaces (protocols), in contrast to both Go and Rust. The
+consequences are
 \begin{itemize}
 \item
 that method genericity for an ADT's objects can be expressed using
@@ -735,7 +745,7 @@ such as \code{av}, especially if such client code needs to work on
 \code{Float64}. Contrast this with Go's and Rust's model, where manual
 instantiation of a different version of \code{IAverager} is required
 for \emph{every} different generic type parameter that the user wishes
-to employ. Notice also, how there's \emph{not a single manual
+to employ. Notice, also, how there's \emph{not a single manual
 instantiation} of generics code required in the Swift example! We
 consider these significant advantages of the generics approach that is
 taken in Swift vs. that of Go and Rust.
@@ -799,9 +809,10 @@ routines. A necessary capability for numerical work that is, for
 instance, built into Go. The points we like most about the language
 are its idea to decouple trait implementations from a \code{struct}'s
 definition through explicit \code{impl} blocks, and the complete
-control over the use of dynamic vs. static method dispatch that Rust
-affords the programmer. These are particular features of Rust that, in
-our opinion, Fortran should borrow in some form.
+control over the use of dynamic vs. static method dispatch (via
+trait objects and generics, respectively) that Rust affords the
+programmer. These are particular features of Rust that, in our
+opinion, Fortran should borrow in some form.
 
 \subsection{Swift}
 
@@ -1209,8 +1220,8 @@ also known as ``The Diamond Problem'').
 The new subtyping features that were discussed in the previous chapter
 are required in order to uniformly express and support both run-time
 and compile-time polymorphism in Fortran. We will now proceed with
-discussing some enhancements that are required in order to further
-support compile-time polymorphism, i.e. generics.
+discussing enhancements that are required in order to further support
+compile-time polymorphism, i.e. generics.
 
 \section{Enhancements to Interfaces}
 
@@ -1414,6 +1425,7 @@ end module user_code
 \end{lstlisting}
 
 \subsubsection{Present restrictions and potential future extensions}
+\label{sect:future_extensions}
 
 Interfaces that are formulated in terms of type sets are presently
 \emph{exclusively} intended for use as generics constraints. Hence, a
@@ -1720,7 +1732,8 @@ own derived type was parameterized. This problem can, in principle, be
 solved by making use of separate generic type parameters in both the
 derived type \emph{and} its method, and then enforcing the consistency
 of these parameters, by passing the same type arguments to them using
-manual instantiation. A better solution, though, is to allow
+manual instantiation. A better solution, though, that does not require
+any manual instantiation of generics, can be obtained by allowing
 ``associated types'' to be declared within abstract interfaces, as it
 is possible in both the Rust and Swift languages.
 
@@ -1801,8 +1814,8 @@ should help to better understand this code:
   Any required conversions to generic types are done using explicit
   casts, as in Go.
 \item
-  All the required instantiations of generic procedures are done
-  automatically by the compiler, based on type inference of the
+  \emph{All} the required instantiations of generic procedures are
+  done automatically by the compiler, based on type inference of the
   actual arguments that are passed to these procedures.
 \end{itemize}
 
@@ -1847,6 +1860,7 @@ language intrinsic and user-defined types in Fortran, that is on par
 with the most modern languages.
 
 \subsection{Dynamic method dispatch}
+\label{sect:Fortran_dynamic_dispatch}
 
 Listing~\ref{lst:OOFortran} shows our encapsulated Fortran code
 version of the test problem, that corresponds closest to the code
@@ -1884,32 +1898,35 @@ other languages.
 
 The most important point to notice in Listing~\ref{lst:OOFortran} is
 how the main program is the only part of the code that (necessarily)
-depends on implementations. The \emph{entire} rest of the code depends
-merely on (user-defined) abstract interfaces (see the \code{use}
-statements in the above modules). The features described in this
-document have enabled us to avoid rigidity in the program, by both
-decoupling it and making it operate on multiple intrinsic data types,
-thus allowing for a maximum of code reuse. Notice, also, that (as in
-the functional Fortran implementation of
-Listing~\ref{lst:Func1Fortran}) not a single manual instantiation of
-generics is necessary anywhere in the code. The Fortran version
-described here is therefore as clean as the Go implementation of
-Listing~\ref{lst:OOGo} with respect to dependency management, and it
-is as easy to use, and to read and understand, as the Swift
-implementation of Listing~\ref{lst:OOSwift}.
+depends on implementations. The \emph{entire} rest of the code is
+decoupled, i.e. it depends merely on abstract interfaces (see the
+\code{use} statements in the above modules). The features described in
+this document have enabled us to avoid rigidity in the program, by
+both decoupling it and making it operate on multiple intrinsic data
+types, thus allowing for a maximum of code reuse. Notice, that all the
+abstract interfaces that are required for this purpose are defined by
+the user himself (without any need to depend on external libraries),
+and that not a single manual instantiation of generics is necessary
+anywhere in the code (as it was already the case in the functional
+implementation of Listing~\ref{lst:Func1Fortran}). The encapsulated
+Fortran version described here is therefore as clean as the Go
+implementation of Listing~\ref{lst:OOGo} with respect to dependency
+management, and it is as easy to use, and to read and understand, as
+the Swift implementation of Listing~\ref{lst:OOSwift}.
 
 \subsection{Static method dispatch}
+\label{sect:Fortran_static_dispatch}
 
 One of the greatest benefits of the present design is that, through
 the use of generics, polymorphic methods in OO programming can be made
 to use static dispatch\footnote{This can be achieved in a compiler by
 implementing generic polymorphism through the (compile-time) technique
-of monomorphization, that is based on static method dispatch. In
-contrast to traditional (run-time) OO polymorphism, that is based on
+of monomorphization, that relies on static method dispatch. In
+contrast to traditional (run-time) OO polymorphism, that relies on
 virtual method tables and dynamic method dispatch.}. This will enable
 inlining of polymorphic methods by the compiler, to potentially
 improve code performance. Listing~\ref{lst:staticFortran} gives a
-\emph{minimally} changed version of the encapsulated Fortran code of
+\emph{minimally} changed version of the OO Fortran code of
 Listing~\ref{lst:OOFortran}, to effect static dispatch of the
 different \code{sum} methods.
 
@@ -1936,9 +1953,10 @@ actual object instances that contain the methods must be initialized
 and their memory allocated at compile-time (although in this
 particular case this is possible, as demonstrated in the next section,
 given that these objects do not contain any other \code{allocatable}
-data fields, like arrays). Notice also that none of the source code
-dependencies in the \code{use} statements have changed, i.e. the code
-is still fully decoupled, despite making now use of static dispatch.
+data fields, like arrays). Notice, also, that none of the source code
+dependencies in the \code{use} statements have changed. That is, the
+code is \emph{still} fully decoupled, despite making now use of static
+dispatch!
 
 \lstinputlisting[language=LFortran,style=boxed,label={lst:staticFortran},caption={Demonstrates static method dispatch for the \code{sum} methods.}]{Code/Fortran/static1.f90}
 
@@ -1952,11 +1970,15 @@ is still fully decoupled, despite making now use of static dispatch.
   \code{class(DerivedType)} &  if \code{DerivedType} is \code{extend}ed &
   if \code{DerivedType} is un\code{extend}ed\tablefootnote{Or the method is declared as \code{non\_overridable}.} \\
   \code{type(DerivedType)}  &  never              & always \\
-  \code{type(Interface)}  &  presently undefined  & presently undefined \\
+  \code{type(Interface)}  &  ---  & --- \\
   \bottomrule
 \end{tabular}
 \caption{Correspondence between object declarations and method
-  dispatch strategies.}
+  dispatch strategies that would be employed by an optimizing Fortran
+  compiler according to the present document. A dash indicates that
+  the case in question is presently undefined, but could be used for a
+  future extension as discussed in
+  Sect.~\ref{sect:future_extensions}.}
 \label{tab:dispatch}
 \end{table}
 
