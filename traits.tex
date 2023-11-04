@@ -37,27 +37,27 @@
 
 \begin{document}
 
-\title{A trait system for the uniform expression of run-time
-       and compile-time polymorphism in Fortran}
+\title{\textbf{A trait system for the uniform expression of run-time
+       and compile-time polymorphism in Fortran}}
 
 \author{Konstantinos Kifonidis, Ondrej Certik, Derick Carnazzola}
 
 \maketitle
 
 \abstract{Based on conclusions drawn from a survey of modern
-  languages, a trait system for Fortran is developed and described
-  that is fully backwards compatible with the present Fortran
-  language, and allows for the uniform management of source code
-  dependencies on both user-defined and language-intrinsic types, via
-  run-time and compile-time polymorphism (i.e. ``object-oriented'' and
-  ``generic'' programming). The feature set described here is small
-  enough to facilitate a first prototype implementation in an open
-  source compiler, like LFortran, but at the same time comprehensive
-  enough to already endow Fortran with polymorphism capabilities that
-  largely equal those of modern programming languages like Swift,
-  Rust, or Go. The discussed new features are expected to transform
-  the way both Fortran applications and libraries will be written in
-  the future. Decoupled software plugin architectures with enormously
+  languages, a trait system for Fortran is developed that is fully
+  backwards compatible with the present Fortran language, and allows
+  for the uniform management of source code dependencies on both
+  user-defined and language-intrinsic types via run-time and
+  compile-time polymorphism, i.e. object-oriented and generic
+  programming. The feature set described here is small enough to
+  facilitate a first prototype implementation in an open source
+  compiler, like LFortran, but at the same time comprehensive enough
+  to already endow Fortran with polymorphism capabilities that largely
+  equal those of modern programming languages like Swift, Rust, or
+  Go. The discussed new features are expected to transform the way
+  both Fortran applications and libraries will be written in the
+  future. Decoupled software plugin architectures with enormously
   improved source code flexibility, reusability, maintainability, and
   reliability will become possible, without any need for run-time type
   inspections, and without any loss in computational performance.}
@@ -189,11 +189,10 @@ possibility to treat polymorphism, and hence the dependency management
 of both user-defined and language intrinsic types, uniformly in a
 programming language. As a consequence, it has become possible to use
 the potentially more efficient (but also less flexible) mechanism of
-compile-time polymorphism also for a number of tasks that have
-traditionally been reserved for run-time polymorphism (i.e. OO
-programming), and to mix and match the two polymorphism types inside a
-single application to better satisfy a user's needs for both
-flexibility and efficiency.
+compile-time polymorphism also for certain tasks that have traditionally
+been reserved for run-time polymorphism (i.e. OO programming), and to
+mix and match the two polymorphism types inside a single application
+to better satisfy a user's needs for both flexibility and efficiency.
 
 \section{Historical background}
 
@@ -204,14 +203,14 @@ implementation inheritance breaks encapsulation in OO languages, and
 therefore results in extremely tightly coupled, rigid, fragile, and
 non-reusable code. This led to an entire specialized literature on OO
 design patterns \cite{Gamma_et_al_94,Martin_03,Holub_04}, that aimed
-at avoiding or mitigating the effects of such rigidity, by replacing
-the use of implementation inheritance with the means to formulate
-run-time polymorphism that are discussed below. It also led to the
-apprehension that implementation inheritance (but \emph{not} run-time
-polymorphism) should be abandoned \cite{Weck_Szyperski}. In modern
-languages, implementation inheritance is either kept solely for
-backwards compatibility reasons (e.g. in the Swift and Carbon
-languages), or it is foregone altogether (e.g. in Rust, and Go).
+at avoiding such rigidity by replacing the use of implementation
+inheritance with the means to formulate run-time polymorphism that are
+discussed below. It also led to the apprehension that implementation
+inheritance (but \emph{not} run-time polymorphism) should be abandoned
+\cite{Weck_Szyperski}. In modern languages, implementation inheritance
+is either kept solely for backwards compatibility reasons (e.g. in the
+Swift and Carbon languages), or it is foregone altogether (e.g. in
+Rust, and Go).
 
 The first statically typed mainstream programming language that
 offered a proper separation of run-time polymorphism from
@@ -259,7 +258,7 @@ minor restrictions on user ownership of either the traits or the
 types).
 
 Rust's main idea was quickly absorbed by almost all other mainstream
-modern languages, most notably Go, Swift, and Carbon, with the
+modern languages, most notably Swift, Go, and Carbon, with the
 difference that these latter languages tend to leave the choice
 between static and dynamic procedure dispatch to the compiler, or
 language implementation, rather than the programmer. C++ is in the
@@ -272,7 +271,7 @@ viewed as a prerequisite in order to call a language design
 Fortran, that aim to provide the Fortran language with such modern
 capabilities.
 
-\chapter{Case Study: Calculating the average value of a numeric array}
+\chapter{Case study: Calculating the average value of a numeric array}
 
 To illustrate the advanced features and capabilities of some of the
 available modern programming languages with respect to polymorphism,
@@ -282,7 +281,7 @@ of numbers stored inside a one-dimensional array. In the remainder of
 this chapter we will first provide an account and some straightforward
 monomorphic (i.e. coupled) functional implementation of this test
 problem, followed by a functional implementation that makes use of
-both run-time and compile-time polymorphism to manage source code
+both run-time and compile-time polymorphism to manage rigid source code
 dependencies. In the survey of programming languages presented in
 Chapter~\ref{sect:survey}, we will then recode this test problem in an
 encapsulated fashion, to highlight how the source code dependencies in
@@ -320,9 +319,14 @@ averaging. The first makes use of a ``simple'' summation of all the
 array's elements, in ascending order of their array index. While the
 second sums in a ``pairwise'' manner, dividing the array in half to
 carry out the summations recursively, and switching to the ``simple''
-method once subdivision is no longer possible.
+method once subdivision is no longer possible. In both cases, the
+resulting sum is then divided by the array's number of elements, to
+obtain the desired average.
 
-As a result, this code has three levels of hard-wired (i.e. rigid)
+\lstinputlisting[language=Go,style=boxed,label={lst:funcGo},caption={Monomorphic functional version of the array averaging example in Go.}]{Code/Go/coupled.go}
+
+An inspection of Listing~\ref{lst:funcGo} will readily reveal that
+this code has three levels of hard-wired (i.e. rigid)
 dependencies. Namely,
 \begin{enumerate}
 \item
@@ -345,7 +349,6 @@ we are dealing with three levels of dependencies, three levels of
 polymorphism will accordingly be required to remove all these
 dependencies.
 
-\lstinputlisting[language=Go,style=boxed,label={lst:funcGo},caption={Monomorphic functional version of the array averaging example in Go.}]{Code/Go/coupled.go}
 
 \section{Polymorphic functional implementation}
 \label{sect:poly_functional}
@@ -376,13 +379,14 @@ Listing~\ref{lst:polyfuncGo}'s code:
 \item
   Generic type parameters have a constraint that follows their
   declared name. Go exclusively uses interfaces as such constraints
-  (see the interface \code{INumeric} in the present example).
+  (like the interface \code{INumeric} in the following code).
 \item
   Interfaces consist of either function signatures, or \emph{type
   sets}, like ``\code{int32 | float64}'' in the present example. The
   latter signify a set of function signatures, too, namely the
-  signatures of the intersecting set of all the operations/functions
-  for which the listed types provide implementations.
+  signatures of the intersecting set of all the operations and
+  intrinsic functions for which the listed types provide
+  implementations.
 \item
   The code makes use of type conversions to the generic type \code{T},
   where required. For instance, \code{T(0)} converts the constant
@@ -397,17 +401,24 @@ Listing~\ref{lst:polyfuncGo}'s code:
 
 \lstinputlisting[language=Go,style=boxed,label={lst:polyfuncGo},caption={Polymorphic functional version of the array averaging example in Go.}]{Code/Go/functional.go}
 
+Notice how, in order to instantiate the closures \code{avi} and
+\code{avf} (see the \code{switch} statement), manual instantiations of
+the \code{simple\_sum} and \code{pairwise\_sum} generic functions are
+required -- with the arguments \code{int32} or \code{float64} being
+substituted for the generic type parameter, \code{T}, of these
+functions.
+
 The motivation to code the example as in Listing~\ref{lst:polyfuncGo}
-is that once the two closures, \code{avi}, and \code{avf}, are properly
-instantiated (by means of the \code{switch} statement), they may be
-passed from the main program to any other client code that may need to
-make use of the particular averaging algorithm that was selected by
-the user. This latter client code would \emph{not} have to be littered
-with \code{switch} statements itself, and it would \emph{not} have to
-depend on any specific implementations. It would merely depend on the
-closures' interfaces. The same holds for the OO code versions that are
-discussed in the next chapter, with objects replacing the closures
-(both being merely slightly different realizations of the same idea).
+is that once the two closures, \code{avi} and \code{avf}, have been
+properly instantiated, they may then be passed from the main program
+to any other client code that may need to make use of the particular
+averaging algorithm that was selected by the user. This latter client
+code would \emph{not} have to be littered with \code{switch}
+statements itself, and it would \emph{not} have to depend on any
+specific implementations. It would merely depend on the closures'
+interfaces. The same holds for the OO code versions that are discussed
+in the next chapter, with objects replacing the closures (both being
+merely slightly different realizations of the same idea).
 
 \chapter{Survey of modern languages}
 \label{sect:survey}
@@ -451,16 +462,15 @@ function signatures. This way of implementing interfaces requires only
 an object reference of the type to be passed to its methods (by means
 of a separate parameter list, in front of a method's actual name). It
 is otherwise decoupled from the type's (i.e. the ADT's \code{struct})
-definition.
+definition. Go makes it explicit in its syntax that interfaces (like
+\code{struct}s) are types in their own right, and that hence
+polymorphic variables (i.e. objects) can be declared in terms of them.
 
 Restrictions in Go are that language intrinsic types cannot have
-methods, and that methods and interfaces cannot be directly
-implemented for user-defined types whose definitions are located in
-other packages. That is, the programmer has to write wrappers in the
-latter case. Go, finally, makes it explicit in its type definition
-syntax that interfaces (like \code{struct}s) are types in their own
-right, and that hence polymorphic variables (i.e. objects) can be
-declared in terms of them.
+user-provided methods, and that methods and interfaces cannot be
+directly implemented for user-defined types whose definitions are
+located in other packages. That is, the programmer has to write
+wrappers in the latter case.
 
 Since version 1.18, Go also supports compile-time polymorphism through
 generics. Go's generics make use of ``strong concepts'', since they
@@ -477,13 +487,12 @@ problem coded in Go. The two different implementations of the
 \code{SimpleSum} and \code{PairwiseSum}, whereas a third ADT named
 \code{Averager} encapsulates the functionality that is required to
 perform the actual averaging. The latter two ADTs contain the
-lower-level objects \code{other} and \code{drv} of
-\code{ISum[T]} type as components, to which they delegate calls to
-these objects' \code{sum} methods. Notice how the use of the
-polymorphic interface \code{ISum[T]} in the declarations of
-\code{other} and \code{drv} enables either \code{SimpleSum} or
-\code{PairwiseSum} objects to be plugged into their higher-level
-clients.
+lower-level objects \code{other} and \code{drv} of \code{ISum[T]} type
+as components, to which they delegate calls to these objects'
+\code{sum} methods. Notice, how the use of the polymorphic interface
+\code{ISum[T]} for the declarations of the objects \code{other} and
+\code{drv} enables either \code{SimpleSum} or \code{PairwiseSum}
+instances to be plugged into these objects' clients.
 
 A second interface, named \code{IAverager}, is used to enable
 polymorphism for different averaging algorithms. Finally, there's a
@@ -498,24 +507,24 @@ Hence, three polymorphic interfaces were required in this code, in
 order to eliminate the three levels of rigid dependencies that were
 listed in Sect.~\ref{sect:mono_functional}. Notice also that,
 exempting \code{INumeric}, all the interfaces and all the user-defined
-ADTs need to take in generic type parameters in this example. This is
-required in order to enable all the \code{sum} and \code{average}
-methods to use generic type parameters in Go.
+ADTs need to take in generic type parameters in this example. In Go,
+this is required in order to enable all the \code{sum} and
+\code{average} methods to use generic type parameters.
 
 \lstinputlisting[language=Go,style=boxed,label={lst:OOGo},caption={Encapsulated Go version of the array averaging example.}]{Code/Go/mixed.go}
 
 The main program makes use of Go's built-in structure constructors,
 and constructor chaining, in order to instantiate objects of the
 required ADTs. In particular, it instantiates run-time polymorphic
-\code{Averager} objects (depending on whether simple or pairwise
-sum averaging is to take place), and it does so for both the
-\code{int32} and \code{float64} types separately, in order to then use
-these objects on \code{int32} and \code{float64} data,
-respectively. That \code{two} such objects are required (one for each
-language intrinsic data type) is connected to the fact that in order
-to obtain generic methods in Go, one has to parameterize interfaces by
-generic parameters, and instantiate them with different actual data
-types, as in \code{func main}'s first two code lines. A single
+\code{Averager} objects (depending on whether simple or pairwise sum
+averaging is to take place), and it does so for both the \code{int32}
+and \code{float64} types separately, in order to then use these
+objects on \code{int32} and \code{float64} data, respectively. That
+\code{two} such objects are required (one for each language intrinsic
+data type) is connected to the aforementioned fact that in order to
+make methods use generic type parameters, one has to parameterize
+interfaces, and instantiate these with different actual data types, as
+in \code{func main}'s first two code lines. A single
 (i.e. unparameterized) \code{IAverager} interface therefore doesn't
 suffice, which is unfortunate from the user's perspective, as some
 code duplication in client code cannot be avoided in this way.
@@ -562,7 +571,8 @@ differences, that are listed in the following notes.
 
 \begin{itemize}
 \item
-  Rust uses angled brackets to indicate generic parameter lists.
+  Rust uses angled brackets, \code{< >}, to indicate generic parameter
+  lists.
 \item
   Generics constraints in Rust are typically enforced by specifying
   the required traits in \code{impl} blocks using \code{where}
@@ -580,11 +590,12 @@ differences, that are listed in the following notes.
   the required functionality.
 \item
   Despite reliance on external dependencies, conversion to generic
-  types wasn't possible. This led to the necessity to move the type
-  conversion from method \code{average} to its calls in the main
+  types wasn't possible. This led to the necessity to move a type
+  conversion, that in the Go implementation was included in the code
+  of method \code{average}, to this method's calls in the main
   program. We also had to import a \code{zero} generic function from
-  the external \code{num} crate, in order to initialize the
-  variable \code{s} that is returned by the \code{sum} method of the
+  the external \code{num} crate, in order to initialize the variable
+  \code{s} that is returned by the \code{sum} method of the
   \code{SimpleSum} ADT.
 \item
   Rust's default structure constructors suffer from the same flaw as
@@ -644,12 +655,12 @@ in Go and Rust, respectively.
 
 Given Swift's backwards compatible design, implementation of a
 protocol (i.e. interface inheritance) is usually done as in
-``classical'' OO languages, i.e. within a structure's or a class's
+classical OO languages, i.e. within a structure's or a class's
 definition. A colon (\code{:}) followed by one or more interface names
 must be supplied for this purpose after the structure's or class's own
 name. However, a very powerful facility for types to implement
 protocols retroactively is also provided, through so-called
-``\code{extension}s'', that work even if the types' source code is
+\code{extension}s, that work even if the types' source code is
 inaccessible (because one is, e.g., working with a library in binary
 form). This same facility also allows for protocols to be implemented
 by language-intrinsic types. For instance, the following little
@@ -672,16 +683,16 @@ Swift. See the following remarks in order to understand this code:
 
 \begin{itemize}
   \item
-    Swift uses angled brackets, \code{< >}, to indicate generic parameter
+    Swift uses angled brackets to indicate generic parameter
     lists.
   \item
     Generic type constraints are formulated by supplying a protocol
     name after a type parameter (separated by a colon).
   \item
     Swift does not supply an equivalent to Go's \code{int32 | float64}
-    syntax. Hence the user must use a \code{Numeric} protocol defined
-    by the standard library, as a constraint for numeric types. Which
-    leads to reliance on library code.
+    syntax and semantics. Hence the user must use a \code{Numeric}
+    protocol that is defined by the standard library, as a constraint for
+    numeric types. Which leads to reliance on library code.
   \item
     Unfortunately, Swift's \code{Numeric} protocol does \emph{not} support
     the division operation! Hence the division that would have been required
@@ -718,58 +729,66 @@ consequences are
 that method genericity for an ADT's objects can be expressed using
 only a single, as opposed to multiple protocols,
 \item
-that merely a \emph{single} object instance of that same protocol is
-required, in order to be able to operate on many different language
-intrinsic data types, and
+that therefore merely a \emph{single} object instance of that same
+protocol is required, in order to be able to operate on many different
+language intrinsic data types, and
 \item
-that this also \emph{largely obviates the need for manual instantiations
-of generics in Swift} (because generic functions/methods are easier to
-instantiate automatically by the compiler, as it can almost always infer the
-required types by checking the actual arguments that are passed to a
-function/method)!
+that this also (largely) \emph{obviates the need for manual
+instantiations of generics in Swift} (because generic
+functions/methods are easier to instantiate automatically by the
+compiler, as it can almost always infer the required types by checking
+the regular arguments that are passed to a function/method)!
 \end{itemize}
 
-As an example, consider the \code{IAverager} protocol in the above
-Swift code. There's only a single (i.e. unparameterized) version of
-this protocol. Consequently, there's only a need in the main program
-to declare a single object variable, \code{av}, of that protocol (that
-enables \code{av} to be polymorphically assigned different
-\code{struct}s that implement \code{IAverager}). Because it contains
-an \code{average} method that is generic, this \emph{single}
-object can then be straightforwardly used on data of \emph{both} the
-\code{Int32} and \code{Float64} types!
+As an example, consider the object \code{av} in the above Swift code
+that contains the functionality for array averaging. This object
+supports two different levels of polymorphism: Firstly, given that it
+is an instance of the \code{IAverager} protocol, it can be
+polymorphically assigned different averaging algorithms (see the
+\code{switch} statement). Secondly, because it contains an
+\code{average} method that is generic, it can be used on data of
+different intrinsic types, like \code{Int32} and \code{Float64} here.
 
-This vastly simplifies client code that needs to make use of objects
-such as \code{av}, especially if such client code needs to work on
-\emph{many} more types than just \code{Int32} and
-\code{Float64}. Contrast this with Go's and Rust's model, where manual
-instantiation of a different version of \code{IAverager} is required
-for \emph{every} different generic type parameter that the user wishes
-to employ. Notice, also, how there's \emph{not a single manual
-instantiation} of generics code required in the Swift example! We
-consider these significant advantages of the generics approach that is
-taken in Swift vs. that of Go and Rust.
+Notice that the main Swift program needs to declare merely a
+\emph{single} such object variable of \code{IAverager} type, to make use of
+all these capabilities. This is a direct consequence of there being
+only a single (i.e. unparameterized) version of the \code{IAverager}
+protocol, and of parameterizing the protocol's method signatures by
+generic types rather than the protocol itself.
+
+Contrast this with Go's and Rust's model, where not only separate
+objects of \code{IAverager} type are required for \emph{every}
+different intrinsic data type that the programmer wishes to use these
+objects with. But where also \emph{manual} instantiations of
+corresponding versions of the generically parameterized
+\code{IAverager} interface/trait are required from the programmer, for
+declaring these objects.
+
+Swift's generics model gets rid of all of that complexity, and
+therefore vastly simplifies client code. We consider this a very
+significant advantage of the generics approach that is taken in Swift
+vs. that of Go and Rust.
 
 
 \section{Conclusions}
 
-The use of run-time polymorphism by means of interfaces is rather
-similar in all the languages considered here. The most significant
-differences (that were not concretely explored here) appear to be that
-Go has stricter limitations on retroactively implementing interfaces
-for existing types than the other languages. Whereas Rust (with some
-minor restrictions), and Swift allow the implementation of an
-interface by some type to be accomplished independently from the
-type's definition site. Rust and Swift thereby overcome Haveraaen et
-al.'s critique \cite{Haveraaen_et_al_19} of Java regarding this
-point. In fact, it is \emph{interface inheritance} which makes the
-uniform polymorphic treatment of both intrinsic and user-defined types
-possible in the first place in Rust and Swift, that Haveraaen et
-al. seem to also (rightly) demand. All the considered languages are
-also very similar in that they support fully type checked generics
-through (polymorphic) interfaces. In the following, we will thus only
-summarize the most significant differences in these languages'
-generics features.
+The use of run-time polymorphism by means of (polymorphic) interfaces
+is rather similar in all the languages considered here. The most
+significant differences (that were not concretely explored here)
+appear to be that Go has stricter limitations on retroactively
+implementing interfaces for existing types than the other
+languages. Whereas Rust (with some minor restrictions), and Swift
+allow the implementation of an interface by some type to be
+accomplished independently from the type's definition site. Rust and
+Swift thereby overcome Haveraaen et al.'s critique
+\cite{Haveraaen_et_al_19} of Java regarding this point. In fact, it is
+\emph{interface inheritance} which makes the uniform polymorphic
+treatment of both intrinsic and user-defined types possible in the
+first place in Rust and Swift, that Haveraaen et al. seem to also
+(rightly) demand. All the considered languages are also very similar
+in that they support fully type checked generics via the mechanism
+of interfaces. In the following, we will thus only summarize the most
+significant differences in these languages' generics features.
 
 \subsection{Go}
 
@@ -780,9 +799,9 @@ duplication of instantiation code in clients
 unavoidable. Nevertheless, generic Go code is quite easy to read and
 to understand. What sets Go apart from the other languages is its
 built-in, easy to use support for conversion to generic types, and
-especially its brilliant new notion to interpret interfaces as type
-sets, along with its syntax to support this notion. This enables the
-Go programmer to easily tailor constraints on generic types to his
+especially its brilliant new notion to interpret type sets as
+interfaces, along with its syntax to support this notion. This enables
+the Go programmer to easily tailor constraints on generic types to his
 specific needs, which is what makes the use of generics in Go
 pleasant. We consider these latter particular features of Go as ``must
 haves'' for Fortran.
@@ -820,8 +839,8 @@ Swift's basic model of implementing generics by allowing parameterized
 structures, functions, and methods (but not parameterized interfaces)
 is both the easiest to read, and the easiest to use from a
 programmer's perspective. Swift's generics design allows the Swift
-compiler to instantiate generics largely automatically, through
-inspection of the argument types that are passed to functions,
+compiler to instantiate generics largely automatically, through type
+inference of the regular arguments that are passed to functions,
 methods, and (structure or class) constructors. In contrast to the
 other languages, in Swift, the user almost never has to bother with
 instantiating any generics.
@@ -829,7 +848,7 @@ instantiating any generics.
 If the Swift programmer knows how to write generic functions, his
 knowledge automatically translates into coding generic methods, since
 generic functions can be transformed into generic methods without
-requiring any changes to their function signatures. This property is
+requiring changes to their function signatures. This property is
 helpful for the refactoring of non-OO codes into corresponding OO
 versions.
 
@@ -868,7 +887,7 @@ compile-time polymorphism (i.e. generics) in the language, and to
 thereby enable a uniform management of dependencies on both
 user-defined \emph{and} language-intrinsic types.
 
-\subsection{Abstract interface definitions}
+\subsection{Definition}
 \label{sect:interface_defs}
 
 Fortran already allows the programmer to define unnamed abstract
@@ -900,56 +919,8 @@ interfaces in the language (which currently serve as bounds on the
 signatures of procedure pointers, and \code{deferred}, i.e. abstract,
 methods), this new feature is fully backwards compatible.
 
-\subsection{Variable declarations}
-
-Named abstract interfaces/traits are types in their own right. Their
-purpose is to allow the programmer to declare (polymorphic) variables
-in terms of them. Either directly, i.e. as objects of such interfaces
-in run-time polymorphism, or indirectly as constraints on generic type
-parameters in compile-time polymorphism (see
-Sect.~\ref{sect:generic_parameters} for examples of the latter).
-
-\subsubsection{\code{Class} declaration specifier: enhancements}
-
-In order to use abstract interfaces to support run-time
-polymorphic objects through subtyping, Fortran's \code{class}
-specifier for variable declarations needs to be enhanced to accept
-named abstract interfaces, like in the following two examples:
-\begin{lstlisting}[language=LFortran,style=boxed]
-  class(IAddition), allocatable :: adder
-  class(IAddition), pointer     :: adderptr
-\end{lstlisting}
-The semantics here are that whenever a named abstract interface
-appears within the \code{class} specifier of an object's declaration,
-then all the \code{public} methods of that object whose signatures
-are prescribed by the adopted interface (like \code{IAddition} in the
-present example), will make use of late binding. That is, their calls
-will be resolved by the run-time system of the language (e.g. through
-a virtual method table). In accordance with how objects that make use
-of run-time polymorphism through subclassing (i.e. implementation
-inheritance) are declared in the present Fortran standard, also
-``trait objects'' (like \code{adder} or \code{adderptr} in the example
-above) must either be declared using the \code{allocatable}, or the
-\code{pointer} attribute, or they must be arguments to a procedure (as
-in the example of Sect.~\ref{sect:interface_defs}). The proposed
-additions are therefore backwards compatible with the functionality
-that is already available in the present language.
-
-\subsubsection{\code{Class} declaration specifier: constraints}
-\label{sect:class_specifier_constraints}
-
-Since the \code{class} declaration specifier is undefined for
-intrinsic types, and since the aforementioned semantics of this
-specifier imply late binding of methods (which is incompatible with
-intrinsic types), a compiler will need to ensure that the \code{class}
-declaration specifier is not used in conjunction with interfaces that
-are intended for use as generics constraints, and reduce to a set of
-language intrinsic types, i.e. interfaces that are formulated in terms
-of type sets, as they are discussed in
-Sect.~\ref{sect:type_sets}. These include the empty interface,
-\code{IAnyType}.
-
-\subsection{Extends specifier for abstract interfaces}
+\subsection{Extends specifier}
+\label{sect:extends_spec}
 
 Abstract interface definitions must allow the programmer to declare
 new abstract interfaces that inherit procedure signatures from
@@ -961,26 +932,67 @@ the interfaces \code{IAddition}, and \code{ISubtraction}, making
 simpler interfaces. That is, objects that adopt or implement the
 \code{IBasicMath} interface (i.e. conform to it), can also be used in
 settings that require conformance to either the \code{IAddition}, or
-\code{ISubtraction} interfaces.
+\code{ISubtraction} interfaces:
 \begin{lstlisting}[language=LFortran,style=boxed]
    abstract interface, extends(IAddition,ISubtraction) :: IBasicMath
    end interface
 \end{lstlisting}
 
-\subsection{Short-hand notation for combination of abstract interfaces}
+\subsection{Declaration of run-time polymorphic variables (trait objects)}
+\label{sect:class_specifier}
 
-There are often cases where the combined functionality of two (or more)
-interfaces is required, but where one would not like to go through the
-labor of explicitly setting up a separate derived interface, like
-\code{IBasicMath} from above. This can be useful in variable
+Named abstract interfaces/traits are types in their own right. Their
+purpose is to allow the programmer to declare (polymorphic) variables
+in terms of them. Either directly, i.e. as objects of such interfaces
+in run-time polymorphism, as demonstrated in this section. Or
+indirectly, as constraints on generic type parameters in compile-time
+polymorphism (see Sect.~\ref{sect:generic_parameters} for examples of
+the latter).
+
+In order to use abstract interfaces to support run-time polymorphic
+objects through subtyping, Fortran's \code{class} specifier for
+variable declarations needs to be enhanced to accept named abstract
+interfaces, like in the following two examples:
+\begin{lstlisting}[language=LFortran,style=boxed]
+  class(IAddition), allocatable :: adder
+  class(IAddition), pointer     :: adderptr
+\end{lstlisting}
+The semantics here are that whenever a named abstract interface
+appears within the \code{class} specifier of an object's declaration,
+then all the \code{public} methods of that object whose signatures are
+prescribed by the adopted interface (like \code{IAddition} in the
+present example), will make use of late binding. That is, their calls
+will be resolved by the run-time system of the language (e.g. through
+a virtual method table).
+
+In accordance with how objects that make use of run-time polymorphism
+through subclassing (i.e. implementation inheritance) are declared in
+the present Fortran standard, also ``trait objects'' (like
+\code{adder} or \code{adderptr} in the example above) must either be
+declared using the \code{allocatable}, or the \code{pointer}
+attribute, or they must be arguments to a procedure (as in the example
+of Sect.~\ref{sect:interface_defs}). The proposed additions are
+therefore backwards compatible with the functionality that is already
+available in the present language. See also Sect.~\ref{sect:type_sets}
+for further information on the \code{class} specifier when used with
+abstract interfaces.
+
+
+\subsection{Short-hand notation for combination of traits}
+
+There are often cases where the combined functionality of two (or
+more) interfaces is required, but where one would not like to go
+through the labor of explicitly setting up a separate derived
+interface, like \code{IBasicMath} of
+Sect.~\ref{sect:extends_spec}. This can be useful in variable
 declarations. In such cases, it should be possible to specify the
 following
 \begin{lstlisting}[language=LFortran,style=boxed]
    class(IAddition + ISubtraction), allocatable :: addsub
 \end{lstlisting}
 instead of having to explicitly derive \code{IBasicMath} from
-\code{IAddition} and \code{ISubtraction}, as above, and then use it as
-follows:
+\code{IAddition} and \code{ISubtraction}, as in
+Sect.~\ref{sect:extends_spec}, and then use it as follows:
 \begin{lstlisting}[language=LFortran,style=boxed]
    class(IBasicMath), allocatable :: addsub
 \end{lstlisting}
@@ -994,15 +1006,16 @@ interfaces to conform to other named abstract interfaces, but also for
 such types are user-defined, or intrinsic to the language.
 
 
-\subsection{\code{Implements} specifier for derived type definitions}
+\subsection{\code{Implements} specifier: Implementing traits for derived types}
+\label{sect:implements_spec}
 
-User-defined (i.e. derived) types can be made to conform to an
-interface by introducing an \code{implements} specifier for derived
-type definitions. In the following example, the derived type
-\code{BasicMath} implements (i.e. conforms to, or adopts) the
-interface \code{IBasicMath} that was defined above, by providing
-implementations of all the method signatures that are contained in
-that interface:
+User-defined (that is derived) types can be made to conform to an
+interface by introducing an \code{implements} specifier in derived
+type definitions. In the following example, the \code{BasicMath}
+derived type implements (i.e. conforms to, or adopts) the interface
+\code{IBasicMath} that was defined in Sect.~\ref{sect:extends_spec},
+by providing implementations of all the method signatures that are
+contained in that interface:
 \begin{lstlisting}[language=LFortran,style=boxed]
 module basic
    ...
@@ -1041,15 +1054,18 @@ or \code{ISubtraction}.
 It is crucial, for flexibility, that the above interface inheritance
 mechanism allow for a type to implement \emph{multiple} different
 interfaces. For instance, if one wouldn't have defined the interface
-\code{IBasicMath} from above, and would nevertheless need to use
-objects of type \code{BasicMath} in settings that require conformance
-to either the \code{IAddition}, or \code{ISubtraction} interfaces,
-then the language must allow one to define the \code{BasicMath} type
-as follows (skipping, for brevity, the implementation of the actual
-methods, that would be done exactly as in the previous example):
+\code{IBasicMath} of Sect.~\ref{sect:extends_spec}, and would
+nevertheless need to use objects of type \code{BasicMath} in settings
+that require conformance to either the \code{IAddition} or
+\code{ISubtraction} interfaces, then the language must allow one to
+define the \code{BasicMath} type as follows (skipping, for brevity,
+the implementation of the actual methods, that would be done exactly
+as in the previous example):
 \begin{lstlisting}[language=LFortran,style=boxed]
    ...
    type, implements(IAddition,ISubtraction) :: BasicMath
+      private
+      real :: a
    contains
       procedure, public, pass(self) :: add
       procedure, public, pass(self) :: sub
@@ -1064,19 +1080,21 @@ this abstract type through implementation inheritance (subclassing)
 must then provide a full implementation.
 
 
-\subsection{\code{Implements} statement}
+\subsection{\code{Implements} statement:
+            Retroactively adding functionality to types}
+\label{sect:implements_stmt}
 
 In order to avoid having to wrap existing types into wrappers, when
 unforeseen new use cases result, it should be possible (as in Swift or
 Rust) to make any type implement new interfaces retroactively,
 regardless of where its original type definition is located. It would
 be desirable to provide such a capability for both user-defined and
-language intrinsic types, which would mean that methods would have to
-be allowed also for \emph{intrinsic} types. The \code{implements}
-statement that is described below is aimed at ultimately accomplishing
-these capabilities, but for the purpose of a first prototype
-implementation it has been restricted here to provide such
-functionality for user-defined types only, i.e. its use on
+language intrinsic types, which would mean that user-provided methods
+would have to be allowed also for \emph{intrinsic} types. The
+\code{implements} statement that is described below is aimed at
+ultimately accomplishing these capabilities, but for the purpose of a
+first prototype implementation it has been restricted here to provide
+such functionality for user-defined types only, i.e. its use on
 intrinsic types is presently prohibited.
 
 Notice, that the \code{implements} statement has \emph{no} relation to
@@ -1090,31 +1108,29 @@ dynamically change an \emph{interface inheritance hierarchy}, and
 achieve utmost code flexibility.
 
 Swift's \code{extension} blocks fulfill essentially the same purpose
-as Rust's \code{impl} blocks in this respect. They have been
-simplified here (for a first implementation), and adjusted to
-Fortran's syntax that binds methods to types through declaration
-blocks, rather than by including the actual implementation bodies
-themselves into such a block (the implementations need to be supplied
-as module procedures, as is usual in Fortran). The syntax of the
-feature is largely symmetric to that of the ``\code{contains}''
-section of derived type definitions. Most of the options that are
-allowed for type-bound procedure declarations in derived type
-definitions, are therefore also allowed for such declarations within
-an \code{implements} statement.
+as Rust's \code{impl} blocks. They have been simplified here (for a
+first implementation), and adjusted to Fortran's syntax that binds
+methods to types through declaration blocks, rather than by including
+the actual implementation bodies themselves into such a block (the
+implementations need to be supplied as module procedures, as is usual
+in Fortran). The syntax of the feature is largely symmetric to that of
+the \code{contains} section of derived type definitions. Most of
+the options that are allowed for type-bound procedure declarations in
+derived type definitions, are therefore also allowed for such
+declarations within an \code{implements} statement.
 
 \subsubsection{Retroactively adding methods to a type}
 
 Suppose that we would like to add, from within a different module, two
-more methods to the \code{BasicMath} type from above, in order to give
-this type some additional functionality. This can be done using an
-\code{implements} \emph{statement} as follows:
+more methods to the \code{BasicMath} type of
+Sect.~\ref{sect:implements_spec}, in order to give this type some
+additional functionality. This can be done using an \code{implements}
+\emph{statement} as follows,
 \begin{lstlisting}[language=LFortran,style=boxed]
 module enhanced
 
    use basic, only: BasicMath
 
-   implicit none
-   
    implements :: BasicMath
       procedure, public, pass(self) :: mul
       procedure, public, pass(self) :: div
@@ -1125,39 +1141,42 @@ contains
 end module enhanced
 \end{lstlisting}
 where the actual implementations of the \code{mul} and \code{div}
-procedures would be given after the module's \code{contains} statement
+procedures would be given after the module's \code{contains} statement,
 as usual.
 
-\subsubsection{Retroactively implementing interfaces by a type}
+\subsubsection{Retroactively implementing traits by a type}
 
-Assume now that the purpose of our addition of the previous two
+Assume now, that the purpose of our addition of the previous two
 methods was to actually make \code{BasicMath} conform to settings
 where implementations of multiplication with, or division by, a
 \code{real} are needed, and where the required functionality is
 described by two abstract interfaces called \code{IMultiplication} and
 \code{IDivision}. So far, we have added the code of the required
-methods, but we haven't made \code{BasicMath} pluggable into code that
-is written in terms of either one of these latter interfaces. To fix
-this, we simply state that the \code{BasicMath} type already has all
-of the required functionality, by acknowledging this using an
+methods, but we haven't made \code{BasicMath} pluggable yet into code
+that is written in terms of either one of these latter interfaces. To
+fix this, we simply state that the \code{BasicMath} type already has
+all of the required functionality, by acknowledging this using an
 \code{implements} statement for these two interfaces as follows:
 \begin{lstlisting}[language=LFortran,style=boxed]
-   ...
+module double_enhanced
+   ...  
    use enhanced, only: BasicMath
-  
+
    implements (IMultiplication,IDivision) :: BasicMath
    end implements BasicMath
 
+end module double_enhanced
 \end{lstlisting}
 
-Alternatively, we could have skipped the latter two code examples, to
-instead adopt the interfaces and provide the method implementations
-simultaneously, splitting, for instance, the \code{implements}
-statements into two, to conform to one interface at a time, like so:
+Alternatively, we could have skipped both of the last two code
+examples, to instead adopt the interfaces and provide the method
+implementations simultaneously, splitting, for instance, the
+\code{implements} statements into two, to conform to one interface at
+a time, like so:
 \begin{lstlisting}[language=LFortran,style=boxed]
    ...
    use basic, only: BasicMath
-  
+
    implements IMultiplication :: BasicMath
       procedure, public, pass(self) :: mul
    end implements BasicMath
@@ -1223,7 +1242,7 @@ and compile-time polymorphism in Fortran. We will now proceed with
 discussing enhancements that are required in order to further support
 compile-time polymorphism, i.e. generics.
 
-\section{Enhancements to Interfaces}
+\section{Enhancements to interfaces}
 
 \subsection{Generic procedure signatures} 
 \label{sect:generic_interfaces}
@@ -1233,7 +1252,8 @@ procedures, as in Swift. The approach taken in Go and Rust to
 parameterize abstract interfaces themselves, appears not as attractive
 from a user's perspective. The following code shows, as an example, an
 abstract interface called \code{ISum} that contains the signature
-intended for a generic type-bound procedure, named \code{sum}:
+intended for a generic type-bound procedure (i.e. generic method),
+named \code{sum}:
 \begin{lstlisting}[language=LFortran,style=boxed]
    abstract interface :: ISum
       function sum{INumeric :: T}(self,x) result(s)
@@ -1250,22 +1270,23 @@ simply called \code{T} here, in terms of which the regular function
 parameters are declared. A significant difference of generic type
 parameters, as compared to regular function parameters, is that the
 former will be substituted by an actual type argument at compile time,
-in a process called instantiation. A similarity is that, in the same
-way that regular function parameters need to be constrained by a
-provided type, type parameters need to be constrained by a provided
-meta-type. This (meta-type) constraint must be an abstract interface
-name (like \code{INumeric} in the present example), that precedes the
-actual type parameter name. The proposed Fortran generics thus support
-``strong concepts'', and can be fully type-checked by the
-compiler. Both, the type parameter and its constraint, are part of a
-generic type parameter list that is enclosed in curly braces, and
-follows immediately behind the procedure's name. Notice that the
-syntax used above, that deviates slightly from how Fortran's regular
-function arguments are declared, appears justified, as it reflects
-that, despite some similarities, in type parameters one is dealing
-with different entities.
+in a process called instantiation.
 
-\subsection{Interfaces based on type sets}
+A similarity is that, in the same way that regular function parameters
+need to be constrained by a provided type, type parameters need to be
+constrained by a provided meta-type. This (meta-type) constraint must
+be an abstract interface name (like \code{INumeric} in the present
+example), that precedes the actual type parameter name. The proposed
+Fortran generics thus support ``strong concepts'', and can be fully
+type-checked by the compiler. Both, the type parameter and its
+constraint, are part of a generic type parameter list that is enclosed
+in curly braces, and follows immediately behind the procedure's
+name. Notice that the syntax used above, that deviates slightly from
+how Fortran's regular function arguments are declared, appears
+justified, as it reflects that, despite some similarities, in type
+parameters one is dealing with different entities.
+
+\subsection{Type sets: Interfaces as generics constraints}
 \label{sect:type_sets}
 
 In order to make the interface based generics facility easy to use for
@@ -1301,27 +1322,19 @@ generics constraint.
 The semantics of such a type set construct is that it implicitly
 defines a \emph{set of function signatures}, namely the signatures of
 the intersecting (common) set of all the operations and intrinsic
-functions (also called ``methods'' in the following) that work with
-all the member types of the type set. This can also be restated, by
-saying that a type \code{T} \emph{implements} an interface consisting
-of such a type set, if (and only if) it is a member type of this
-set. For instance, Fortran's various \code{complex} types are not
-members of interface \code{INumeric}'s type set (as it is given in
-this section), because they do not appear in its definition. Hence,
-none of the \code{complex} types implements the \code{INumeric}
-interface. In particular, the \code{complex} types do not support,
-i.e. ``implement'', the relational operators \code{(<)} and \code{(>)}
-that are required for conformance to this interface, given that these
-operators are implemented by the \code{integer} and
-\code{real(real64)} member types.
-
-%Another way to formulate the above relation is to say that the
-%interface is the dual (or intersection) type \cite{Pierce_91}, of the
-%type union that it contains. It is this dual view, that makes it
-%possible to easily select multiple types for potential use, while
-%still being able to rigorously check for conformance to only a single
-%type (namely the interface dual of the set), and to thereby enforce
-%the idea of ``strong concepts''.
+functions (also called methods in the following) that work with all
+the member types of the type set. This can also be restated, by saying
+that a type \code{T} \emph{implements} an interface consisting of such
+a type set, if (and only if) it is a member type of this set. For
+instance, Fortran's various \code{complex} types are not members of
+interface \code{INumeric}'s type set (as it is given above), because
+they do not appear in its definition. Hence, none of the
+\code{complex} types implements the \code{INumeric} interface. In
+particular, the \code{complex} types do not support, i.e. implement,
+the relational operators \code{(<)} and \code{(>)} that are required
+for conformance to this interface, given that these operators are
+implemented by the \code{integer} and \code{real(real64)} member
+types.
 
 \subsubsection{Kind parameters}
 
@@ -1387,11 +1400,11 @@ as discussed above.
 \subsubsection{Predefined constraints}
 
 The facilities described in this section are flexible enough for the
-user to be able to construct generic constraints himself the way he
+user to be able to construct generics constraints himself the way he
 needs them. Nevertheless, the language should ideally also supply a
-collection of predefined, commonly used generic constraints in the
+collection of predefined, commonly used generics constraints in the
 form of abstract interfaces that are contained in a language intrinsic
-module, tentatively called \code{generic\_constraints} here. The list
+module, tentatively called \code{generics\_constraints} here. The list
 of such predefined interfaces could include
 \begin{itemize}
 \item
@@ -1410,7 +1423,7 @@ existence of a language defined interface \code{INumeric}:
 \begin{lstlisting}[language=LFortran,style=boxed]
 module user_code
 
-   use, intrinsic :: generic_constraints, only: INumeric
+   use, intrinsic :: generics_constraints, only: INumeric
 
    abstract interface :: ISum
       function sum{INumeric :: T}(self,x) result(s)
@@ -1429,16 +1442,26 @@ end module user_code
 
 Interfaces that are formulated in terms of type sets are presently
 \emph{exclusively} intended for use as generics constraints. Hence, a
-compiler must ensure that they are not used for any other purpose. In
-particular, they are not intended to be implemented by derived
-(i.e. user-defined) types\footnote{One of the problems here is that
-any new intrinsic function that would be added to the language
+compiler must ensure that they are \emph{not} used for any other
+purpose. In particular, they are not intended to be implemented by
+derived (i.e. user-defined) types\footnote{One of the problems here is
+that any new intrinsic function that would be added to the language
 for some intrinsic type, would change the set of methods of all the
 type sets of which this type is a member. This would break any
 user-defined types that would implement interfaces which are based on
 these type sets.}, and they cannot be used in variable declarations
-that involve the \code{class} specifier
-(see Sect.~\ref{sect:class_specifier_constraints}).
+that involve the \code{class} specifier (as described in
+Sect.~\ref{sect:class_specifier}).
+
+As it was demonstrated by the examples that were given above,
+interfaces that are formulated in terms of type sets often boil down
+to a set of language intrinsic types. Since the \code{class}
+declaration specifier is undefined for intrinsic types, and since --
+moreover -- the semantics of this specifier allow for late binding of
+methods, which is incompatible with intrinsic types, a compiler will
+need to ensure that the \code{class} declaration specifier is not used
+in conjunction with interfaces that are formulated in terms of type
+sets. This includes the empty interface, \code{IAnyType}.
 
 In a future language revision, such interfaces could, however, be
 admitted for use with the \code{type} declaration specifier, in order
@@ -1477,14 +1500,14 @@ also for all other cases where such conversion is indeed
 possible. Otherwise, the compiler should emit an error message, and
 abort compilation at the generics instantiation step.
 
-\section{Generic type parameters}
+\section{Generic procedures, methods, and derived types}
 \label{sect:generic_parameters}
 
-As already mentioned above, Fortran's basic generics design should
-allow both ordinary and type-bound procedures (i.e. methods), and
-derived types to be given their own generic type parameters.
+As already mentioned, Fortran's basic generics design should allow
+both ordinary and type-bound procedures (i.e. methods), and derived
+types to be given their own generic type parameters.
 
-\subsection{Procedures}
+\subsection{Generic procedures}
 \label{sect:generic_procedures}
 
 Using the syntax proposed in this document, an implementation of a
@@ -1542,7 +1565,7 @@ procedure pointers, as in the next example:
   total2 = sumf([2.d0,4.d0,6.d0,8.d0])
 \end{lstlisting}
 
-\subsection{Methods}
+\subsection{Generic methods}
 \label{sect:generic_methods}
 
 The same summation algorithm as that of
@@ -1587,14 +1610,15 @@ follows:
   float_total   = simple%sum([1.d0,2.d0,3.d0,4.d0,5.d0])
 \end{lstlisting}
 
-\subsection{Derived types}
+\subsection{Generic derived types}
 \label{sect:generic_derived_types}
 
-In addition to procedures, and methods, generic type parameter lists
+In addition to procedures and methods, generic type parameter lists
 must also be allowed for derived type definitions, as in the following
-example, in which the same interface \code{ISum} from above is
-implemented by another derived-type, named \code{PairwiseSum} (here,
-using an \code{implements} \emph{statement}):
+example, in which the same interface \code{ISum} of
+Sect.~\ref{sect:generic_interfaces} is implemented by another
+derived-type, named \code{PairwiseSum} (here, using an
+\code{implements} \emph{statement}):
 \begin{lstlisting}[language=LFortran,style=boxed]
 module pairwise_library
    ...   
@@ -1624,6 +1648,7 @@ contains
 
 end module pairwise_library
 \end{lstlisting}
+
 Notice, how type \code{PairwiseSum} depends on a generic type
 parameter, \code{U}, that is used within type \code{PairwiseSum}
 itself in order to declare a field variable of \code{type(U)}, which
@@ -1780,8 +1805,8 @@ defer it to a separate document.
 In order to comprehensively illustrate how the new features, that were
 discussed in the last two chapters, would be used in practice, we will
 give in the present chapter both complete functional and encapsulated
-(i.e. OO) Fortran code versions of the test problem that was used in
-our language survey.
+(i.e. OO) Fortran code versions of the test problem that is used
+throughout this document.
 
 \section{Functional versions}
 
@@ -1816,7 +1841,7 @@ should help to better understand this code:
 \item
   \emph{All} the required instantiations of generic procedures are
   done automatically by the compiler, based on type inference of the
-  actual arguments that are passed to these procedures.
+  regular arguments that are passed to these procedures.
 \end{itemize}
 
 \lstinputlisting[language=LFortran,style=boxed,label={lst:Func1Fortran},caption={Fortran version of the array averaging problem with
@@ -1840,8 +1865,8 @@ program, for the closures that were used in the Go code. As this is a
 good example for demonstrating how generics can be instantiated
 manually by the programmer, we give in Listing~\ref{lst:Func2Fortran}
 an alternative form of the main program of
-Listing~\ref{lst:Func1Fortran} that makes use of such manual
-instantiation (as it was discussed in
+Listing~\ref{lst:Func1Fortran} that makes use of both procedure
+pointers and such manual instantiation (as it was discussed in
 Sect.~\ref{sect:generic_procedures}).
 
 \lstinputlisting[linerange={53-101},language=LFortran,style=boxed,label={lst:Func2Fortran},caption={Main program using procedure pointers and manual generics instantiation.}]{Code/Fortran/functional2.f90}
@@ -1853,11 +1878,7 @@ Sect.~\ref{sect:generic_procedures}).
 The present section will demonstrate that being able to use the new
 generics features seamlessly and easily even within a modern-day OO
 programming setting is one of the great strengths of the present
-design. The equal importance that has been placed in this document on
-both proper compile-time and run-time polymorphic (i.e. modern-day OO)
-capabilities will allow for uniform dependency management of both
-language intrinsic and user-defined types in Fortran, that is on par
-with the most modern languages.
+design.
 
 \subsection{Dynamic method dispatch}
 \label{sect:Fortran_dynamic_dispatch}
@@ -1891,7 +1912,7 @@ other languages.
 \item
   This Fortran version makes use of modules and \code{use} statements
   with \code{only} clauses, in order to make explicit the source code
-  dependencies of the different defined classes.
+  dependencies of the different defined classes/ADTs.
 \end{itemize}
 
 \lstinputlisting[language=LFortran,style=boxed,label={lst:OOFortran},caption={Proposed encapsulated Fortran version of the array averaging example.}]{Code/Fortran/mixed.f90}
@@ -1903,16 +1924,18 @@ decoupled, i.e. it depends merely on abstract interfaces (see the
 \code{use} statements in the above modules). The features described in
 this document have enabled us to avoid rigidity in the program, by
 both decoupling it and making it operate on multiple intrinsic data
-types, thus allowing for a maximum of code reuse. Notice, that all the
-abstract interfaces that are required for this purpose are defined by
-the user himself (without any need to depend on external libraries),
-and that not a single manual instantiation of generics is necessary
-anywhere in the code (as it was already the case in the functional
-implementation of Listing~\ref{lst:Func1Fortran}). The encapsulated
-Fortran version described here is therefore as clean as the Go
-implementation of Listing~\ref{lst:OOGo} with respect to dependency
-management, and it is as easy to use, and to read and understand, as
-the Swift implementation of Listing~\ref{lst:OOSwift}.
+types, thus allowing for a maximum of code reuse.
+
+Notice, that all the abstract interfaces that are required for this
+purpose are defined by the user himself (without any need to depend on
+external libraries), and that not a single manual instantiation of
+generics is necessary anywhere in the code (as it was already the case
+in the functional implementation of
+Listing~\ref{lst:Func1Fortran}). The encapsulated Fortran version
+described here is therefore as clean as the Go implementation of
+Listing~\ref{lst:OOGo} with respect to dependency management, and it
+is as easy to use, and to read and understand, as the Swift
+implementation of Listing~\ref{lst:OOSwift}.
 
 \subsection{Static method dispatch}
 \label{sect:Fortran_static_dispatch}
@@ -1948,14 +1971,14 @@ rules regarding method dispatch.
 Everything else, especially the declaration of these object variables
 as \code{alloctable}s and their instantiation at run-time using
 constructor chaining, was kept the same in order to demonstrate that
-static method dispatch does \emph{not} necessarily mean that the
-actual object instances that contain the methods must be initialized
-and their memory allocated at compile-time (although in this
-particular case this is possible, as demonstrated in the next section,
-given that these objects do not contain any other \code{allocatable}
-data fields, like arrays). Notice, also, that none of the source code
-dependencies in the \code{use} statements have changed. That is, the
-code is \emph{still} fully decoupled, despite making now use of static
+static method dispatch does \emph{not} mean that the actual object
+instances that contain the methods must be initialized and their
+memory allocated at compile-time (although in this particular case
+this is possible, as demonstrated in the next section, given that
+these objects do not contain any other \code{allocatable} data fields,
+like arrays). Notice, also, that none of the source code dependencies
+in the \code{use} statements have changed. That is, the code is
+\emph{still} fully decoupled, despite making now use of static
 dispatch!
 
 \lstinputlisting[language=LFortran,style=boxed,label={lst:staticFortran},caption={Demonstrates static method dispatch for the \code{sum} methods.}]{Code/Fortran/static1.f90}
@@ -1974,10 +1997,10 @@ dispatch!
   \bottomrule
 \end{tabular}
 \caption{Correspondence between object declarations and method
-  dispatch strategies that would be employed by an optimizing Fortran
-  compiler according to the present document. A dash indicates that
-  the case in question is presently undefined, but could be used for a
-  future extension as discussed in
+  dispatch strategies that would be typically employed by an
+  optimizing Fortran compiler according to the present document. A
+  dash indicates that the case in question is presently undefined, but
+  could be used for a future extension as discussed in
   Sect.~\ref{sect:future_extensions}.}
 \label{tab:dispatch}
 \end{table}
@@ -2051,6 +2074,36 @@ altogether, and provide only the generic type arguments, as follows
 \end{lstlisting}
 The full source code for this version of the test problem can be found
 in the \code{Code} subdirectory that is accompanying this document.
+
+
+\section{Conclusions}
+
+The Fortran extensions, that were described in this document for both
+modern-day object-oriented and generic programming, resulted from
+consistent application of orthogonal language design. Wherever
+possible, simple extension of existing Fortran features was preferred
+over the introduction of new ones. Indeed, only in one single case
+(the \code{implements} statement of Sect.~\ref{sect:implements_stmt})
+did we find it necessary to introduce a new language feature.
+
+The end result is a language that is both significantly easier to use,
+and much more powerful than designs that prefer to forego the proven
+philosophy of orthogonal design. The presented language extensions are
+fully backwards compatible, and they allow for a consistent use of
+generics not just in functional but also in OO programming (OOP)
+settings, enabling the programmer to even use static dispatch in OOP,
+for achieving enhanced code performance of polymorphic methods via
+inlining by the compiler.
+
+Taken together, these capabilities will allow the Fortran programmer
+to manage source code dependencies on both language intrinsic and
+user-defined types uniformly in his applications, and to thereby write
+unprecedented modular code that is on par with the most modern
+languages, without suffering any losses in computational
+performance. The present design achieves all of this largely without
+requiring any manual instantiations of generics, and it furthermore
+leaves significant room for future language growth, like support of
+rank genericity, and compile time polymorphism via union (sum) types.
 
 \bibliographystyle{plain}
 \bibliography{traits}
