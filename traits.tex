@@ -462,9 +462,10 @@ function signatures. This way of implementing interfaces requires only
 an object reference of the type to be passed to its methods (by means
 of a separate parameter list, in front of a method's actual name). It
 is otherwise decoupled from the type's (i.e. the ADT's \code{struct})
-definition. Go makes it explicit in its syntax that interfaces (like
-\code{struct}s) are types in their own right, and that hence
-polymorphic variables (i.e. objects) can be declared in terms of them.
+definition. Finally, Go makes it explicit in its syntax that
+interfaces (like \code{struct}s) are types in their own right, and
+that hence polymorphic variables (i.e. objects) can be declared in
+terms of them.
 
 Restrictions in Go are that language intrinsic types cannot have
 user-provided methods, and that methods and interfaces cannot be
@@ -939,7 +940,7 @@ settings that require conformance to either the \code{IAddition}, or
 \end{lstlisting}
 
 \subsection{Declaration of run-time polymorphic variables (trait objects)}
-\label{sect:class_specifier}
+\label{sect:trait_objects}
 
 Named abstract interfaces/traits are types in their own right. Their
 purpose is to allow the programmer to declare (polymorphic) variables
@@ -1451,7 +1452,7 @@ type sets of which this type is a member. This would break any
 user-defined types that would implement interfaces which are based on
 these type sets.}, and they cannot be used in variable declarations
 that involve the \code{class} specifier (as described in
-Sect.~\ref{sect:class_specifier}).
+Sect.~\ref{sect:trait_objects}).
 
 As it was demonstrated by the examples that were given above,
 interfaces that are formulated in terms of type sets often boil down
@@ -1511,8 +1512,9 @@ types to be given their own generic type parameters.
 \label{sect:generic_procedures}
 
 Using the syntax proposed in this document, an implementation of a
-Fortran function for array summation that is generic over the type of its
-input array argument would look as follows:
+Fortran function for array summation that is generic over the type of
+its input array argument would look as follows\footnote{Generic
+subroutines can be coded completely analogously.}:
 \begin{lstlisting}[language=LFortran,style=boxed]
    function sum{INumeric :: T}(x) result(s)
       type(T), intent(in) :: x(:)
@@ -1524,11 +1526,14 @@ input array argument would look as follows:
       end do
    end function sum
 \end{lstlisting}
-Generic subroutines can be coded completely analogously.
+The following examples will assume that the \code{INumeric} generics
+constraint, that is used here, is provided by an interface that admits
+both the \code{integer} and \code{real(real64)} types for \code{T}
+(see Sect.~\ref{sect:type_sets}).
 
 To actually use the \code{sum} generic function, one simply needs to
-call it with arguments of (different) ``numeric'' types in its
-regular arguments list, e.g., as in the following example:
+pass to it (via its regular arguments list) an argument of one of
+the admitted ``numeric'' types, e.g. as in the following two calls:
 \begin{lstlisting}[language=LFortran,style=boxed]
   integer      :: integer_total
   real(real64) :: float_total
@@ -1545,6 +1550,7 @@ generic type argument in curly braces, as in the following two calls:
   integer_total = sum{integer}([1,2,3,4,5])
   float_total   = sum{real(real64)}([1.d0,2.d0,3.d0,4.d0,5.d0])
 \end{lstlisting}
+
 Such manual instantiation of generic procedures can be useful for
 combination with \code{associate} statements, or for use with
 procedure pointers, as in the next example:
@@ -1615,7 +1621,7 @@ follows:
 
 In addition to procedures and methods, generic type parameter lists
 must also be allowed for derived type definitions, as in the following
-example, in which the same interface \code{ISum} of
+example, in which the \code{ISum} interface of
 Sect.~\ref{sect:generic_interfaces} is implemented by another
 derived-type, named \code{PairwiseSum} (here, using an
 \code{implements} \emph{statement}):
@@ -1917,20 +1923,22 @@ other languages.
 
 \lstinputlisting[language=LFortran,style=boxed,label={lst:OOFortran},caption={Proposed encapsulated Fortran version of the array averaging example.}]{Code/Fortran/mixed.f90}
 
-The most important point to notice in Listing~\ref{lst:OOFortran} is
-how the main program is the only part of the code that (necessarily)
-depends on implementations. The \emph{entire} rest of the code is
-decoupled, i.e. it depends merely on abstract interfaces (see the
-\code{use} statements in the above modules). The features described in
-this document have enabled us to avoid rigidity in the program, by
-both decoupling it and making it operate on multiple intrinsic data
-types, thus allowing for a maximum of code reuse.
+The most important point to note, in Listing~\ref{lst:OOFortran}, is
+how this code makes use of trait objects
+(cf. Sect.~\ref{sect:trait_objects}) to avoid rigid dependencies on
+user-defined implementation types, and generics to admit different
+language intrinsic types as arguments to methods, thus allowing for a
+maximum of code reuse. Notice, in particular, how the main program is
+the only part of the code that (necessarily) depends on
+implementations. The \emph{entire} rest of the code is decoupled,
+i.e. it depends merely on abstract interfaces (see the \code{use}
+statements in the above modules).
 
-Notice, that all the abstract interfaces that are required for this
-purpose are defined by the user himself (without any need to depend on
-external libraries), and that not a single manual instantiation of
-generics is necessary anywhere in the code (as it was already the case
-in the functional implementation of
+Notice also, that all the abstract interfaces that are required for
+this purpose are defined by the user himself (without any need to
+depend on external libraries), and that not a single manual
+instantiation of generics is necessary anywhere in the code (as it was
+already the case in the functional implementation of
 Listing~\ref{lst:Func1Fortran}). The encapsulated Fortran version
 described here is therefore as clean as the Go implementation of
 Listing~\ref{lst:OOGo} with respect to dependency management, and it
@@ -1964,9 +1972,9 @@ specifier. This signifies compile-time polymorphism for the objects
 of their methods (whose interfaces were declared in the \code{ISum}
 interface). This needs to be contrasted with the \code{class}
 specifier, that was used previously for the declaration of these
-objects, in order to effect run-time polymorphism and dynamic dispatch
-of their methods. See also Table~\ref{tab:dispatch} for a summary of
-rules regarding method dispatch.
+former trait objects, in order to effect run-time polymorphism and
+dynamic dispatch of their methods. See also Table~\ref{tab:dispatch}
+for a summary of rules regarding method dispatch.
 
 Everything else, especially the declaration of these object variables
 as \code{alloctable}s and their instantiation at run-time using
@@ -2078,32 +2086,34 @@ in the \code{Code} subdirectory that is accompanying this document.
 
 \section{Conclusions}
 
-The Fortran extensions, that were described in this document for both
+The Fortran extensions, that are described in this document for both
 modern-day object-oriented and generic programming, resulted from
-consistent application of orthogonal language design. Wherever
-possible, simple extension of existing Fortran features was preferred
-over the introduction of new ones. Indeed, only in one single case
+consistent application of orthogonal language design. That is,
+significant new capabilities are provided through the simple extension
+of existing Fortran features, and their mutual interaction, rather
+than the addition of complex new ones. Indeed, only in one single case
 (the \code{implements} statement of Sect.~\ref{sect:implements_stmt})
 did we find it necessary to introduce a new language feature.
 
 The end result is a language that is both significantly easier to use,
-and much more powerful than designs that prefer to forego the proven
-philosophy of orthogonal design. The presented language extensions are
-fully backwards compatible, and they allow for a consistent use of
-generics not just in functional but also in OO programming (OOP)
-settings, enabling the programmer to even use static dispatch in OOP,
-for achieving enhanced code performance of polymorphic methods via
-inlining by the compiler.
+and much more powerful, than that of approaches which prefer to forego
+the proven philosophy of orthogonal design. The presented extensions
+are fully backwards compatible with the present Fortran language,
+while allowing for a consistent use of generics not just in procedural
+and functional, but also in OO programming settings, including the use
+of static method dispatch (which can improve the performance of
+polymorphic methods by facilitating inlining via the compiler).
 
-Taken together, these capabilities will allow the Fortran programmer
-to manage source code dependencies on both language intrinsic and
-user-defined types uniformly in his applications, and to thereby write
-unprecedented modular code that is on par with the most modern
-languages, without suffering any losses in computational
-performance. The present design achieves all of this largely without
-requiring any manual instantiations of generics, and it furthermore
-leaves significant room for future language growth, like support of
-rank genericity, and compile time polymorphism via union (sum) types.
+Taken together, these capabilities will enable the Fortran programmer
+to uniformly manage source code dependencies on both language
+intrinsic and user-defined types in his applications, and to thereby
+write unprecedented modular code, that is on par with the most modern
+languages in terms of reusability, and moreover does not sacrifice any
+computational performance. The present design achieves all of this
+largely without requiring any manual instantiations of generics, and
+it furthermore leaves significant room for future language growth,
+like support of rank genericity, and compile time polymorphism via
+union (sum) types.
 
 \bibliographystyle{plain}
 \bibliography{traits}

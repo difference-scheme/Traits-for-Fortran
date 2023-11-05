@@ -1,6 +1,6 @@
 module vector_library
 
-   use, intrinsic :: generic_constraints, only: IAnyType
+   use, intrinsic :: generics_constraints, only: IAnyType
    
    implicit none
    private
