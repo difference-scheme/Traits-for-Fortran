@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  5 NOV 2023 16:46
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  6 NOV 2023 16:42
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -604,15 +604,15 @@ tance?  [][]$\T1/fvm/m/n/10.95 https : / / www .
  been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2131 \end{abstract}
+l.2134 \end{abstract}
                       [1] (./traits.aux)
 Package rerunfilecheck Info: File `traits.out' has not changed.
-(rerunfilecheck)             Checksum: D10CABCCC2EFA3738DA8342B4EE68905;10485.
+(rerunfilecheck)             Checksum: 0218F32AB1E93CD7006EEB6C3198B73A;10293.
  ) 
 Here is how much of TeX's memory you used:
  16131 strings out of 480247
  241526 string characters out of 5896151
- 758711 words of memory out of 5000000
+ 758675 words of memory out of 5000000
  32453 multiletter control sequences out of 15000+600000
  510854 words of font info for 107 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
@@ -623,7 +623,7 @@ fonts/type1/public/bera/fvmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
 ublic/bera/fvmro8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/
 uplb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb><
 /usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on traits.pdf (57 pages, 277137 bytes).
+Output written on traits.pdf (57 pages, 277144 bytes).
 PDF statistics:
  2146 PDF objects out of 2487 (max. 8388607)
  2053 compressed objects within 21 object streams

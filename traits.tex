@@ -462,7 +462,7 @@ function signatures. This way of implementing interfaces requires only
 an object reference of the type to be passed to its methods (by means
 of a separate parameter list, in front of a method's actual name). It
 is otherwise decoupled from the type's (i.e. the ADT's \code{struct})
-definition. Finally, Go makes it explicit in its syntax that
+definition. Go, finally, makes it explicit in its syntax that
 interfaces (like \code{struct}s) are types in their own right, and
 that hence polymorphic variables (i.e. objects) can be declared in
 terms of them.
@@ -498,7 +498,7 @@ instances to be plugged into these objects' clients.
 A second interface, named \code{IAverager}, is used to enable
 polymorphism for different averaging algorithms. Finally, there's a
 third interface, \code{INumeric}, that serves exactly the same purpose
-as in the functional polymorphic version given in
+as in the functional polymorphic version that was given in
 Sect.~\ref{sect:poly_functional}, namely to make all function
 arguments and return values polymorphic, by admitting as input and
 output parameters both the \code{int32} and \code{float64} intrinsic
@@ -1287,7 +1287,7 @@ how Fortran's regular function arguments are declared, appears
 justified, as it reflects that, despite some similarities, in type
 parameters one is dealing with different entities.
 
-\subsection{Type sets: Interfaces as generics constraints}
+\subsection{Type sets}
 \label{sect:type_sets}
 
 In order to make the interface based generics facility easy to use for
@@ -1731,16 +1731,16 @@ contrast to the \code{PairwiseSum} type, as implemented in
 Sect.~\ref{sect:generic_derived_types}) is not parameterized by any
 generic type parameter itself.
 
-We also propose to make a further, small, but very important addition
-to structure constructors: namely to introduce the notion that a
-structure constructor is implicitly defined within the same scope that
-holds the definition of its derived type. Assuming that this scope is
-a module, then the structure constructor will always be able to access
-all the components of its derived type, even if these are declared
-being \code{private} to the module's scope. Hence, these components
-could be initialized even by calls to the structure constructor that
-are being performed from outside the module's scope, in complete
-analogy to how user-defined constructors work in Fortran.
+We also propose to make a further, small, but extremely important
+addition to structure constructors: namely to introduce the notion
+that a structure constructor is implicitly defined within the same
+scope that holds the definition of its derived type. Assuming that
+this scope is a module, then the structure constructor will always be
+able to access all the components of its derived type, even if these
+are declared being \code{private} to the module's scope. Hence, these
+components could be initialized even by calls to the structure
+constructor that are being performed from outside the module's scope,
+in complete analogy to how user-defined constructors work in Fortran.
 
 In this way, it would become possible to initialize \code{private},
 \code{allocatable} derived type components by structure constructors,
@@ -1757,16 +1757,20 @@ Listing~\ref{lst:OORust}.
 
 \section{Associated types}
 
-It is often the case, that a method signature needs to declare
-arguments that are of exactly the same generic type(s) over which its
-own derived type was parameterized. This problem can, in principle, be
-solved by making use of separate generic type parameters in both the
-derived type \emph{and} its method, and then enforcing the consistency
-of these parameters, by passing the same type arguments to them using
-manual instantiation. A better solution, though, that does not require
-any manual instantiation of generics, can be obtained by allowing
-``associated types'' to be declared within abstract interfaces, as it
-is possible in both the Rust and Swift languages.
+It is often the case, that a method signature, that is contained
+within an abstract interface, needs to declare arguments of a yet
+unknown type. This type could, e.g., be a generic parameter over
+which a derived type, that is implementing the interface, might need
+to be parameterized.
+
+The latter problem could, in principle, be solved by making use of
+separate generic type parameters in both the implementing type
+\emph{and} its method, and then enforcing the consistency of these
+parameters through manual instantiation, by passing identical type
+arguments to them. A much simpler solution, though, that does not
+require any manual instantiation of generics, can be obtained by
+allowing ``associated types'' to be declared within abstract
+interfaces, as it is possible in both the Rust and Swift languages.
 
 The following example illustrates how an associated type is declared
 inside an abstract interface, \code{IAppendable}, that requires any
@@ -1782,17 +1786,15 @@ is provided here by the derived type \code{Vector}, that stores an
 \code{elements} array of generic \code{type(U)}, where the type
 parameter \code{U} conforms to the \code{IAnyType} constraint. Notice,
 that in order to maintain consistency between the type of the
-\code{elements} array, and any new item that we wish to append to it,
-we must force the equally named \code{item} argument of method
-\code{append} to be of \code{type(U)} as well, as it is shown in this
-method's actual implementation. In order to accomplish this
-enforcement without contradicting interface \code{IAppendable}'s
-definition (that doesn't know anything about type \code{U}), we made
-use of the placeholder (i.e. associated) type \code{Element} in the
-latter interface. Given method \code{append}'s implementation, the
-compiler will then implicitly assign type \code{U} to the type alias
-\code{Element}, in order to conform to interface \code{IAppendable}'s
-definition.
+\code{elements} array, and any new \code{item} that we wish to append
+to it, we must force the \code{item} argument of method \code{append}
+to be of \code{type(U)} as well, as it is shown in this method's
+actual implementation. In order to accomplish this enforcement without
+contradicting interface \code{IAppendable}'s definition (that doesn't
+know anything about type \code{U}), we made use of the placeholder
+(i.e. associated) type \code{Element} in the latter interface. Given
+method \code{append}'s implementation, the compiler will then infer
+\code{Element} to be of the actual type \code{U}.
 
 \section{Extensibility to rank genericity}
 
@@ -1927,10 +1929,10 @@ The most important point to note, in Listing~\ref{lst:OOFortran}, is
 how this code makes use of trait objects
 (cf. Sect.~\ref{sect:trait_objects}) to avoid rigid dependencies on
 user-defined implementation types, and generics to admit different
-language intrinsic types as arguments to methods, thus allowing for a
-maximum of code reuse. Notice, in particular, how the main program is
-the only part of the code that (necessarily) depends on
-implementations. The \emph{entire} rest of the code is decoupled,
+language intrinsic types as arguments to (and results of) methods, thus
+allowing for a maximum of code reuse. Notice, in particular, how the
+main program is the only part of the code that (necessarily) depends
+on implementations. The \emph{entire} rest of the code is decoupled,
 i.e. it depends merely on abstract interfaces (see the \code{use}
 statements in the above modules).
 
@@ -2087,22 +2089,23 @@ in the \code{Code} subdirectory that is accompanying this document.
 \section{Conclusions}
 
 The Fortran extensions, that are described in this document for both
-modern-day object-oriented and generic programming, resulted from
-consistent application of orthogonal language design. That is,
-significant new capabilities are provided through the simple extension
-of existing Fortran features, and their mutual interaction, rather
-than the addition of complex new ones. Indeed, only in one single case
+modern-day object-oriented and generic programming, resulted from the
+consistent application of orthogonal language design. That is, new
+capabilities are provided through the simple extension of existing
+Fortran features, and their mutual interaction, rather than the
+addition of (complex) new constructs. Indeed, only in one single case
 (the \code{implements} statement of Sect.~\ref{sect:implements_stmt})
 did we find it necessary to introduce a new language feature.
 
 The end result is a language that is both significantly easier to use,
-and much more powerful, than that of approaches which prefer to forego
-the proven philosophy of orthogonal design. The presented extensions
-are fully backwards compatible with the present Fortran language,
-while allowing for a consistent use of generics not just in procedural
-and functional, but also in OO programming settings, including the use
-of static method dispatch (which can improve the performance of
-polymorphic methods by facilitating inlining via the compiler).
+and much more powerful, than the result of approaches that prefer to
+abandon the proven philosophy of orthogonal design. The presented
+extensions are fully backwards compatible with the present Fortran
+language, while allowing for a consistent use of generics not just in
+procedural and functional, but also in OO programming settings,
+including the use of static method dispatch (which can improve the
+performance of polymorphic methods by facilitating inlining via the
+compiler).
 
 Taken together, these capabilities will enable the Fortran programmer
 to uniformly manage source code dependencies on both language
@@ -2110,7 +2113,7 @@ intrinsic and user-defined types in his applications, and to thereby
 write unprecedented modular code, that is on par with the most modern
 languages in terms of reusability, and moreover does not sacrifice any
 computational performance. The present design achieves all of this
-largely without requiring any manual instantiations of generics, and
+largely without requiring manual instantiations of generics, and
 it furthermore leaves significant room for future language growth,
 like support of rank genericity, and compile time polymorphism via
 union (sum) types.
