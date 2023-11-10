@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  6 NOV 2023 16:42
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  10 NOV 2023 15:56
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -571,7 +571,7 @@ File: lstlang1.sty 2020/03/24 1.8d listings language file
 ) [25
 
 ] [26]
-Overfull \hbox (1.76978pt too wide) in paragraph at lines 994--997
+Overfull \hbox (1.76978pt too wide) in paragraph at lines 998--1001
 \T1/ppl/m/n/10.95 instead of hav-ing to ex-plic-itly de-rive \T1/fvm/m/n/10.95 
 IBasicMath \T1/ppl/m/n/10.95 from \T1/fvm/m/n/10.95 IAddition \T1/ppl/m/n/10.95
  and \T1/fvm/m/n/10.95 ISubtraction\T1/ppl/m/n/10.95 , as in Sect. [][]4.1.2[][
@@ -579,7 +579,7 @@ IBasicMath \T1/ppl/m/n/10.95 from \T1/fvm/m/n/10.95 IAddition \T1/ppl/m/n/10.95
  []
 
 LaTeX Font Info:    Font shape `T1/fvm/b/n' will be
-(Font)              scaled to size 9.84009pt on input line 1010.
+(Font)              scaled to size 9.84009pt on input line 1014.
 [27] [28] [29] [30]
 Chapter 5.
 [31
@@ -604,14 +604,14 @@ tance?  [][]$\T1/fvm/m/n/10.95 https : / / www .
  been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2134 \end{abstract}
+l.2138 \end{abstract}
                       [1] (./traits.aux)
 Package rerunfilecheck Info: File `traits.out' has not changed.
 (rerunfilecheck)             Checksum: 0218F32AB1E93CD7006EEB6C3198B73A;10293.
  ) 
 Here is how much of TeX's memory you used:
- 16131 strings out of 480247
- 241526 string characters out of 5896151
+ 16133 strings out of 480247
+ 241568 string characters out of 5896151
  758675 words of memory out of 5000000
  32453 multiletter control sequences out of 15000+600000
  510854 words of font info for 107 fonts, out of 8000000 for 9000
@@ -623,10 +623,10 @@ fonts/type1/public/bera/fvmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
 ublic/bera/fvmro8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/
 uplb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb><
 /usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on traits.pdf (57 pages, 277144 bytes).
+Output written on traits.pdf (57 pages, 277242 bytes).
 PDF statistics:
- 2146 PDF objects out of 2487 (max. 8388607)
- 2053 compressed objects within 21 object streams
- 1374 named destinations out of 1440 (max. 500000)
+ 2149 PDF objects out of 2487 (max. 8388607)
+ 2056 compressed objects within 21 object streams
+ 1376 named destinations out of 1440 (max. 500000)
  401 words of extra memory for PDF output out of 10000 (max. 10000000)
 

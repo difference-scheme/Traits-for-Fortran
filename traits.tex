@@ -55,7 +55,7 @@
   compiler, like LFortran, but at the same time comprehensive enough
   to already endow Fortran with polymorphism capabilities that largely
   equal those of modern programming languages like Swift, Rust, or
-  Go. The discussed new features are expected to transform the way
+  Go. The discussed extensions are expected to transform the way
   both Fortran applications and libraries will be written in the
   future. Decoupled software plugin architectures with enormously
   improved source code flexibility, reusability, maintainability, and
@@ -279,7 +279,7 @@ and hence dependency management, we will make use here of a case
 study: the simple test problem of calculating the average value of a set
 of numbers stored inside a one-dimensional array. In the remainder of
 this chapter we will first provide an account and some straightforward
-monomorphic (i.e. coupled) functional implementation of this test
+monomorphic (i.e. rigidly coupled) functional implementation of this test
 problem, followed by a functional implementation that makes use of
 both run-time and compile-time polymorphism to manage rigid source code
 dependencies. In the survey of programming languages presented in
@@ -953,7 +953,12 @@ the latter).
 In order to use abstract interfaces to support run-time polymorphic
 objects through subtyping, Fortran's \code{class} specifier for
 variable declarations needs to be enhanced to accept named abstract
-interfaces, like in the following two examples:
+interfaces, like in the following example, that already appeared in
+Sect.~\ref{sect:interface_defs},
+\begin{lstlisting}[language=LFortran,style=boxed]
+  class(IAddition), intent(inout) :: self
+\end{lstlisting}
+or in the following two declarations:
 \begin{lstlisting}[language=LFortran,style=boxed]
   class(IAddition), allocatable :: adder
   class(IAddition), pointer     :: adderptr
@@ -962,21 +967,20 @@ The semantics here are that whenever a named abstract interface
 appears within the \code{class} specifier of an object's declaration,
 then all the \code{public} methods of that object whose signatures are
 prescribed by the adopted interface (like \code{IAddition} in the
-present example), will make use of late binding. That is, their calls
+above examples), will make use of late binding. That is, their calls
 will be resolved by the run-time system of the language (e.g. through
 a virtual method table).
 
 In accordance with how objects that make use of run-time polymorphism
 through subclassing (i.e. implementation inheritance) are declared in
 the present Fortran standard, also ``trait objects'' (like
-\code{adder} or \code{adderptr} in the example above) must either be
-declared using the \code{allocatable}, or the \code{pointer}
-attribute, or they must be arguments to a procedure (as in the example
-of Sect.~\ref{sect:interface_defs}). The proposed additions are
-therefore backwards compatible with the functionality that is already
-available in the present language. See also Sect.~\ref{sect:type_sets}
-for further information on the \code{class} specifier when used with
-abstract interfaces.
+\code{self}, \code{adder}, and \code{adderptr} in the examples above)
+must either be arguments of a procedure, or they must be declared
+using the \code{allocatable}, or the \code{pointer} attribute. The
+proposed additions are therefore backwards compatible with the
+functionality that is already available in the present language. See
+also Sect.~\ref{sect:type_sets} for further information on the
+\code{class} specifier when used with abstract interfaces.
 
 
 \subsection{Short-hand notation for combination of traits}
@@ -1757,11 +1761,11 @@ Listing~\ref{lst:OORust}.
 
 \section{Associated types}
 
-It is often the case, that a method signature, that is contained
-within an abstract interface, needs to declare arguments of a yet
-unknown type. This type could, e.g., be a generic parameter over
-which a derived type, that is implementing the interface, might need
-to be parameterized.
+It is often the case, that a method signature that is contained within
+an abstract interface, needs to declare arguments of a type, that will
+only be known once that interface is actually implemented. This type
+could, for instance, be a generic parameter over which a derived type,
+that is implementing the interface, might need to be parameterized.
 
 The latter problem could, in principle, be solved by making use of
 separate generic type parameters in both the implementing type
@@ -1783,12 +1787,12 @@ that will be provided by implementations of that interface.
 
 An example of such an implementation of interface \code{IAppendable}
 is provided here by the derived type \code{Vector}, that stores an
-\code{elements} array of generic \code{type(U)}, where the type
+\code{elements} array of generic type \code{U}, where the type
 parameter \code{U} conforms to the \code{IAnyType} constraint. Notice,
 that in order to maintain consistency between the type of the
 \code{elements} array, and any new \code{item} that we wish to append
 to it, we must force the \code{item} argument of method \code{append}
-to be of \code{type(U)} as well, as it is shown in this method's
+to be of type \code{U} as well, as it is shown in this method's
 actual implementation. In order to accomplish this enforcement without
 contradicting interface \code{IAppendable}'s definition (that doesn't
 know anything about type \code{U}), we made use of the placeholder
@@ -1798,7 +1802,7 @@ method \code{append}'s implementation, the compiler will then infer
 
 \section{Extensibility to rank genericity}
 
-Fortran's special role, as a language that caters to numeric
+Fortran's special role, as a language that caters to numerical
 programming, demands that any generics design for the language must
 allow for the possibility to also handle genericity of array rank. The
 present design offers a lot of room in this respect, but since this is
@@ -1856,9 +1860,9 @@ should help to better understand this code:
 automatic generics instantiation.}]{Code/Fortran/functional1.f90}
 
 The example demonstrates that using the new generics features together
-with a functional programming style is easy, that the syntax is
-economical, and that type inference by the compiler should be
-straightforward and therefore reliable. Hence, we believe that the
+with a functional (or procedural) programming style is easy, that the
+syntax is economical, and that type inference by the compiler should
+be straightforward and therefore reliable. Hence, we believe that the
 generics features described here will place no burden on the
 programmer.
 
@@ -1927,22 +1931,22 @@ other languages.
 
 The most important point to note, in Listing~\ref{lst:OOFortran}, is
 how this code makes use of trait objects
-(cf. Sect.~\ref{sect:trait_objects}) to avoid rigid dependencies on
-user-defined implementation types, and generics to admit different
-language intrinsic types as arguments to (and results of) methods, thus
-allowing for a maximum of code reuse. Notice, in particular, how the
-main program is the only part of the code that (necessarily) depends
-on implementations. The \emph{entire} rest of the code is decoupled,
-i.e. it depends merely on abstract interfaces (see the \code{use}
-statements in the above modules).
+(cf. Sect.~\ref{sect:trait_objects}) and generics to avoid rigid
+dependencies on user-defined implementation and language intrinsic
+types, respectively, and thus allows for a maximum of code
+reuse. Notice, in particular, how the main program is the only part of
+the code that (necessarily) depends on implementations. The
+\emph{entire} rest of the code is decoupled, i.e. it depends merely on
+abstract interfaces (see the \code{use} statements in the above
+modules).
 
 Notice also, that all the abstract interfaces that are required for
 this purpose are defined by the user himself (without any need to
 depend on external libraries), and that not a single manual
 instantiation of generics is necessary anywhere in the code (as it was
-already the case in the functional implementation of
-Listing~\ref{lst:Func1Fortran}). The encapsulated Fortran version
-described here is therefore as clean as the Go implementation of
+already the case in the functional version of
+Listing~\ref{lst:Func1Fortran}). The encapsulated Fortran version that
+is described here is therefore as clean as the Go implementation of
 Listing~\ref{lst:OOGo} with respect to dependency management, and it
 is as easy to use, and to read and understand, as the Swift
 implementation of Listing~\ref{lst:OOSwift}.
@@ -2098,7 +2102,7 @@ addition of (complex) new constructs. Indeed, only in one single case
 did we find it necessary to introduce a new language feature.
 
 The end result is a language that is both significantly easier to use,
-and much more powerful, than the result of approaches that prefer to
+and much more powerful, than the results of approaches that prefer to
 abandon the proven philosophy of orthogonal design. The presented
 extensions are fully backwards compatible with the present Fortran
 language, while allowing for a consistent use of generics not just in
@@ -2113,10 +2117,10 @@ intrinsic and user-defined types in his applications, and to thereby
 write unprecedented modular code, that is on par with the most modern
 languages in terms of reusability, and moreover does not sacrifice any
 computational performance. The present design achieves all of this
-largely without requiring manual instantiations of generics, and
-it furthermore leaves significant room for future language growth,
-like support of rank genericity, and compile time polymorphism via
-union (sum) types.
+largely without requiring manual instantiations of generics, and it
+furthermore provides a solid foundation for a number of possible
+future extensions, like support of rank genericity, and compile time
+polymorphism via union (sum) types.
 
 \bibliographystyle{plain}
 \bibliography{traits}
