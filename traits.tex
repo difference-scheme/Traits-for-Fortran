@@ -1,6 +1,5 @@
 \documentclass[11pt,oneside]{report}
 \usepackage[a4paper, total={6.5in, 9in}]{geometry}
-\usepackage{natbib}
 \usepackage{url}
 \usepackage{listings}
 \usepackage{listings-rust}
@@ -9,12 +8,24 @@
 \usepackage{hyperref}
 \usepackage{xcolor}
 \usepackage[title]{appendix}
-\usepackage{csquotes}
 \usepackage{mathpazo}
 %\usepackage{mathptmx}
 \usepackage{array}
 \usepackage{booktabs}
 \usepackage{tablefootnote}
+\usepackage[autostyle]{csquotes}
+\usepackage[
+	backend=biber, 
+	bibstyle=numeric,
+	citestyle=numeric, 
+	sorting=nyt,
+	sortcites=true, 
+	abbreviate=false, 
+	defernumbers=true,
+]{biblatex}
+\defbibheading{bibempty}{}
+
+\addbibresource{traits.bib}
 
 \newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}} 
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}} 
@@ -88,16 +99,19 @@ from his blog \cite{Martin_14}:
 
 \begin{displayquote}
 ``There really is only one benefit to polymorphism; but it's a big
-  one. It is the inversion of source code and run time
-  dependencies. In most software systems when one function calls
-  another, the runtime dependency and the source code dependency point
-  in the same direction. The calling module depends on the called
-  module. However, when polymorphism is injected between the two there
-  is an inversion of the source code dependency. The calling module
-  still depends on the called module at run time. However, the source
-  code of the calling module does not depend upon the source code of
-  the called module. Rather both modules depend upon a polymorphic
-  interface. This inversion allows the called module to act like a
+  one. It is the inversion of source code and run time dependencies.
+
+  In most software systems when one function calls another, the
+  runtime dependency and the source code dependency point in the same
+  direction. The calling module depends on the called module. However,
+  when polymorphism is injected between the two there is an inversion
+  of the source code dependency. The calling module still depends on
+  the called module at run time. However, the source code of the
+  calling module does not depend upon the source code of the called
+  module. Rather both modules depend upon a polymorphic
+  interface.
+
+  This inversion allows the called module to act like a
   plugin. Indeed, this is how all plugins work.''
 \end{displayquote}
 
@@ -2122,8 +2136,7 @@ furthermore provides a solid foundation for a number of possible
 future extensions, like support of rank genericity, and compile time
 polymorphism via union (sum) types.
 
-\bibliographystyle{plain}
-\bibliography{traits}
+\printbibliography
 
 \renewcommand{\abstractname}{Acknowledgements}
 

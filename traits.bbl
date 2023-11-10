@@ -1,87 +1,512 @@
-\begin{thebibliography}{10}
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.2 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
 
-\bibitem{Cardelli_Wegner_85}
-Luca Cardelli and Peter Wegner.
-\newblock On understanding types, data abstraction, and polymorphism.
-\newblock {\em ACM Computing Surveys}, 17:471--523, 12 1985.
 
-\bibitem{Cox_et_al_20}
-Brad~J. Cox, Steve Naroff, and Hansen Hsu.
-\newblock The origins of objective-c at ppi/stepstone and its evolution at
-  next.
-\newblock {\em Proceedings of the ACM on Programming Languages}, 4:1--74, 6
-  2020.
+\refsection{0}
+  \datalist[entry]{nyt/global//global/global}
+    \entry{Cardelli_Wegner_85}{article}{}
+      \name{author}{2}{}{%
+        {{hash=081a17a005a2ab94a60ccd76c206e9f0}{%
+           family={Cardelli},
+           familyi={C\bibinitperiod},
+           given={Luca},
+           giveni={L\bibinitperiod}}}%
+        {{hash=188912a7587794bddb2db624e745c4ee}{%
+           family={Wegner},
+           familyi={W\bibinitperiod},
+           given={Peter},
+           giveni={P\bibinitperiod}}}%
+      }
+      \strng{namehash}{5ddd05bdb594e2c241dd0fadf7c3d80e}
+      \strng{fullhash}{5ddd05bdb594e2c241dd0fadf7c3d80e}
+      \strng{bibnamehash}{5ddd05bdb594e2c241dd0fadf7c3d80e}
+      \strng{authorbibnamehash}{5ddd05bdb594e2c241dd0fadf7c3d80e}
+      \strng{authornamehash}{5ddd05bdb594e2c241dd0fadf7c3d80e}
+      \strng{authorfullhash}{5ddd05bdb594e2c241dd0fadf7c3d80e}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issue}{4}
+      \field{journaltitle}{ACM Computing Surveys}
+      \field{month}{12}
+      \field{title}{On understanding types, data abstraction, and polymorphism}
+      \field{volume}{17}
+      \field{year}{1985}
+      \field{pages}{471\bibrangedash 523}
+      \range{pages}{53}
+      \verb{urlraw}
+      \verb https://dl.acm.org/doi/pdf/10.1145/6041.6042
+      \endverb
+      \verb{url}
+      \verb https://dl.acm.org/doi/pdf/10.1145/6041.6042
+      \endverb
+    \endentry
+    \entry{Cox_et_al_20}{article}{}
+      \name{author}{3}{}{%
+        {{hash=31cfa77bea91445c5b60a7c435f0ec8f}{%
+           family={Cox},
+           familyi={C\bibinitperiod},
+           given={Brad\bibnamedelima J.},
+           giveni={B\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=f538f0a26bc14ab1c6389366236b86d0}{%
+           family={Naroff},
+           familyi={N\bibinitperiod},
+           given={Steve},
+           giveni={S\bibinitperiod}}}%
+        {{hash=d3a29f2fa05790bb4d6b013faa8ecab3}{%
+           family={Hsu},
+           familyi={H\bibinitperiod},
+           given={Hansen},
+           giveni={H\bibinitperiod}}}%
+      }
+      \strng{namehash}{c0d82d2533d1247cf18deeb335076f63}
+      \strng{fullhash}{c0d82d2533d1247cf18deeb335076f63}
+      \strng{bibnamehash}{c0d82d2533d1247cf18deeb335076f63}
+      \strng{authorbibnamehash}{c0d82d2533d1247cf18deeb335076f63}
+      \strng{authornamehash}{c0d82d2533d1247cf18deeb335076f63}
+      \strng{authorfullhash}{c0d82d2533d1247cf18deeb335076f63}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Proceedings of the ACM on Programming Languages}
+      \field{month}{6}
+      \field{title}{The Origins of Objective-C at PPI/Stepstone and Its Evolution at NeXT}
+      \field{volume}{4}
+      \field{year}{2020}
+      \field{pages}{1\bibrangedash 74}
+      \range{pages}{74}
+      \verb{urlraw}
+      \verb https://dl.acm.org/doi/10.1145/3386332
+      \endverb
+      \verb{url}
+      \verb https://dl.acm.org/doi/10.1145/3386332
+      \endverb
+    \endentry
+    \entry{Dahl_04}{inproceedings}{}
+      \name{author}{1}{}{%
+        {{hash=46ca6147a0fd36fa62dea0c8d0a9d589}{%
+           family={Dahl},
+           familyi={D\bibinitperiod},
+           given={Ole-Johan},
+           giveni={O\bibinithyphendelim J\bibinitperiod}}}%
+      }
+      \name{editor}{3}{}{%
+        {{hash=7d19a4857ede0654f4a3f780ceca967e}{%
+           family={Owe},
+           familyi={O\bibinitperiod},
+           given={O.},
+           giveni={O\bibinitperiod}}}%
+        {{hash=1fef40182d4bdaa5d737066ef9e2c6d5}{%
+           family={Krogdahl},
+           familyi={K\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod}}}%
+        {{hash=c689e17175329d6bc6490ca94ad6372c}{%
+           family={Lyche},
+           familyi={L\bibinitperiod},
+           given={T.},
+           giveni={T\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Berlin, Heidelberg}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{46ca6147a0fd36fa62dea0c8d0a9d589}
+      \strng{fullhash}{46ca6147a0fd36fa62dea0c8d0a9d589}
+      \strng{bibnamehash}{46ca6147a0fd36fa62dea0c8d0a9d589}
+      \strng{authorbibnamehash}{46ca6147a0fd36fa62dea0c8d0a9d589}
+      \strng{authornamehash}{46ca6147a0fd36fa62dea0c8d0a9d589}
+      \strng{authorfullhash}{46ca6147a0fd36fa62dea0c8d0a9d589}
+      \strng{editorbibnamehash}{c1f3d0f1738381872f43ba95fa8e3e1d}
+      \strng{editornamehash}{c1f3d0f1738381872f43ba95fa8e3e1d}
+      \strng{editorfullhash}{c1f3d0f1738381872f43ba95fa8e3e1d}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{From Object-Orientation to Formal Methods}
+      \field{series}{Lecture Notes in Computer Science}
+      \field{title}{The Birth of Object Orientation: the Simula Languages}
+      \field{volume}{2635}
+      \field{year}{2004}
+    \endentry
+    \entry{Gamma_et_al_94}{book}{}
+      \name{author}{4}{}{%
+        {{hash=abd927bf30d6566be0ac66a66e893fdd}{%
+           family={Gamma},
+           familyi={G\bibinitperiod},
+           given={Erich},
+           giveni={E\bibinitperiod}}}%
+        {{hash=233f891813bda0f3920985f97a4a7554}{%
+           family={Helm},
+           familyi={H\bibinitperiod},
+           given={Richard},
+           giveni={R\bibinitperiod}}}%
+        {{hash=fd79e5e249b219ff553fc2d811104d78}{%
+           family={Johnson},
+           familyi={J\bibinitperiod},
+           given={Ralph},
+           giveni={R\bibinitperiod}}}%
+        {{hash=e032589f0b9a38804483ab7cf5ccad7f}{%
+           family={Vlissides},
+           familyi={V\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Prentice Hall}%
+      }
+      \strng{namehash}{4d2492409a24d4ed208ae6670cb91945}
+      \strng{fullhash}{5cb4a6d7baf30d11bae6682eca698b4f}
+      \strng{bibnamehash}{4d2492409a24d4ed208ae6670cb91945}
+      \strng{authorbibnamehash}{4d2492409a24d4ed208ae6670cb91945}
+      \strng{authornamehash}{4d2492409a24d4ed208ae6670cb91945}
+      \strng{authorfullhash}{5cb4a6d7baf30d11bae6682eca698b4f}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Design Patterns. Elements of Reusable Object-Oriented Software}
+      \field{year}{1994}
+    \endentry
+    \entry{Haveraaen_et_al_19}{misc}{}
+      \name{author}{3}{}{%
+        {{hash=9b84387eb5d927e98a985b8527876d72}{%
+           family={Haveraaen},
+           familyi={H\bibinitperiod},
+           given={Magne},
+           giveni={M\bibinitperiod}}}%
+        {{hash=1e332832ad7a3307798f03a2ade2b926}{%
+           family={Järvi},
+           familyi={J\bibinitperiod},
+           given={Jaakko},
+           giveni={J\bibinitperiod}}}%
+        {{hash=873efdc2174b11ea7c75d1f868946fee}{%
+           family={Rouson},
+           familyi={R\bibinitperiod},
+           given={Damian},
+           giveni={D\bibinitperiod}}}%
+      }
+      \strng{namehash}{aa8d7f4ce7b31356122dfc099f9c919e}
+      \strng{fullhash}{aa8d7f4ce7b31356122dfc099f9c919e}
+      \strng{bibnamehash}{aa8d7f4ce7b31356122dfc099f9c919e}
+      \strng{authorbibnamehash}{aa8d7f4ce7b31356122dfc099f9c919e}
+      \strng{authornamehash}{aa8d7f4ce7b31356122dfc099f9c919e}
+      \strng{authorfullhash}{aa8d7f4ce7b31356122dfc099f9c919e}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{7}
+      \field{title}{Reflecting on Generics for Fortran}
+      \field{year}{2019}
+      \verb{urlraw}
+      \verb https://j3-fortran.org/doc/year/19/19-188.pdf
+      \endverb
+      \verb{url}
+      \verb https://j3-fortran.org/doc/year/19/19-188.pdf
+      \endverb
+    \endentry
+    \entry{Holub_04}{book}{}
+      \name{author}{1}{}{%
+        {{hash=ff29884bd8576c98e51cb8f177f08877}{%
+           family={Holub},
+           familyi={H\bibinitperiod},
+           given={Allen},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Apress}%
+      }
+      \strng{namehash}{ff29884bd8576c98e51cb8f177f08877}
+      \strng{fullhash}{ff29884bd8576c98e51cb8f177f08877}
+      \strng{bibnamehash}{ff29884bd8576c98e51cb8f177f08877}
+      \strng{authorbibnamehash}{ff29884bd8576c98e51cb8f177f08877}
+      \strng{authornamehash}{ff29884bd8576c98e51cb8f177f08877}
+      \strng{authorfullhash}{ff29884bd8576c98e51cb8f177f08877}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{1-59059-388-X}
+      \field{title}{Holub on Patterns, Learning Design Patterns by Looking at Code}
+      \field{year}{2004}
+    \endentry
+    \entry{Klabnik_Nichols}{misc}{}
+      \name{author}{2}{}{%
+        {{hash=a41f7649d631481ec7b8c9984f13ca74}{%
+           family={Klabnik},
+           familyi={K\bibinitperiod},
+           given={Steve},
+           giveni={S\bibinitperiod}}}%
+        {{hash=dddb7b905682bcd4ef905d1f964c7ae8}{%
+           family={Nichols},
+           familyi={N\bibinitperiod},
+           given={Carol},
+           giveni={C\bibinitperiod}}}%
+      }
+      \strng{namehash}{e2d6cc0cf49d363084c5ab92add7b56f}
+      \strng{fullhash}{e2d6cc0cf49d363084c5ab92add7b56f}
+      \strng{bibnamehash}{e2d6cc0cf49d363084c5ab92add7b56f}
+      \strng{authorbibnamehash}{e2d6cc0cf49d363084c5ab92add7b56f}
+      \strng{authornamehash}{e2d6cc0cf49d363084c5ab92add7b56f}
+      \strng{authorfullhash}{e2d6cc0cf49d363084c5ab92add7b56f}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{The Rust Programming Language}
+      \verb{urlraw}
+      \verb https://doc.rust-lang.org/stable/book/ch10-02-traits.html#implementing-a-trait-on-a-type
+      \endverb
+      \verb{url}
+      \verb https://doc.rust-lang.org/stable/book/ch10-02-traits.html#implementing-a-trait-on-a-type
+      \endverb
+    \endentry
+    \entry{Lyon}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=118391cf2e23ce849908c396377d2782}{%
+           family={Lyon},
+           familyi={L\bibinitperiod},
+           given={George},
+           giveni={G\bibinitperiod}}}%
+      }
+      \strng{namehash}{118391cf2e23ce849908c396377d2782}
+      \strng{fullhash}{118391cf2e23ce849908c396377d2782}
+      \strng{bibnamehash}{118391cf2e23ce849908c396377d2782}
+      \strng{authorbibnamehash}{118391cf2e23ce849908c396377d2782}
+      \strng{authornamehash}{118391cf2e23ce849908c396377d2782}
+      \strng{authorfullhash}{118391cf2e23ce849908c396377d2782}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{labelnamesource}{author}
+      \verb{urlraw}
+      \verb https://gist.github.com/GeorgeLyon/c7b07923f7a800674bc9745ae45ddc7f
+      \endverb
+      \verb{url}
+      \verb https://gist.github.com/GeorgeLyon/c7b07923f7a800674bc9745ae45ddc7f
+      \endverb
+    \endentry
+    \entry{Martin_03}{book}{}
+      \name{author}{1}{}{%
+        {{hash=6f41df64eb0dc4855be70172368604c2}{%
+           family={Martin},
+           familyi={M\bibinitperiod},
+           given={Robert\bibnamedelima C.},
+           giveni={R\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Prentice Hall}%
+      }
+      \strng{namehash}{6f41df64eb0dc4855be70172368604c2}
+      \strng{fullhash}{6f41df64eb0dc4855be70172368604c2}
+      \strng{bibnamehash}{6f41df64eb0dc4855be70172368604c2}
+      \strng{authorbibnamehash}{6f41df64eb0dc4855be70172368604c2}
+      \strng{authornamehash}{6f41df64eb0dc4855be70172368604c2}
+      \strng{authorfullhash}{6f41df64eb0dc4855be70172368604c2}
+      \field{extraname}{1}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{978-0-135-97444-5}
+      \field{title}{Agile Software Development: Principles, Patterns, and Practices}
+      \field{year}{2002}
+    \endentry
+    \entry{Martin_14}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=6f41df64eb0dc4855be70172368604c2}{%
+           family={Martin},
+           familyi={M\bibinitperiod},
+           given={Robert\bibnamedelima C.},
+           giveni={R\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+      }
+      \strng{namehash}{6f41df64eb0dc4855be70172368604c2}
+      \strng{fullhash}{6f41df64eb0dc4855be70172368604c2}
+      \strng{bibnamehash}{6f41df64eb0dc4855be70172368604c2}
+      \strng{authorbibnamehash}{6f41df64eb0dc4855be70172368604c2}
+      \strng{authornamehash}{6f41df64eb0dc4855be70172368604c2}
+      \strng{authorfullhash}{6f41df64eb0dc4855be70172368604c2}
+      \field{extraname}{2}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{11}
+      \field{title}{OO vs FP}
+      \field{year}{2014}
+      \verb{urlraw}
+      \verb https://blog.cleancoder.com/uncle-bob/2014/11/24/FPvsOO.html
+      \endverb
+      \verb{url}
+      \verb https://blog.cleancoder.com/uncle-bob/2014/11/24/FPvsOO.html
+      \endverb
+    \endentry
+    \entry{Martin_17}{book}{}
+      \name{author}{1}{}{%
+        {{hash=6f41df64eb0dc4855be70172368604c2}{%
+           family={Martin},
+           familyi={M\bibinitperiod},
+           given={Robert\bibnamedelima C.},
+           giveni={R\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Boston, MA}%
+      }
+      \list{publisher}{1}{%
+        {Prentice Hall}%
+      }
+      \strng{namehash}{6f41df64eb0dc4855be70172368604c2}
+      \strng{fullhash}{6f41df64eb0dc4855be70172368604c2}
+      \strng{bibnamehash}{6f41df64eb0dc4855be70172368604c2}
+      \strng{authorbibnamehash}{6f41df64eb0dc4855be70172368604c2}
+      \strng{authornamehash}{6f41df64eb0dc4855be70172368604c2}
+      \strng{authorfullhash}{6f41df64eb0dc4855be70172368604c2}
+      \field{extraname}{3}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{978-0-13-449416-6}
+      \field{series}{Robert C. Martin Series}
+      \field{title}{Clean Architecture: A Craftsman's Guide to Software Structure and Design}
+      \field{year}{2017}
+      \keyw{01841 103 book safari software architecture development}
+    \endentry
+    \entry{Matsakis_2014}{inproceedings}{}
+      \name{author}{2}{}{%
+        {{hash=b9ab334450ee042b091f8f30fe01d877}{%
+           family={Matsakis},
+           familyi={M\bibinitperiod},
+           given={Nicholas\bibnamedelima D},
+           giveni={N\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+        {{hash=b9a3d4481011c0f83352dbe1e5adb0de}{%
+           family={Klock\bibnamedelima II},
+           familyi={K\bibinitperiod\bibinitdelim I\bibinitperiod},
+           given={Felix\bibnamedelima S},
+           giveni={F\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {ACM}%
+      }
+      \strng{namehash}{9405a61ca6d068f80b44b60a2d4fdb53}
+      \strng{fullhash}{9405a61ca6d068f80b44b60a2d4fdb53}
+      \strng{bibnamehash}{9405a61ca6d068f80b44b60a2d4fdb53}
+      \strng{authorbibnamehash}{9405a61ca6d068f80b44b60a2d4fdb53}
+      \strng{authornamehash}{9405a61ca6d068f80b44b60a2d4fdb53}
+      \strng{authorfullhash}{9405a61ca6d068f80b44b60a2d4fdb53}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{ACM SIGAda Ada Letters}
+      \field{title}{The Rust language}
+      \field{volume}{34}
+      \field{year}{2014}
+      \field{pages}{103\bibrangedash 104}
+      \range{pages}{2}
+    \endentry
+    \entry{Pierce_91}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=7365a4e827c2dfa2c5af0c0ec4c18c27}{%
+           family={Pierce},
+           familyi={P\bibinitperiod},
+           given={Benjamin\bibnamedelima C.},
+           giveni={B\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+      }
+      \strng{namehash}{7365a4e827c2dfa2c5af0c0ec4c18c27}
+      \strng{fullhash}{7365a4e827c2dfa2c5af0c0ec4c18c27}
+      \strng{bibnamehash}{7365a4e827c2dfa2c5af0c0ec4c18c27}
+      \strng{authorbibnamehash}{7365a4e827c2dfa2c5af0c0ec4c18c27}
+      \strng{authornamehash}{7365a4e827c2dfa2c5af0c0ec4c18c27}
+      \strng{authorfullhash}{7365a4e827c2dfa2c5af0c0ec4c18c27}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Programming with intersection types, union types, and polymorphism}
+      \verb{urlraw}
+      \verb https://api.semanticscholar.org/CorpusID:118907019
+      \endverb
+      \verb{url}
+      \verb https://api.semanticscholar.org/CorpusID:118907019
+      \endverb
+    \endentry
+    \entry{Taylor_21}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=2a1364d409000c7fa6ee8fa1d1e14511}{%
+           family={Taylor},
+           familyi={T\bibinitperiod},
+           given={Ian\bibnamedelima Lance},
+           giveni={I\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+      }
+      \strng{namehash}{2a1364d409000c7fa6ee8fa1d1e14511}
+      \strng{fullhash}{2a1364d409000c7fa6ee8fa1d1e14511}
+      \strng{bibnamehash}{2a1364d409000c7fa6ee8fa1d1e14511}
+      \strng{authorbibnamehash}{2a1364d409000c7fa6ee8fa1d1e14511}
+      \strng{authornamehash}{2a1364d409000c7fa6ee8fa1d1e14511}
+      \strng{authorfullhash}{2a1364d409000c7fa6ee8fa1d1e14511}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{labelnamesource}{author}
+      \verb{urlraw}
+      \verb https://github.com/golang/go/issues/45346
+      \endverb
+      \verb{url}
+      \verb https://github.com/golang/go/issues/45346
+      \endverb
+    \endentry
+    \entry{Weck_Szyperski}{misc}{}
+      \name{author}{2}{}{%
+        {{hash=6fc63043b845d08f2b05d169f2832b02}{%
+           family={Weck},
+           familyi={W\bibinitperiod},
+           given={Wolfgang},
+           giveni={W\bibinitperiod}}}%
+        {{hash=3b888dabd874dce1a9c3942201f04eb6}{%
+           family={Szyperski},
+           familyi={S\bibinitperiod},
+           given={Clemens},
+           giveni={C\bibinitperiod}}}%
+      }
+      \strng{namehash}{9f810938b1764b1d4beab6e3deea71fa}
+      \strng{fullhash}{9f810938b1764b1d4beab6e3deea71fa}
+      \strng{bibnamehash}{9f810938b1764b1d4beab6e3deea71fa}
+      \strng{authorbibnamehash}{9f810938b1764b1d4beab6e3deea71fa}
+      \strng{authornamehash}{9f810938b1764b1d4beab6e3deea71fa}
+      \strng{authorfullhash}{9f810938b1764b1d4beab6e3deea71fa}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{{Do We Need Inheritance?}}
+      \verb{urlraw}
+      \verb https://www.researchgate.net/publication/2297653_Do_We_Need_Inheritance
+      \endverb
+      \verb{url}
+      \verb https://www.researchgate.net/publication/2297653_Do_We_Need_Inheritance
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
 
-\bibitem{Dahl_04}
-Ole-Johan Dahl.
-\newblock The birth of object orientation: the simula languages.
-\newblock In O.~Owe, S.~Krogdahl, and T.~Lyche, editors, {\em From
-  Object-Orientation to Formal Methods}, volume 2635 of {\em Lecture Notes in
-  Computer Science}, Berlin, Heidelberg, 2004. Springer.
-
-\bibitem{Gamma_et_al_94}
-Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides.
-\newblock {\em Design Patterns. Elements of Reusable Object-Oriented Software}.
-\newblock Prentice Hall, 1994.
-
-\bibitem{Haveraaen_et_al_19}
-Magne Haveraaen, Jaakko J{\"a}rvi, and Damian Rouson.
-\newblock Reflecting on generics in fortran.
-\newblock July 2019.
-
-\bibitem{Holub_04}
-Allen Holub.
-\newblock {\em Holub on Patterns, Learning Design Patterns by Looking at Code}.
-\newblock Apress, 2004.
-
-\bibitem{Klabnik_Nichols}
-Steve Klabnik and Carol Nichols.
-\newblock The rust programming language.
-\newblock
-  \url{https://doc.rust-lang.org/stable/book/ch10-02-traits.html#implementing-a-trait-on-a-type}.
-
-\bibitem{Lyon}
-George Lyon.
-\newblock
-  \url{https://gist.github.com/GeorgeLyon/c7b07923f7a800674bc9745ae45ddc7f}.
-
-\bibitem{Martin_03}
-Robert~C. Martin.
-\newblock {\em Agile Software Development: Principles, Patterns, and
-  Practices}.
-\newblock Prentice Hall, 2002.
-
-\bibitem{Martin_14}
-Robert~C. Martin.
-\newblock Oo vs fp.
-\newblock \url{https://blog.cleancoder.com/uncle-bob/2014/11/24/FPvsOO.html},
-  November 2014.
-
-\bibitem{Martin_17}
-Robert~C. Martin.
-\newblock {\em Clean Architecture: A Craftsman's Guide to Software Structure
-  and Design}.
-\newblock Robert C. Martin Series. Prentice Hall, Boston, MA, 2017.
-
-\bibitem{Matsakis_2014}
-Nicholas~D Matsakis and Felix~S Klock~II.
-\newblock The rust language.
-\newblock In {\em ACM SIGAda Ada Letters}, volume~34, pages 103--104. ACM,
-  2014.
-
-\bibitem{Pierce_91}
-Benjamin~C. Pierce.
-\newblock Programming with intersection types, union types, and polymorphism.
-\newblock 1991.
-
-\bibitem{Taylor_21}
-Ian~Lance Taylor.
-\newblock \url{https://github.com/golang/go/issues/45346}.
-
-\bibitem{Weck_Szyperski}
-Wolfgang Weck and Clemens Szyperski.
-\newblock {Do We Need Inheritance?}
-\newblock
-  \url{https://www.researchgate.net/publication/2297653_Do_We_Need_Inheritance}.
-
-\end{thebibliography}
