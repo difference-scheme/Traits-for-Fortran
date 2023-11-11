@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  10 NOV 2023 17:17
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  11 NOV 2023 16:22
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -842,14 +842,14 @@ Chapter 6.
 consecutive:
 [44]) (./Code/Fortran/mixed.f90 [45] [46] [47] [48])
 (./Code/Fortran/static1.f90 [49] [50] [51] [52]) [53] [54]
-Overfull \hbox (15.27174pt too wide) in paragraph at lines 2140--2140
+Overfull \hbox (15.27174pt too wide) in paragraph at lines 2141--2141
 []\T1/ppl/m/n/10.95 George Lyon. \T1/ppl/m/sc/10.95 url\T1/ppl/m/n/10.95 : [][]
 $\T1/fvm/m/n/10.95 https : / / gist . github . com / GeorgeLyon / c7b07923f7a80
 0674bc9745ae45ddc7f$[][]\T1/ppl/m/n/10.95 . 
  []
 
 
-Overfull \hbox (27.29716pt too wide) in paragraph at lines 2140--2140
+Overfull \hbox (27.29716pt too wide) in paragraph at lines 2141--2141
 []\T1/ppl/m/n/10.95 Wolfgang Weck and Clemens Szyper-ski. \T1/ppl/m/it/10.95 Do
  We Need In-her-i-tance? \T1/ppl/m/sc/10.95 url\T1/ppl/m/n/10.95 : [][]$\T1/fvm
 /m/n/10.95 https : / / www . researchgate .
@@ -861,7 +861,7 @@ Overfull \hbox (27.29716pt too wide) in paragraph at lines 2140--2140
  been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2151 \end{abstract}
+l.2152 \end{abstract}
                       [1] (./traits.aux)
 Package rerunfilecheck Info: File `traits.out' has not changed.
 (rerunfilecheck)             Checksum: 0218F32AB1E93CD7006EEB6C3198B73A;10293.
@@ -872,7 +872,7 @@ Package logreq Info: Writing requests to 'traits.run.xml'.
 Here is how much of TeX's memory you used:
  22962 strings out of 480247
  383683 string characters out of 5896151
- 1112192 words of memory out of 5000000
+ 1112191 words of memory out of 5000000
  39233 multiletter control sequences out of 15000+600000
  513104 words of font info for 109 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
@@ -883,10 +883,10 @@ fonts/type1/public/bera/fvmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
 ublic/bera/fvmro8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/
 uplb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb><
 /usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on traits.pdf (57 pages, 278755 bytes).
+Output written on traits.pdf (57 pages, 279046 bytes).
 PDF statistics:
- 2154 PDF objects out of 2487 (max. 8388607)
- 2061 compressed objects within 21 object streams
+ 2156 PDF objects out of 2487 (max. 8388607)
+ 2063 compressed objects within 21 object streams
  1376 named destinations out of 1440 (max. 500000)
  401 words of extra memory for PDF output out of 10000 (max. 10000000)
 

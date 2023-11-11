@@ -198,7 +198,7 @@ fields over the last decades. Namely, the realizations that
   way as well.
 \end{itemize}
 
-These two developments taken together have recently opened up the
+These two developments, taken together, have recently opened up the
 possibility to treat polymorphism, and hence the dependency management
 of both user-defined and language intrinsic types, uniformly in a
 programming language. As a consequence, it has become possible to use
@@ -210,7 +210,7 @@ to better satisfy a user's needs for both flexibility and efficiency.
 
 \section{Historical background}
 
-The road towards these realizations has been surprisingly long. Over
+The road towards these realizations was surprisingly long. Over
 the last five decades, a huge body of OO programming experience first
 had to demonstrate that the use of (both single and multiple)
 implementation inheritance breaks encapsulation in OO languages, and
@@ -967,12 +967,12 @@ the latter).
 In order to use abstract interfaces to support run-time polymorphic
 objects through subtyping, Fortran's \code{class} specifier for
 variable declarations needs to be enhanced to accept named abstract
-interfaces, like in the following example, that already appeared in
-Sect.~\ref{sect:interface_defs},
+interfaces, like in the following declaration of a procedure argument
+(taken from Sect.~\ref{sect:interface_defs})
 \begin{lstlisting}[language=LFortran,style=boxed]
   class(IAddition), intent(inout) :: self
 \end{lstlisting}
-or in the following two declarations:
+or in the declarations of the following two variables:
 \begin{lstlisting}[language=LFortran,style=boxed]
   class(IAddition), allocatable :: adder
   class(IAddition), pointer     :: adderptr
@@ -1095,8 +1095,9 @@ as in the previous example):
 In case the ``implementing'' type is \code{abstract}, it must be
 allowed to provide an only partial implementation of the interface(s)
 that it adopts. However, any non-abstract type that is derived from
-this abstract type through implementation inheritance (subclassing)
-must then provide a full implementation.
+this abstract type through implementation inheritance
+(i.e. subclassing via the \code{extends} specifier) must then provide
+a full implementation.
 
 
 \subsection{\code{Implements} statement:
@@ -1338,7 +1339,7 @@ that redefines interface \code{INumeric} such as to admit either the
 default 32 bit \code{integer}, or the 64 bit \code{real} type as a
 generics constraint.
 
-The semantics of such a type set construct is that it implicitly
+The semantics of such a type set construct are that it implicitly
 defines a \emph{set of function signatures}, namely the signatures of
 the intersecting (common) set of all the operations and intrinsic
 functions (also called methods in the following) that work with all
@@ -1357,9 +1358,9 @@ types.
 
 \subsubsection{Kind parameters}
 
-Expanding on the previous example, an \code{INumeric} interface that is
-potentially even more useful as a generics constraint could be coded
-as follows:
+Expanding on the previous example, an \code{INumeric} interface that
+might be even more useful as a generics constraint, for a number of
+tasks, could be coded as follows:
 \begin{lstlisting}[language=LFortran,style=boxed]
    abstract interface :: INumeric
       integer(*) | real(*) | complex(*)
@@ -1413,7 +1414,7 @@ Sect.~\ref{sect:generic_interfaces}, provides such an example:
 The notation within the generic type parameter list in curly braces
 defines a type set interface implicitly, to be used as a type
 constraint for type \code{T}. In this particular case, to admit only
-the 32 bit \code{integer}, or 64 bit \code{real} type, for \code{T},
+the 32 bit \code{integer}, or 64 bit \code{real} type for \code{T},
 as discussed above.
 
 \subsubsection{Predefined constraints}
@@ -1456,7 +1457,7 @@ module user_code
 end module user_code
 \end{lstlisting}
 
-\subsubsection{Present restrictions and potential future extensions}
+\subsubsection{Present restrictions and possible future extensions}
 \label{sect:future_extensions}
 
 Interfaces that are formulated in terms of type sets are presently
@@ -1472,9 +1473,9 @@ these type sets.}, and they cannot be used in variable declarations
 that involve the \code{class} specifier (as described in
 Sect.~\ref{sect:trait_objects}).
 
-As it was demonstrated by the examples that were given above,
-interfaces that are formulated in terms of type sets often boil down
-to a set of language intrinsic types. Since the \code{class}
+As it was demonstrated by the examples that were given in this
+section, interfaces that are formulated in terms of type sets often
+boil down to a set of language intrinsic types. Since the \code{class}
 declaration specifier is undefined for intrinsic types, and since --
 moreover -- the semantics of this specifier allow for late binding of
 methods, which is incompatible with intrinsic types, a compiler will
@@ -1947,12 +1948,12 @@ The most important point to note, in Listing~\ref{lst:OOFortran}, is
 how this code makes use of trait objects
 (cf. Sect.~\ref{sect:trait_objects}) and generics to avoid rigid
 dependencies on user-defined implementation and language intrinsic
-types, respectively, and thus allows for a maximum of code
-reuse. Notice, in particular, how the main program is the only part of
-the code that (necessarily) depends on implementations. The
-\emph{entire} rest of the code is decoupled, i.e. it depends merely on
-abstract interfaces (see the \code{use} statements in the above
-modules).
+types, respectively, and thus realizes a plugin architecture that
+allows for a maximum of code reuse. Notice, in particular, how the
+main program is the only part of the code that (necessarily) depends
+on implementations. The \emph{entire} rest of the code is decoupled,
+i.e. it depends merely on abstract interfaces (see the \code{use}
+statements in the above modules).
 
 Notice also, that all the abstract interfaces that are required for
 this purpose are defined by the user himself (without any need to

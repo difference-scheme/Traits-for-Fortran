@@ -125,7 +125,7 @@
            giveni={T\bibinitperiod}}}%
       }
       \list{location}{1}{%
-        {Berlin, Heidelberg}%
+        {Berlin}%
       }
       \list{publisher}{1}{%
         {Springer}%
@@ -144,10 +144,14 @@
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{From Object-Orientation to Formal Methods}
-      \field{series}{Lecture Notes in Computer Science}
       \field{title}{The Birth of Object Orientation: the Simula Languages}
-      \field{volume}{2635}
       \field{year}{2004}
+      \verb{urlraw}
+      \verb https://www.mn.uio.no/ifi/english/about/ole-johan-dahl/bibliography/the-birth-of-object-orientation-the-simula-languages.pdf
+      \endverb
+      \verb{url}
+      \verb https://www.mn.uio.no/ifi/english/about/ole-johan-dahl/bibliography/the-birth-of-object-orientation-the-simula-languages.pdf
+      \endverb
     \endentry
     \entry{Gamma_et_al_94}{book}{}
       \name{author}{4}{}{%
@@ -387,7 +391,6 @@
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{isbn}{978-0-13-449416-6}
-      \field{series}{Robert C. Martin Series}
       \field{title}{Clean Architecture: A Craftsman's Guide to Software Structure and Design}
       \field{year}{2017}
       \keyw{01841 103 book safari software architecture development}
