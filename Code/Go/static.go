@@ -91,6 +91,7 @@ func main() {
       avf = Averager[float64,PairwiseSum[float64,SimpleSum[float64]]]{}
    default:
       fmt.Println("Case not implemented!")
+      return
    }
 
    fmt.Println(avi.average(xi))

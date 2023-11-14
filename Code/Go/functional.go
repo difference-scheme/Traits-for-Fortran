@@ -55,6 +55,7 @@ func main() {
                }
       default:
 	 fmt.Println("Case not implemented!")
+	 return
     }
 
     fmt.Println(avi(xi))

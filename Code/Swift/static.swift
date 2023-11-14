@@ -57,35 +57,41 @@ struct Averager<U: ISum>: IAverager {
 }
 
 // ..............
-// main program
+// main function
 // ..............
 
-// the type parameters in <> brackets are optional. They're not required!
-let avs = Averager<SimpleSum>(drv: SimpleSum())
-let avp = Averager<PairwiseSum<SimpleSum>>(drv: PairwiseSum(other: SimpleSum()))
+func main() {
 
-var av : IAverager = avs
+    let avs = Averager(drv: SimpleSum())
+    let avp = Averager(drv: PairwiseSum(other: SimpleSum()))
 
-var xi: [Int32] = [1,2,3,4,5]
-var xf: [Float64] = [1.0,2.0,3.0,4.0,5.0]
+    var av : IAverager = avs
+    
+    let xi: [Int32] = [1,2,3,4,5]
+    let xf: [Float64] = [1.0,2.0,3.0,4.0,5.0]
+    
+    var key: Int32?
 
-var key: Int32?
+    print("Simple   sum average: 1")
+    print("Pairwise sum average: 2")
+    print("Choose an averaging method: ")
+    key = Int32(readLine()!)
+    
+    switch key {
+    case 1:
+        // simple sum case
+        av = avs
+    case 2:
+        // pairwise sum case
+        av = avp
+    default:
+        print("Case not implemented!")
+        return
+    }
 
-print("Simple   sum average: 1")
-print("Pairwise sum average: 2")
-print("Choose an averaging method: ")
-key = Int32(readLine()!)
-
-switch key {
-case 1:
-    // simple sum case
-    av = avs
-case 2:
-    // pairwise sum case
-    av = avp
-default:
-    print("Case not implemented!")
+    print( av.average(x: xi) / Int32(xi.count) )
+    print( av.average(x: xf) / Float64(xf.count) )
 }
 
-print( av.average(x: xi) / Int32(xi.count) )
-print( av.average(x: xf) / Float64(xf.count) )
+// execute main function
+main()

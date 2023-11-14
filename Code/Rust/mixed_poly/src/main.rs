@@ -22,8 +22,7 @@ pub mod simple_library {
     // SimpleSum ADT
     // ..............
 
-    pub struct SimpleSum {
-    }
+    pub struct SimpleSum;
     
     impl<T> ISum<T> for SimpleSum where T: Num + Copy {
         fn sum(&self, x: &[T]) -> T {
@@ -136,6 +135,7 @@ fn main() {
                avf = Box::new(avpf);
         }
         _ => { println!("Case not implemented!");
+               return;
         }
     }
 

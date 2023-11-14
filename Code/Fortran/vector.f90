@@ -6,9 +6,7 @@ module vector_library
    private
 
    abstract interface :: IAppendable
-      ! associated type "Element"
-      type, alias :: Element
-
+      type, alias :: Element  ! associated type "Element"
       subroutine append(self, item)
          import; implicit none
          class(IAppendable), intent(inout) :: self
