@@ -63,15 +63,16 @@
   compile-time polymorphism, i.e. object-oriented and generic
   programming. The feature set described here is small enough to
   facilitate a first prototype implementation in an open source
-  compiler, like LFortran, but at the same time comprehensive enough
-  to already endow Fortran with polymorphism capabilities that largely
-  equal those of modern programming languages like Swift, Rust, or
-  Go. The discussed extensions are expected to transform the way
-  both Fortran applications and libraries will be written in the
-  future. Decoupled software plugin architectures with enormously
-  improved source code flexibility, reusability, maintainability, and
-  reliability will become possible, without any need for run-time type
-  inspections, and without any loss in computational performance.}
+  compiler, like LFortran, or LLVM/Flang, but at the same time
+  comprehensive enough to already endow Fortran with polymorphism
+  capabilities that largely equal those of modern programming
+  languages like Swift, Rust, or Go. The discussed extensions are
+  expected to transform the way both Fortran applications and
+  libraries will be written in the future. Decoupled software plugin
+  architectures with enormously improved source code flexibility,
+  reusability, maintainability, and reliability will become possible,
+  without any need for run-time type inspections, and without any loss
+  in computational performance.}
 
 \chapter{Introduction}
 
@@ -461,10 +462,10 @@ benefit from an encapsulated coding style.
 \section{Go}
 
 Go has supported run-time polymorphism through (polymorphic)
-``interfaces'' (and hence modern-day OO programming) since its
+``interfaces'' (and thus modern-day OO programming) since its
 inception. In Go, encapsulation is done by storing state in a
 ``\code{struct}'' and by binding procedures, that need to use that
-state, to this same \code{struct}. Thus creating a user-defined
+state, to this same \code{struct}. Thereby creating a user-defined
 abstract data type (or ADT) with methods. Go allows the programmer to
 implement multiple polymorphic interfaces for such a type (i.e. to use
 multiple interface inheritance), even though it offers no explicit
@@ -537,7 +538,7 @@ and \code{float64} types separately, in order to then use these
 objects on \code{int32} and \code{float64} data, respectively. That
 \code{two} such objects are required (one for each language intrinsic
 data type) is connected to the aforementioned fact that in order to
-make methods use generic type parameters, one has to parameterize
+make methods use generic type parameters in Go, one has to parameterize
 interfaces, and instantiate these with different actual data types, as
 in \code{func main}'s first two code lines. A single
 (i.e. unparameterized) \code{IAverager} interface therefore doesn't
@@ -825,28 +826,29 @@ haves'' for Fortran.
 
 Rust's basic model for generics is similar to Go's in that it allows
 for parameterization of structures, interfaces, and ordinary
-functions. Hence, what has been said above for Go in this respect
-holds also for Rust. Rust has, unfortunately, some quirks which render
-its use for the management of all types of dependencies through
-polymorphism somewhat sub-optimal when compared to the other languages
-considered here. The language is unpleasant to use, because of its
-``borrow checker'', its employment of move semantics by default, its
-\emph{excessive} obsession with type safety, and its overall C++-like
-philosophy to copiously rely on external dependencies, even for the
-most basic tasks, like initializing a generic type. The Rust version
-of our test case is therefore marred by some dependencies on external
-libraries, which is somewhat contrarian to the purpose of programming
-in a polymorphic fashion, namely to avoid rigid dependencies. But even
-with the functionality provided by such external dependencies, Rust
-doesn't allow type conversion to generic types within generic
-routines. A necessary capability for numerical work that is, for
-instance, built into Go. The points we like most about the language
-are its idea to decouple trait implementations from a \code{struct}'s
-definition through explicit \code{impl} blocks, and the complete
-control over the use of dynamic vs. static method dispatch (via
-trait objects and generics, respectively) that Rust affords the
-programmer. These are particular features of Rust that, in our
-opinion, Fortran should borrow in some form.
+functions, but not methods. Hence, what has been said above for Go in
+this respect holds also for Rust. Rust has, unfortunately, some quirks
+which render its use for the management of all types of dependencies
+through polymorphism somewhat sub-optimal when compared to the other
+languages considered here. The language is unpleasant to use, because
+of its ``borrow checker'', its employment of move semantics by
+default, its \emph{excessive} obsession with type safety, and its
+overall C++-like philosophy to copiously rely on external
+dependencies, even for the most basic tasks, like initializing a
+generic type. The Rust version of our test case is therefore marred by
+some dependencies on external libraries, which is quite contrarian
+to the purpose of programming in a polymorphic fashion, namely to
+avoid rigid dependencies. But even with the functionality provided by
+such external dependencies, Rust doesn't allow type conversion to
+generic types within generic routines. A necessary capability for
+numerical work that is, for instance, built into Go. The points we
+like most about the language are its idea to decouple trait
+implementations from a \code{struct}'s definition through explicit
+\code{impl} blocks, and the complete control over the use of dynamic
+vs. static method dispatch (via trait objects and generics,
+respectively) that Rust affords the programmer. These are particular
+features of Rust that, in our opinion, Fortran should borrow in some
+form.
 
 \subsection{Swift}
 
@@ -1190,9 +1192,10 @@ end module double_enhanced
 
 Alternatively, we could have skipped both of the last two code
 examples, to instead adopt the interfaces and provide the method
-implementations simultaneously, splitting, for instance, the
-\code{implements} statements into two, to conform to one interface at
-a time, like so:
+implementations simultaneously, using a single \code{implements}
+statement obtained as the fusion of the previous two. Or we could
+have employed two separate \code{implements} statements in order to
+conform to one interface at a time, like so:
 \begin{lstlisting}[language=LFortran,style=boxed]
    ...
    use basic, only: BasicMath
@@ -1209,10 +1212,11 @@ contains
    ...
 \end{lstlisting}
 The result would have been the same. Such splitting of
-\code{implements} statements can be useful to improve readability, if
-different interfaces contain multiple procedure signatures, that would
-all need to be implemented. These two statements (together with the
-required implementations), could then even be distributed among
+\code{implements} statements can be useful to improve code
+readability, as it makes the association between the interfaces, and
+the actual procedures that are to be implemented for any one of them,
+immediately obvious. These two statements (together with the actual
+implementations), could then have been distributed even among
 different modules and files. Notice, also, how parentheses around
 interface lists in \code{implements} statements are optional, but not
 required.
@@ -1713,10 +1717,11 @@ derived types that implement the same interface can be run-time
 polymorphic.
 
 The following code snippet finally shows how an object of the
-\code{PaiwiseSum} type could be declared statically (by substituting
-its generic type parameter \code{U} by the \code{SimpleSum} type of
-Sect.~\ref{sect:generic_methods}), and how its generic \code{sum}
-method would be employed using automatic type inference:
+\code{PaiwiseSum} type could be declared and instantiated statically
+(by substituting its generic type parameter \code{U} by the
+\code{SimpleSum} type of Sect.~\ref{sect:generic_methods}), and how
+its generic \code{sum} method would be employed using automatic type
+inference:
 \begin{lstlisting}[language=LFortran,style=boxed]
   type(PairwiseSum{SimpleSum}) :: pairwise
 
@@ -1730,11 +1735,11 @@ method would be employed using automatic type inference:
 If a derived type is parameterized over a generic type, as in the
 example of Sect.~\ref{sect:generic_derived_types}, then its structure
 constructor must also be assumed to be parameterized over the same
-generic type. Hence, calls of structure constructors, that are
-instantiated with specific argument types substituting the generic
-type parameters of their derived types, must be legal. The following
-(optional, because superfluous, as demonstrated above) initialization
-of object \code{pairwise} by the structure constructor of type
+generic type. Hence, calls of structure constructors, with specific
+argument types substituting the generic type parameters of their
+derived types, must be legal. The following (in this particular case
+redundant, as demonstrated above) run-time instantiation of object
+\code{pairwise} by the structure constructor of type
 \code{PairwiseSum} provides such an example:
 \begin{lstlisting}[language=LFortran,style=boxed]
   type(PairwiseSum{SimpleSum}) :: pairwise
@@ -1974,7 +1979,7 @@ the use of generics, polymorphic methods in OO programming can be made
 to use static dispatch\footnote{This can be achieved in a compiler by
 implementing generic polymorphism through the (compile-time) technique
 of monomorphization, that relies on static method dispatch. In
-contrast to traditional (run-time) OO polymorphism, that relies on
+contrast to traditional (run-time) polymorphism, that relies on
 virtual method tables and dynamic method dispatch.}. This will enable
 inlining of polymorphic methods by the compiler, to potentially
 improve code performance. Listing~\ref{lst:staticFortran} gives a
@@ -2134,7 +2139,7 @@ languages in terms of reusability, and moreover does not sacrifice any
 computational performance. The present design achieves all of this
 largely without requiring manual instantiations of generics, and it
 furthermore provides a solid foundation for a number of possible
-future extensions, like support of rank genericity, and compile time
+future extensions, like support for rank genericity, and compile time
 polymorphism via union (sum) types.
 
 \printbibliography
