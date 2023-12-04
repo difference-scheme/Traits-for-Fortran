@@ -7,7 +7,7 @@ module vector_library
 
    abstract interface :: IAppendable
       type, alias :: Element  ! associated type "Element"
-      subroutine append(self, item)
+      subroutine append(self,item)
          import; implicit none
          class(IAppendable), intent(inout) :: self
          type(Element),      intent(in)    :: item
@@ -23,10 +23,10 @@ module vector_library
 
 contains
 
-   subroutine append(self, item)
+   subroutine append(self,item)
       class(Vector{U}), intent(inout) :: self
       type(U),          intent(in)    :: item
-      self%elements = [self%elements, item]
+      self%elements = [self%elements,item]
    end subroutine append
 
 end module vector_library

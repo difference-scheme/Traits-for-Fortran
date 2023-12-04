@@ -83,7 +83,7 @@ pub mod averager_library {
     // Averager ADT
     // .............
     
-    pub struct Averager <T,U> {
+    pub struct Averager<T,U> {
         drv: U,
         phantom: PhantomData::<T>,
     }
@@ -122,7 +122,7 @@ fn main() {
 
     let avpi = Averager::new( PairwiseSum::new(SimpleSum{}) );
     let avpf = Averager::new( PairwiseSum::new(SimpleSum{}) );
-    
+
     let mut avi: Box<dyn IAverager::<i32>> = Box::new(avsi);
     let mut avf: Box<dyn IAverager::<f64>> = Box::new(avsf);
 

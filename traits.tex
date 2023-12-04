@@ -63,7 +63,7 @@
   compile-time polymorphism, i.e. object-oriented and generic
   programming. The feature set described here is small enough to
   facilitate a first prototype implementation in an open source
-  compiler, like LFortran, or LLVM/Flang, but at the same time
+  compiler, like LFortran, or LLVM Flang, but at the same time
   comprehensive enough to already endow Fortran with polymorphism
   capabilities that largely equal those of modern programming
   languages like Swift, Rust, or Go. The discussed extensions are
@@ -136,26 +136,25 @@ answering this question:
   procedures and data types. If the programmer employs encapsulation
   of both a program's procedures and its data, i.e. its state, both
   these dependencies can actually be viewed as dependencies on
-  user-defined abstract data types. That is, types that contain both
-  user-defined state, and implementation code which operates on that
-  (hidden) state. These are the dependencies that Martin is concretely
-  referring to in the above quotation, and it is these dependencies on
-  (volatile) implementation (details) that are particularly
-  troublesome, because they lead to rigid coupling between the various
-  different \emph{parts} of an application. Their results are
-  recompilation cascades, the non-reusability of higher-level modules,
-  the impossibility to comprehend a large application incrementally,
-  and fragility of such an application as a whole.
+  user-defined abstract data types. These are the dependencies that
+  Martin is concretely referring to in the above quotation, and it is
+  these dependencies on (volatile) user-defined data and
+  implementations that are particularly troublesome, because they lead
+  to rigid coupling between the various different \emph{parts} of an
+  application. Their results are recompilation cascades, the
+  non-reusability of higher-level modules, the impossibility to
+  comprehend a large application incrementally, and fragility of such
+  an application as a whole.
 \item
   Secondly, every program, that is written in a statically typed
   language, also has dependencies on abstract data types that are
   provided by the language itself. Fortran's \code{integer},
-  \code{real}, etc. intrinsic types are examples of language intrinsic
-  abstract data types. While hard-wired dependencies on such intrinsic
-  types may not couple different parts of a program (because the
-  implementations of these types are supplied by the language), they
-  nevertheless make a program's source code rigid with respect to the
-  data that it can be used on.
+  \code{real}, etc. intrinsic types are examples of
+  \emph{language-intrinsic} abstract data types. While hard-wired
+  dependencies on such intrinsic types do not couple different parts
+  of a program (because the implementations of these types are
+  supplied by the language), they nevertheless make a program's source
+  code rigid with respect to the data that it can be used on.
 \end{itemize}
 
 The most widely used approaches to manage dependencies on language
@@ -247,8 +246,8 @@ manifestations. The only negative exceptions in this respect being
 modern Fortran, and C++, which both still stick to the obsolescent
 Simula~67 paradigm.
 
-A similar learning process, as that outlined for run-time
-polymorphism, took place in the field of compile-time/parametric
+A similarly lengthy learning process, as that outlined for run-time
+polymorphism, took also place in the field of compile-time/parametric
 polymorphism. Early attempts, notably templates in C++, to render
 function arguments and class parameters polymorphic, did not impose
 any constraints on such arguments and parameters, that could be
@@ -258,7 +257,7 @@ and cryptic compiler error messages
 popularized polymorphic interfaces in OO programming, did not provide
 an interface based mechanism to constrain its generics. Within the
 pool of mainstream programming languages, this latter realization was
-first made with the advent of Rust \cite{Matsakis_2014}.
+only made with the advent of Rust \cite{Matsakis_2014}.
 
 Rust came with a trait (i.e. polymorphic interface) system with which
 it is possible for the user to uniformly and transparently express
@@ -298,7 +297,7 @@ monomorphic (i.e. rigidly coupled) functional implementation of this test
 problem, followed by a functional implementation that makes use of
 both run-time and compile-time polymorphism to manage rigid source code
 dependencies. In the survey of programming languages presented in
-Chapter~\ref{sect:survey}, we will then recode this test problem in an
+Chapter~\ref{chapt:survey}, we will then recode this test problem in an
 encapsulated fashion, to highlight how the source code dependencies in
 this problem can be managed in different languages even in more
 complex situations, that require OO techniques.
@@ -381,7 +380,7 @@ function \code{average} (that depended on specific implementations),
 by a single polymorphic version. Only the rigid dependency of function
 \code{pairwise\_sum} on function \code{simple\_sum} has not been
 removed, in order to keep the code more readable. In the OO code
-versions, that will be presented in Chapter~\ref{sect:survey}, even
+versions, that will be presented in Chapter~\ref{chapt:survey}, even
 this dependency is eliminated.
 
 A few remarks are in order for a better understanding of
@@ -436,7 +435,7 @@ in the next chapter, with objects replacing the closures (both being
 merely slightly different realizations of the same idea).
 
 \chapter{Survey of modern languages}
-\label{sect:survey}
+\label{chapt:survey}
 
 In the present chapter, we give encapsulated (i.e. OO) code versions
 of the test problem in various modern languages. As in the functional
@@ -530,7 +529,7 @@ this is required in order to enable all the \code{sum} and
 \lstinputlisting[language=Go,style=boxed,label={lst:OOGo},caption={Encapsulated Go version of the array averaging example.}]{Code/Go/mixed.go}
 
 The main program makes use of Go's built-in structure constructors,
-and constructor chaining, in order to instantiate objects of the
+and chaining of their calls, in order to instantiate objects of the
 required ADTs. In particular, it instantiates run-time polymorphic
 \code{Averager} objects (depending on whether simple or pairwise sum
 averaging is to take place), and it does so for both the \code{int32}
@@ -548,16 +547,15 @@ code duplication in client code cannot be avoided in this way.
 \section{Rust}
 
 Like Go, Rust supports both run-time and compile-time polymorphism
-through polymorphic interfaces, which Rust calls ``traits''. In
-contrast to Go, Rust has its programmers implement traits in an
-explicit manner, by using explicit ``\code{impl}'' code blocks to
-provide a trait's method implementations. These same \code{impl}
-blocks also serve to bind methods to a type that aren't a part of some
-trait, like e.g. user-defined constructors for \code{struct}s (see the
-functions named ``\code{new}'' in the following code
-Listing~\ref{lst:OORust}).
+through polymorphic interfaces, which Rust calls ``traits''. Unlike
+Go, Rust has its programmers implement traits in an explicit manner,
+by using explicit ``\code{impl}'' code blocks to provide a trait's
+method implementations. These same \code{impl} blocks also serve to
+bind methods to a type that aren't a part of some trait, like
+e.g. user-defined constructors for \code{struct}s (see the functions
+named ``\code{new}'' in the following code Listing~\ref{lst:OORust}).
 
-Differing from Go, Rust allows the programmer to implement traits for
+In contrast to Go, Rust allows the programmer to implement traits for
 both user-defined \emph{and} language intrinsic types, and to do so
 for types that are located in external libraries (called ``crates'' in
 Rust), as long as the traits themselves are defined in the
@@ -1190,12 +1188,12 @@ module double_enhanced
 end module double_enhanced
 \end{lstlisting}
 
-Alternatively, we could have skipped both of the last two code
-examples, to instead adopt the interfaces and provide the method
-implementations simultaneously, using a single \code{implements}
-statement obtained as the fusion of the previous two. Or we could
-have employed two separate \code{implements} statements in order to
-conform to one interface at a time, like so:
+Alternatively, we could have skipped the last two code examples, to
+instead adopt the interfaces and provide the method implementations
+simultaneously, using a single \code{implements} statement obtained
+from the fusion of the previous two. Or we could have employed two
+separate \code{implements} statements in order to conform to one
+interface at a time, like so:
 \begin{lstlisting}[language=LFortran,style=boxed]
    ...
    use basic, only: BasicMath
@@ -1213,8 +1211,8 @@ contains
 \end{lstlisting}
 The result would have been the same. Such splitting of
 \code{implements} statements can be useful to improve code
-readability, as it makes the association between the interfaces, and
-the actual procedures that are to be implemented for any one of them,
+readability, as it makes the association between the interfaces and
+the actual procedures, that are to be implemented for any one of them,
 immediately obvious. These two statements (together with the actual
 implementations), could then have been distributed even among
 different modules and files. Notice, also, how parentheses around
@@ -1360,7 +1358,7 @@ for conformance to this interface, given that these operators are
 implemented by the \code{integer} and \code{real(real64)} member
 types.
 
-\subsubsection{Kind parameters}
+\subsubsection{Assumed kind parameters}
 
 Expanding on the previous example, an \code{INumeric} interface that
 might be even more useful as a generics constraint, for a number of
@@ -1370,20 +1368,21 @@ tasks, could be coded as follows:
       integer(*) | real(*) | complex(*)
    end interface
 \end{lstlisting}
-Notice how this makes use of both unions of types, and kind parameters
-for types, to include all \code{integer}, \code{real}, and
-\code{complex} types, that are admitted by the language, in a single
-\code{abstract interface} constraint.
+Notice how this makes use of both unions of types, and assumed
+(i.e. wildcard) kind parameters for types, to include \emph{all}
+\code{integer}, \code{real}, and \code{complex} types, that are
+admitted by the language, in a single \code{abstract interface}
+constraint.
 
-The use of kind parameters here is merely syntactic sugar that allows
-one to avoid having to write out a type set for all the involved kinds
-of a type. For instance, if the particular Fortran implementation
-supports \code{real(real32)} and \code{real(real64)} as its only
-\code{real} types, then \code{real(kind=*)}, or \code{real(*)} for
-short, is understood to mean the type set ``\code{real(real32) |
-  real(real64)}''. Notice, also, that the more types are added to an
-interface in this fashion, the smaller the set of intersecting methods
-will usually become.
+The use of assumed kind parameters is here merely syntactic sugar
+that allows one to avoid having to write out a type set for all
+the possible kinds of a type. For instance, if the particular Fortran
+implementation supports \code{real(real32)} and \code{real(real64)} as
+its only \code{real} types, then \code{real(kind=*)}, or
+\code{real(*)} for short, is understood to mean the type set
+``\code{real(real32) | real(real64)}''. Notice, also, that the more
+types are added to an interface in this fashion, the smaller the set
+of intersecting methods will usually become.
 
 \subsubsection{Empty interface}
 
@@ -1401,7 +1400,7 @@ types (since any type has at least zero methods):
 For simple use cases, it should be optionally possible for the
 programmer to employ a shorter notation for declaring type constraints
 for generics, than having to define an explicit interface of type
-sets, like \code{INumeric} above, and to then have to use it as in
+sets, like \code{INumeric} above, and to then use it as in
 Sect.~\ref{sect:generic_interfaces}. The following modification of
 interface \code{ISum}'s original declaration of
 Sect.~\ref{sect:generic_interfaces}, provides such an example:
@@ -1917,7 +1916,7 @@ design.
 
 Listing~\ref{lst:OOFortran} shows our encapsulated Fortran code
 version of the test problem, that corresponds closest to the code
-versions that were presented in Chapter~\ref{sect:survey} for all the
+versions that were presented in Chapter~\ref{chapt:survey} for all the
 other languages.
 
 \begin{itemize}
@@ -2004,7 +2003,7 @@ for a summary of rules regarding method dispatch.
 
 Everything else, especially the declaration of these object variables
 as \code{alloctable}s and their instantiation at run-time using
-constructor chaining, was kept the same in order to demonstrate that
+chaining of constructor calls, was kept the same in order to demonstrate that
 static method dispatch does \emph{not} mean that the actual object
 instances that contain the methods must be initialized and their
 memory allocated at compile-time (although in this particular case
@@ -2131,16 +2130,16 @@ including the use of static method dispatch (which can improve the
 performance of polymorphic methods by facilitating inlining via the
 compiler).
 
-Taken together, these capabilities will enable the Fortran programmer
-to uniformly manage source code dependencies on both language
-intrinsic and user-defined types in his applications, and to thereby
-write unprecedented modular code, that is on par with the most modern
-languages in terms of reusability, and moreover does not sacrifice any
-computational performance. The present design achieves all of this
-largely without requiring manual instantiations of generics, and it
-furthermore provides a solid foundation for a number of possible
-future extensions, like support for rank genericity, and compile time
-polymorphism via union (sum) types.
+Taken together, these capabilities will allow for the uniform
+management of source code dependencies on both language intrinsic and
+user-defined types in Fortran. They will enable the Fortran programmer
+to write unprecedented modular code, that is on par with the most
+modern languages in terms of reusability, and moreover does not
+sacrifice any computational performance. The present design achieves
+all of this largely without requiring manual instantiations of
+generics, and it furthermore provides a solid foundation for a number
+of possible future extensions, like support for rank genericity, and
+compile time polymorphism via union (sum) types.
 
 \printbibliography
 

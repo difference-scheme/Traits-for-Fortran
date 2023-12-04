@@ -79,7 +79,7 @@ pub mod averager_library {
     // Averager ADT
     // .............
     
-    pub struct Averager <T> {
+    pub struct Averager<T> {
         drv: Box<dyn ISum<T>>,
     }
     
