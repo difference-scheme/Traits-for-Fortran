@@ -142,9 +142,9 @@ answering this question:
   implementations that are particularly troublesome, because they lead
   to rigid coupling between the various different \emph{parts} of an
   application. Their results are recompilation cascades, the
-  non-reusability of higher-level modules, the impossibility to
-  comprehend a large application incrementally, and fragility of such
-  an application as a whole.
+  non-reusability of higher-level source code units, the impossibility
+  to comprehend a large application incrementally, and fragility of
+  such an application as a whole.
 \item
   Secondly, every program, that is written in a statically typed
   language, also has dependencies on abstract data types that are
@@ -157,11 +157,12 @@ answering this question:
   code rigid with respect to the data that it can be used on.
 \end{itemize}
 
-The most widely used approaches to manage dependencies on language
-intrinsic types have so far been through generics, while dependency
-management of user-defined (abstract data) types has so far been the
-task of OO programming and OO design patterns. Martin \cite{Martin_17}
-has, for instance, defined object-orientation as follows:
+The most widely used approaches to manage dependencies on
+language-intrinsic types have so far been through generics, while
+dependency management of user-defined (abstract data) types has so far
+been the task of OO programming and OO design patterns. Martin
+\cite{Martin_17} has, for instance, defined object-orientation as
+follows:
 
 \begin{displayquote}
   ``OO is the ability, through the use of polymorphism, to gain
@@ -200,7 +201,7 @@ fields over the last decades. Namely, the realizations that
 
 These two developments, taken together, have recently opened up the
 possibility to treat polymorphism, and hence the dependency management
-of both user-defined and language intrinsic types, uniformly in a
+of both user-defined and language-intrinsic types, uniformly in a
 programming language. As a consequence, it has become possible to use
 the potentially more efficient (but also less flexible) mechanism of
 compile-time polymorphism also for certain tasks that have traditionally
@@ -356,12 +357,12 @@ dependencies. Namely,
   the results of its summation and averaging operations.
 \end{enumerate}
 The first two items are dependencies on user-defined implementations,
-while the third is a typical case of rigid dependency on a language
-intrinsic type, which renders the present code incapable of being
-applied to arrays of any other data type than \code{int32}s. Given that
-we are dealing with three levels of dependencies, three levels of
-polymorphism will accordingly be required to remove all these
-dependencies.
+while the third is a typical case of rigid dependency on a
+language-intrinsic type, which renders the present code incapable of
+being applied to arrays of any other data type than
+\code{int32}s. Given that we are dealing with three levels of
+dependencies, three levels of polymorphism will accordingly be
+required to remove all these dependencies.
 
 
 \section{Polymorphic functional implementation}
@@ -442,7 +443,7 @@ of the test problem in various modern languages. As in the functional
 code version presented in Sect.~\ref{sect:poly_functional}, we employ
 run-time polymorphism to manage the dependencies on user-defined
 implementations (in this case abstract data types), and generics in
-order to manage the dependencies on language intrinsic types. This
+order to manage the dependencies on language-intrinsic types. This
 serves to illustrate how both run-time and compile-time polymorphism
 can be typically used for dependency management in an OO setting in
 these modern languages. The survey also aims to highlight the many
@@ -481,7 +482,7 @@ interfaces (like \code{struct}s) are types in their own right, and
 that hence polymorphic variables (i.e. objects) can be declared in
 terms of them.
 
-Restrictions in Go are that language intrinsic types cannot have
+Restrictions in Go are that language-intrinsic types cannot have
 user-provided methods, and that methods and interfaces cannot be
 directly implemented for user-defined types whose definitions are
 located in other packages. That is, the programmer has to write
@@ -535,7 +536,7 @@ required ADTs. In particular, it instantiates run-time polymorphic
 averaging is to take place), and it does so for both the \code{int32}
 and \code{float64} types separately, in order to then use these
 objects on \code{int32} and \code{float64} data, respectively. That
-\code{two} such objects are required (one for each language intrinsic
+\code{two} such objects are required (one for each language-intrinsic
 data type) is connected to the aforementioned fact that in order to
 make methods use generic type parameters in Go, one has to parameterize
 interfaces, and instantiate these with different actual data types, as
@@ -556,7 +557,7 @@ e.g. user-defined constructors for \code{struct}s (see the functions
 named ``\code{new}'' in the following code Listing~\ref{lst:OORust}).
 
 In contrast to Go, Rust allows the programmer to implement traits for
-both user-defined \emph{and} language intrinsic types, and to do so
+both user-defined \emph{and} language-intrinsic types, and to do so
 for types that are located in external libraries (called ``crates'' in
 Rust), as long as the traits themselves are defined in the
 programmer's own crate. The reverse, namely implementing an external
@@ -745,7 +746,7 @@ only a single, as opposed to multiple protocols,
 \item
 that therefore merely a \emph{single} object instance of that same
 protocol is required, in order to be able to operate on many different
-language intrinsic data types, and
+language-intrinsic data types, and
 \item
 that this also (largely) \emph{obviates the need for manual
 instantiations of generics in Swift} (because generic
@@ -1109,7 +1110,7 @@ unforeseen new use cases result, it should be possible (as in Swift or
 Rust) to make any type implement new interfaces retroactively,
 regardless of where its original type definition is located. It would
 be desirable to provide such a capability for both user-defined and
-language intrinsic types, which would mean that user-provided methods
+language-intrinsic types, which would mean that user-provided methods
 would have to be allowed also for \emph{intrinsic} types. The
 \code{implements} statement that is described below is aimed at
 ultimately accomplishing these capabilities, but for the purpose of a
@@ -1427,7 +1428,7 @@ The facilities described in this section are flexible enough for the
 user to be able to construct generics constraints himself the way he
 needs them. Nevertheless, the language should ideally also supply a
 collection of predefined, commonly used generics constraints in the
-form of abstract interfaces that are contained in a language intrinsic
+form of abstract interfaces that are contained in a language-intrinsic
 module, tentatively called \code{generics\_constraints} here. The list
 of such predefined interfaces could include
 \begin{itemize}
@@ -1479,7 +1480,7 @@ Sect.~\ref{sect:trait_objects}).
 
 As it was demonstrated by the examples that were given in this
 section, interfaces that are formulated in terms of type sets
-typically boil down to a set of language intrinsic types. Since the
+typically boil down to a set of language-intrinsic types. Since the
 \code{class} declaration specifier is undefined for intrinsic types,
 and since -- moreover -- the semantics of this specifier allow for
 late binding of methods, which is incompatible with intrinsic types, a
@@ -1859,7 +1860,7 @@ the functional Fortran code versions that are presented in this
 section therefore make no attempt to eliminate rigid dependencies on
 user-defined function implementations, and content themselves with
 demonstrating how the new generics features can be used to eliminate
-rigid dependencies on language intrinsic types.
+rigid dependencies on language-intrinsic types.
 
 \subsection{Automatic instantiation of generic procedures}
 
@@ -1962,7 +1963,7 @@ other languages.
 The most important point to note, in Listing~\ref{lst:OOFortran}, is
 how this code makes use of trait objects
 (cf. Sect.~\ref{sect:trait_objects}) and generics to avoid rigid
-dependencies on user-defined implementation and language intrinsic
+dependencies on user-defined implementation and language-intrinsic
 types, respectively, and to thus realize a plugin architecture that
 allows for a maximum of code reuse. Notice, in particular, how the
 main program is the only part of the code that (necessarily) depends
@@ -2071,7 +2072,7 @@ user-defined types, and the employment of generics for this latter
 task merely in cases where profiling has shown that static dispatch
 would significantly speed up a program's execution (by allowing method
 inlining by the compiler). Of course, the use of generics to manage
-dependencies on language intrinsic types remains unaffected by this
+dependencies on language-intrinsic types remains unaffected by this
 recommendation.
 
 \subsection{Static method dispatch and static object declarations}
@@ -2142,7 +2143,7 @@ performance of polymorphic methods by facilitating inlining via the
 compiler).
 
 Taken together, these capabilities will allow for the uniform
-management of source code dependencies on both language intrinsic and
+management of source code dependencies on both language-intrinsic and
 user-defined types in Fortran. They will enable the Fortran programmer
 to write unprecedented modular code, that is on par with the most
 modern languages in terms of reusability, and moreover does not
