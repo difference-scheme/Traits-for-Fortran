@@ -12,7 +12,7 @@ module vector_library
          class(IAppendable), intent(inout) :: self
          type(Element),      intent(in)    :: item
       end subroutine append
-   end interface
+   end interface IAppendable
 
    type, public, implements(IAppendable) :: Vector{IAnyType :: U}
       private

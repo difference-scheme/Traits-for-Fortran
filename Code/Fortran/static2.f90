@@ -9,7 +9,7 @@ module interfaces
    
    abstract interface :: INumeric
       integer | real(real64)
-   end interface
+   end interface INumeric
 
    abstract interface :: ISum
       function sum{INumeric :: T}(self,x) result(s)
@@ -18,7 +18,7 @@ module interfaces
          type(T),     intent(in) :: x(:)
          type(T)                 :: s
       end function sum
-   end interface
+   end interface ISum
 
    abstract interface :: IAverager
       function average{INumeric :: T}(self,x) result(a)
@@ -27,7 +27,7 @@ module interfaces
          type(T),          intent(in) :: x(:)
          type(T)                      :: a
       end function average
-   end interface
+   end interface IAverager
 
 end module interfaces
 

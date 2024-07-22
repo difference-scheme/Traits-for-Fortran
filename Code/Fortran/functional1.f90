@@ -9,7 +9,7 @@ module averager_library
    
    abstract interface :: INumeric
       integer | real(real64)
-   end interface
+   end interface INumeric
 
 contains
    
