@@ -1,13 +1,13 @@
-A traits system for Fortran is described. Its aim is to endow the language with state-of-the-art
-capabilities for *both* compile-time and run-time polymorphism, that
-are only equalled by those of the Swift, Rust, Go, or Carbon
-languages.
+A traits system for Fortran is described. Its aim is to endow the
+language with state-of-the-art capabilities for *both* compile-time
+and run-time polymorphism, that are only equalled by those of the
+Swift, Rust, Go, or Carbon languages.
 
 We have surveyed all these latter modern languages in order to distill
-their very best features with respect to polymorphism, and to tie
-them into a coherent and consistent package of extensions for
-Fortran, that is both powerful, yet easy to use (also for
-non-experts), and backwards compatible with the present language.
+their very best features with respect to polymorphism, and to tie them
+into a coherent and consistent package of extensions for Fortran, that
+is both powerful, yet easy to use (also for non-experts), and
+backwards compatible with the present language.
 
 The resulting design features:
 
