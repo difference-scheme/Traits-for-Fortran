@@ -13,19 +13,17 @@ module interfaces
 
    abstract interface :: ISum
       function sum{INumeric :: T}(self,x) result(s)
-         import; implicit none
-         class(ISum), intent(in) :: self
-         type(T),     intent(in) :: x(:)
-         type(T)                 :: s
+         deferred(self), intent(in) :: self
+         type(T),        intent(in) :: x(:)
+         type(T)                    :: s
       end function sum
    end interface ISum
 
    abstract interface :: IAverager
       function average{INumeric :: T}(self,x) result(a)
-         import; implicit none
-         class(IAverager), intent(in) :: self
-         type(T),          intent(in) :: x(:)
-         type(T)                      :: a
+         deferred(self), intent(in) :: self
+         type(T),        intent(in) :: x(:)
+         type(T)                    :: a
       end function average
    end interface IAverager
 
@@ -38,8 +36,10 @@ module simple_library
 
    implicit none
    private
+
+   public :: SimpleSum
    
-   type, public, implements(ISum) :: SimpleSum
+   type, sealed, implements(ISum) :: SimpleSum
    contains
       procedure :: sum
    end type SimpleSum
@@ -47,9 +47,9 @@ module simple_library
 contains
    
    function sum{INumeric :: T}(self,x) result(s)
-      class(SimpleSum), intent(in) :: self
-      type(T),          intent(in) :: x(:)
-      type(T)                      :: s
+      type(SimpleSum), intent(in) :: self
+      type(T),         intent(in) :: x(:)
+      type(T)                     :: s
       integer :: i
       s = T(0)
       do i = 1, size(x)
@@ -66,8 +66,10 @@ module pairwise_library
    
    implicit none
    private
+
+   public :: PairwiseSum
    
-   type, public, implements(ISum) :: PairwiseSum
+   type, sealed, implements(ISum) :: PairwiseSum
       private
       class(ISum), allocatable :: other
    contains
@@ -77,9 +79,9 @@ module pairwise_library
 contains
 
    function sum{INumeric :: T}(self,x) result(s)
-      class(PairwiseSum), intent(in) :: self
-      type(T),            intent(in) :: x(:)
-      type(T)                        :: s
+      type(PairwiseSum), intent(in) :: self
+      type(T),           intent(in) :: x(:)
+      type(T)                       :: s
       integer :: m
       if (size(x) <= 2) then
          s = self%other%sum(x)
@@ -99,7 +101,9 @@ module averager_library
    implicit none
    private
 
-   type, public, implements(IAverager) :: Averager
+   public :: Averager
+   
+   type, sealed, implements(IAverager) :: Averager
       private
       class(ISum), allocatable :: drv
    contains
@@ -109,9 +113,9 @@ module averager_library
 contains
 
    function average{INumeric :: T}(self,x) result(a)
-      class(Averager), intent(in) :: self
-      type(T),         intent(in) :: x(:)
-      type(T)                     :: a
+      type(Averager), intent(in) :: self
+      type(T),        intent(in) :: x(:)
+      type(T)                    :: a
       a = self%drv%sum(x) / T(size(x))
    end function average
 

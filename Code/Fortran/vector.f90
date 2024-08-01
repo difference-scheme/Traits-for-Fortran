@@ -1,16 +1,15 @@
 module vector_library
 
-   use, intrinsic :: generics_constraints, only: IAnyType
-   
    implicit none
    private
 
+   abstract interface :: IAnyType
+   end interface IAnyType
+   
    abstract interface :: IAppendable
-      type, alias :: Element  ! associated type "Element"
       subroutine append(self,item)
-         import; implicit none
-         class(IAppendable), intent(inout) :: self
-         type(Element),      intent(in)    :: item
+         deferred(self), intent(inout) :: self
+         deferred(item), intent(in)    :: item
       end subroutine append
    end interface IAppendable
 

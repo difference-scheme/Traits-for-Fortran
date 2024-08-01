@@ -1,10 +1,10 @@
 protocol IPrintable {
-    func out()
+    func output()
 }
 extension Float64: IPrintable {
-    func out() {
+    func output() {
         print("I am \(self)")
     }
 }
 var x: Float64 = 4.9
-x.out()
+x.output()
