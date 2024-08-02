@@ -1547,10 +1547,11 @@ parameters one is dealing with different entities.
 \subsection{Type sets}
 \label{sect:type_sets}
 
-In order to make the interface based generics facility easy to use for
-the programmer, it must be possible, as in the Go language, to define
-generics constraints by means of abstract interfaces that consist of
-type sets.
+In order to make the interface based generics facility easy to use
+with intrinsic types (and the multitude of intrinsic procedures that
+Fortran supports for these types), it must be possible, as in the Go
+language, to define generics constraints by means of abstract
+interfaces that consist of type sets.
 
 \subsubsection{Unions of types}
 
@@ -1673,7 +1674,7 @@ interfaces could include
   numeric operations, but also
 \item
   some predefined interfaces to allow for the use of relational
-  operators with different types.
+  operators with different intrinsic types.
 \end{itemize}
 
 Such interfaces could then be imported from user code through a
@@ -2371,20 +2372,20 @@ numeric functionality in the form of a custom addition operator, but
 also custom type-conversion functionality. Listing~\ref{lst:types}
 provides also two modules that implement both this \code{IAdmissible}
 interface, and the \code{IPrintable} interface of
-Sect.~\ref{sect:interface_defs}, for two different data types. This
-serves to enable the latters' use with both the \code{generic\_sum}
-function, but also a second internal subroutine, \code{printout}, that
-requires I/O functionality. A derived type with name \code{MyType}
-illustrates the procedure of implementing these interfaces for a
-user-defined type, while the same is also shown for the \code{real}
-type, as an intrinsic type example.
+Sect.~\ref{sect:interface_defs}, for two different data types.  A
+derived type with name \code{MyType} illustrates the procedure of
+implementing these interfaces for a user-defined type, while the same
+is also shown for the \code{real} type, as an intrinsic type example.
+This serves to enable the use of \emph{both} these types with the
+\code{generic\_sum} function, but also with a second internal
+subroutine, called \code{printout}, that requires I/O functionality.
 
 \lstinputlisting[language=LFortran,style=boxed,label={lst:types},caption={Example of using non-type-set interfaces as generics constraints for procedures.}]{Code/Fortran/types.f90}
 
 
 \section{Associated type usage with generics}
 
-Lastly, we will demonstrate now, how associated types in abstract
+Lastly, we will demonstrate, now, how associated types in abstract
 interfaces (as they were introduced in Sect.~\ref{sect:assoc_types}),
 can be used in conjunction with implementing types that are
 parameterized over some generic parameter. The following example
