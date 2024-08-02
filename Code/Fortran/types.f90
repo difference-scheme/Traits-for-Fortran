@@ -76,12 +76,18 @@ program test
    implicit none
 
    integer      :: i
-   real         :: res_r   ! result of real type
-   type(MyType) :: res_t   ! result of MyType 
-   
-   ! generic_sum: no manual instantiations needed, for arrays of both types
-   res_r = generic_sum([(real(i),i=1,10)])
-   res_t = generic_sum([(MyType(i),i=1,10)])
+   real         :: arr_r(10)    ! array  of real type
+   real         :: res_r        ! result of real type
+   type(MyType) :: arr_t(10)    ! array  of MyType 
+   type(MyType) :: res_t        ! result of MyType 
+
+   ! initializations
+   arr_r = [(real(i),i=1,10)]
+   arr_t = [(MyType(i),i=1,10)] ! use of enhanced structure constructor
+
+   ! use generic_sum with arrays of both types; no manual instantiations needed!
+   res_r = generic_sum(arr_r)
+   res_t = generic_sum(arr_t)
    
    ! print the results
    call printout(res_r,res_t)

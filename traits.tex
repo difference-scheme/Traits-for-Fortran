@@ -2061,7 +2061,7 @@ give in the present chapter several worked out examples. The first two
 subsections contain both complete functional and OO Fortran code
 versions of the standard test problem that is used throughout this
 document. While the last two subsections deal with how to formulate
-general generics constraints and how to use associated types with
+general generics constraints, and how to use associated types with
 generics.
 
 \section{Functional versions of the standard test problem}
@@ -2390,12 +2390,12 @@ interfaces (as they were introduced in Sect.~\ref{sect:assoc_types}),
 can be used in conjunction with implementing types that are
 parameterized over some generic parameter. The following example
 defines an abstract interface, \code{IAppendable}, that requires any
-implementing type to provide functionality for appending some items to
+implementing type to provide functionality for appending some item to
 itself. This interface contains two associated types: an alias,
 \code{deferred(self)}, for the type of the passed-object dummy
 argument of an implementing derived type, and a placeholder,
-\code{deferred(item)}, for the type of appendable items, that needs
-to be supplied by an actual implementation of that interface.
+\code{deferred(item)}, for the type of the appendable items, that
+needs to be supplied by an actual implementation of that interface.
 
 \lstinputlisting[language=LFortran,style=boxed]{Code/Fortran/vector.f90}
 
@@ -2422,7 +2422,8 @@ instantiation needs of the latter, and the potential duplication of
 client code that this can result in
 (cf. Sect.~\ref{sect:Go_encapsulated}). Associated types are therefore
 an important element of the present generics design, and its
-philosophy not to burden the user.
+philosophy not to burden the user with superfluous manual
+instantiations of generics.
 
 
 \chapter{Conclusions}
