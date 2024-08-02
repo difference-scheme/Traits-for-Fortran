@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  2 AUG 2024 12:58
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  2 AUG 2024 13:17
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -814,7 +814,7 @@ File: lstlang1.sty 2020/03/24 1.8d listings language file
 ) [25
 
 ]
-Overfull \hbox (0.82645pt too wide) in paragraph at lines 996--999
+Overfull \hbox (0.82645pt too wide) in paragraph at lines 995--998
 \T1/ppl/m/n/10.95 of the passed-object dummy ar-gu-ment \T1/fvm/m/n/10.95 self\
 T1/ppl/m/n/10.95 , in \T1/fvm/m/n/10.95 IPrintable\T1/ppl/m/n/10.95 's sig-na-t
 ure of sub-rou-tine \T1/fvm/m/n/10.95 output\T1/ppl/m/n/10.95 , would
@@ -831,7 +831,7 @@ Chapter 6.
 ] [45]) [46] (./Code/Fortran/functional2.f90
 consecutive:
 [47])
-Overfull \hbox (2.98868pt too wide) in paragraph at lines 2160--2167
+Overfull \hbox (2.98868pt too wide) in paragraph at lines 2159--2166
 []\T1/ppl/m/n/10.95 Interface in-her-i-tance is ex-pressed through the pres-enc
 e of the \T1/fvm/m/n/10.95 implements \T1/ppl/m/n/10.95 at-tribute in derived-
  []
@@ -843,14 +843,14 @@ Chapter 7.
 [63
 
 ]
-Overfull \hbox (15.27174pt too wide) in paragraph at lines 2467--2467
+Overfull \hbox (15.27174pt too wide) in paragraph at lines 2466--2466
 []\T1/ppl/m/n/10.95 George Lyon. \T1/ppl/m/sc/10.95 url\T1/ppl/m/n/10.95 : [][]
 $\T1/fvm/m/n/10.95 https : / / gist . github . com / GeorgeLyon / c7b07923f7a80
 0674bc9745ae45ddc7f$[][]\T1/ppl/m/n/10.95 . 
  []
 
 
-Overfull \hbox (27.29716pt too wide) in paragraph at lines 2467--2467
+Overfull \hbox (27.29716pt too wide) in paragraph at lines 2466--2466
 []\T1/ppl/m/n/10.95 Wolfgang Weck and Clemens Szyper-ski. \T1/ppl/m/it/10.95 Do
  We Need In-her-i-tance? \T1/ppl/m/sc/10.95 url\T1/ppl/m/n/10.95 : [][]$\T1/fvm
 /m/n/10.95 https : / / www . researchgate .
@@ -862,7 +862,7 @@ Overfull \hbox (27.29716pt too wide) in paragraph at lines 2467--2467
  been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2478 \end{abstract}
+l.2477 \end{abstract}
                       [1] (./traits.aux)
 Package rerunfilecheck Info: File `traits.out' has not changed.
 (rerunfilecheck)             Checksum: 35EA3CF55A7F03D1B53E12ADE5E12160;11705.
@@ -884,7 +884,7 @@ fonts/type1/public/bera/fvmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
 ublic/bera/fvmro8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/
 uplb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb><
 /usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on traits.pdf (66 pages, 310623 bytes).
+Output written on traits.pdf (66 pages, 310552 bytes).
 PDF statistics:
  2549 PDF objects out of 2984 (max. 8388607)
  2443 compressed objects within 25 object streams
