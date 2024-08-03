@@ -1030,7 +1030,7 @@ the interfaces \code{IAddable}, and \code{ISubtractable}, making
 simpler interfaces:
 \begin{lstlisting}[language=LFortran,style=boxed]
    abstract interface, extends(IAddable,ISubtractable) :: ICalculable
-   end interface IBasicMath
+   end interface ICalculable
 \end{lstlisting}
 That is, objects that implement (or adopt) the \code{ICalculable}
 interface (i.e. conform to it), can also be used in settings that
