@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  3 AUG 2024 21:59
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  10 AUG 2024 16:29
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -831,7 +831,7 @@ Chapter 6.
 ] [45]) [46] (./Code/Fortran/functional2.f90
 consecutive:
 [47])
-Overfull \hbox (2.98868pt too wide) in paragraph at lines 2161--2168
+Overfull \hbox (2.98868pt too wide) in paragraph at lines 2162--2169
 []\T1/ppl/m/n/10.95 Interface in-her-i-tance is ex-pressed through the pres-enc
 e of the \T1/fvm/m/n/10.95 implements \T1/ppl/m/n/10.95 at-tribute in derived-
  []
@@ -843,14 +843,14 @@ Chapter 7.
 [63
 
 ]
-Overfull \hbox (15.27174pt too wide) in paragraph at lines 2468--2468
+Overfull \hbox (15.27174pt too wide) in paragraph at lines 2469--2469
 []\T1/ppl/m/n/10.95 George Lyon. \T1/ppl/m/sc/10.95 url\T1/ppl/m/n/10.95 : [][]
 $\T1/fvm/m/n/10.95 https : / / gist . github . com / GeorgeLyon / c7b07923f7a80
 0674bc9745ae45ddc7f$[][]\T1/ppl/m/n/10.95 . 
  []
 
 
-Overfull \hbox (27.29716pt too wide) in paragraph at lines 2468--2468
+Overfull \hbox (27.29716pt too wide) in paragraph at lines 2469--2469
 []\T1/ppl/m/n/10.95 Wolfgang Weck and Clemens Szyper-ski. \T1/ppl/m/it/10.95 Do
  We Need In-her-i-tance? \T1/ppl/m/sc/10.95 url\T1/ppl/m/n/10.95 : [][]$\T1/fvm
 /m/n/10.95 https : / / www . researchgate .
@@ -862,10 +862,10 @@ Overfull \hbox (27.29716pt too wide) in paragraph at lines 2468--2468
  been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2479 \end{abstract}
+l.2487 \end{abstract}
                       [1] (./traits.aux)
 Package rerunfilecheck Info: File `traits.out' has not changed.
-(rerunfilecheck)             Checksum: 35EA3CF55A7F03D1B53E12ADE5E12160;11705.
+(rerunfilecheck)             Checksum: 0EFDC9854621B5BE28B42F12AA71332A;11710.
 Package logreq Info: Writing requests to 'traits.run.xml'.
 \openout1 = `traits.run.xml'.
 
@@ -873,7 +873,7 @@ Package logreq Info: Writing requests to 'traits.run.xml'.
 Here is how much of TeX's memory you used:
  23286 strings out of 480247
  388614 string characters out of 5896151
- 1113797 words of memory out of 5000000
+ 1113798 words of memory out of 5000000
  39293 multiletter control sequences out of 15000+600000
  512484 words of font info for 107 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
@@ -884,7 +884,7 @@ fonts/type1/public/bera/fvmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
 ublic/bera/fvmro8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/
 uplb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb><
 /usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on traits.pdf (66 pages, 310861 bytes).
+Output written on traits.pdf (66 pages, 311251 bytes).
 PDF statistics:
  2549 PDF objects out of 2984 (max. 8388607)
  2443 compressed objects within 25 object streams

@@ -128,7 +128,7 @@ Notice the absence of the words ``code reuse'' in these statements.
 The purpose of polymorphism, according to Martin, is the ``inversion''
 (i.e. replacement, or management) of rigid source code dependencies by
 means of particular abstractions, i.e. polymorphic interfaces (or
-protocols/traits, as they are also known today). The possibility to
+proto\-cols/traits, as they are also known today). The possibility to
 reuse code is then merely the logical consequence of such proper
 dependency management in a polymorphism-based software plugin
 architecture.
@@ -911,7 +911,7 @@ Carbon. The present chapter adds general subtyping capabilities to
 Fortran, while the next chapter aims at providing specific support for
 generics. The extensions related to subtyping concern abstract
 interfaces, derived types, and the class specifier for variable
-declarations. They also encompass an extremely useful, new Fortran
+declarations. They also encompass an extremely useful, new, Fortran
 feature: the \code{implements} statement.
 
 \section{Named abstract interfaces (traits)}
@@ -1127,11 +1127,11 @@ derived type being extended into another through (rigid)
 implementation inheritance. Rather, this is a feature that adds new
 capabilities to a single, \emph{given} type.
 
-\subsection{Adding methods to a type}
+\subsection{Binding methods to a type}
 \label{sect:adding_methods}
 
-The simplest use of the \code{implements} statement is to add some new
-methods to a type. The following example shows how to add two methods,
+The simplest use of the \code{implements} statement is to bind some new
+methods to a type. The following example shows how to bind two methods,
 named \code{add} and \code{sub}, to a derived type with name
 \code{Calculable}, and how to provide their implementations as module
 procedures:
@@ -1166,16 +1166,17 @@ end module basic
 
 \subsection{Implementing a trait}
 
-Assume now, that the purpose of our addition of the previous two
-methods was to actually make the \code{Calculable} type compatible
+Assume now, that the purpose of binding the previous two methods to
+the \code{Calculable} type was to actually make this type compatible
 with settings where conformance to the \code{ICalculable} interface of
-Sect.~\ref{sect:extends_spec} is required. So far, we have added the
-code of the required methods, but we haven't made \code{Calculable}
-pluggable yet into code that is written in terms of the
-\code{ICalculable} interface. To fix this, we can simply acknowledge
-(even from a different module, as in the following example), that the
-\code{Calculable} type already has all of the required functionality
-to implement the \code{ICalculable} interface:
+Sect.~\ref{sect:extends_spec} is required. So far, we have provided
+both the binding of the required methods, and their implementations,
+but we haven't made \code{Calculable} pluggable yet into code that is
+written in terms of the \code{ICalculable} interface. To fix this, we
+can simply acknowledge (even from a different module, as in the
+following example), that the \code{Calculable} type already has all of
+the required functionality to implement the \code{ICalculable}
+interface:
 \begin{lstlisting}[language=LFortran,style=boxed]
 module enhanced
    ...  
@@ -1214,8 +1215,8 @@ end module enhanced
 \end{lstlisting}
 
 The last two examples have demonstrated how interfaces can actually be
-implemented once their necessary method implementations were already
-added to some type. Of course, it is also possible to do all of this
+implemented after their necessary method implementations were already
+bound to some type. Of course, it is also possible to do all of this
 at one fell swoop, as in the following alternative example of the
 aforegiven module \code{basic}:
 \begin{lstlisting}[language=LFortran,style=boxed]
@@ -2355,14 +2356,14 @@ in the \code{Code} subdirectory that is accompanying this document.
 \label{sect:types}
 
 In the previous examples of this chapter, we made predominant use of
-generics constraints that, like the interface \code{INumeric}, were
-formulated as type set unions of intrinsic types. While this is a very
-frequently occuring use case, it is of course possible to formulate
-generics constraints in a more general manner, through explicit
-specification of procedure signatures in abstract interfaces. One
-example was already given in the form of the \code{ISum} interface,
-that was used as a generics constraint for derived types in
-Listing~\ref{lst:staticFortran}.
+generics constraints that, in the form of the \code{INumeric}
+interface, were formulated as type set unions of intrinsic
+types. While this is a very frequently occuring use case, it is of
+course possible to formulate generics constraints in a more general
+manner, through explicit specification of procedure signatures in
+abstract interfaces. One such example was already given in the form of
+the \code{ISum} interface, that was used as a generics constraint for
+derived types in Listing~\ref{lst:staticFortran}.
 
 Another example is shown in the following
 Listing~\ref{lst:types}. This listing provides a main program with an
@@ -2377,7 +2378,7 @@ Sect.~\ref{sect:interface_defs}, for two different data types.  A
 derived type with name \code{MyType} illustrates the procedure of
 implementing these interfaces for a user-defined type, while the same
 is also shown for the \code{real} type, as an intrinsic type example.
-This serves to enable the use of \emph{both} these types with the
+This enables the use of \emph{both} these types with the
 \code{generic\_sum} function, but also with a second internal
 subroutine, called \code{printout}, that requires I/O functionality.
 
@@ -2387,7 +2388,7 @@ subroutine, called \code{printout}, that requires I/O functionality.
 \section{Associated type usage with generics}
 
 Lastly, we will demonstrate, now, how associated types in abstract
-interfaces (as they were introduced in Sect.~\ref{sect:assoc_types}),
+interfaces (as they were introduced in Sect.~\ref{sect:assoc_types})
 can be used in conjunction with implementing types that are
 parameterized over some generic parameter. The following example
 defines an abstract interface, \code{IAppendable}, that requires any
@@ -2469,13 +2470,20 @@ and compile time polymorphism via union (sum) types.
 \renewcommand{\abstractname}{Acknowledgements}
 
 \begin{abstract}
-We thank Robert Griesemer of the Go language team for providing the
-original code version from which Listing~\ref{lst:polyfuncGo} was
-derived, and for his and the Go team's inspirational work on type sets
-in Go generics, on which a good fraction of the present design for
-Fortran is based. In the same vein, we also thank the many developers
-of the Swift, Rust, and Carbon languages who, through their work, have
-also influenced the present design.
+  The present extensions for Fortran could not have been devised
+  without the guidance we had through the prior work of countless
+  developers on the Swift, Go, Rust, and Carbon languages. We wish to
+  thank all these developers, even though we can only mention here two
+  of them explicitly by name, who have particularly influenced the
+  present effort. Chris Lattner's design of the Swift language
+  provided the foundational ideas upon which we built the majority of
+  our language extensions for Fortran, including much of the modern OO
+  features, and the generics. While Robert Griesemer's and the Go
+  team's inspirational work on type sets accounts largely not only for
+  our remaining generics design, but also for its ease of use. Robert
+  also kindly provided the original code version from which
+  Listing~\ref{lst:polyfuncGo} was derived, and answered the many
+  questions we had regarding Go's generics.
 \end{abstract}
 
 \end{document}
