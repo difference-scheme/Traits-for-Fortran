@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  10 AUG 2024 16:29
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.5.23)  28 SEP 2024 18:21
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -820,61 +820,68 @@ T1/ppl/m/n/10.95 , in \T1/fvm/m/n/10.95 IPrintable\T1/ppl/m/n/10.95 's sig-na-t
 ure of sub-rou-tine \T1/fvm/m/n/10.95 output\T1/ppl/m/n/10.95 , would
  []
 
-[26] [27] [28] [29] [30] [31] [32] [33] [34]
+[26] [27] [28] [29] [30] [31] [32] [33] [34] [35]
 Chapter 5.
-[35
+[36
 
-] [36] [37] [38] [39] [40] [41] [42] [43]
+] [37] [38] [39]
+Overfull \hbox (3.22954pt too wide) in paragraph at lines 1904--1908
+[]\T1/ppl/m/n/10.95 Although the present de-sign \T1/ppl/m/it/10.95 doesn't \T1
+/ppl/m/n/10.95 typ-i-cally re-quire it, the pro-gram-mer can ac-com-plish gener
+ic
+ []
+
+[40] [41] [42] [43] [44]
 Chapter 6.
-(./Code/Fortran/functional1.f90 [44
+(./Code/Fortran/functional1.f90 [45
 
-] [45]) [46] (./Code/Fortran/functional2.f90
+] [46]) [47] (./Code/Fortran/functional2.f90
 consecutive:
-[47])
-Overfull \hbox (2.98868pt too wide) in paragraph at lines 2162--2169
+[48])
+Overfull \hbox (2.98868pt too wide) in paragraph at lines 2256--2263
 []\T1/ppl/m/n/10.95 Interface in-her-i-tance is ex-pressed through the pres-enc
 e of the \T1/fvm/m/n/10.95 implements \T1/ppl/m/n/10.95 at-tribute in derived-
  []
 
-(./Code/Fortran/mixed.f90 [48] [49] [50] [51]) [52] (./Code/Fortran/static1.f90
-[53] [54] [55]) [56] [57] (./Code/Fortran/types.f90 [58] [59]) [60]
-(./Code/Fortran/vector.f90) [61] [62]
+(./Code/Fortran/mixed.f90 [49] [50] [51] [52]) [53] (./Code/Fortran/static1.f90
+[54] [55] [56]) [57] [58] (./Code/Fortran/types.f90 [59] [60]) [61]
+(./Code/Fortran/vector.f90) [62] [63]
 Chapter 7.
-[63
+[64
 
 ]
-Overfull \hbox (15.27174pt too wide) in paragraph at lines 2469--2469
+Overfull \hbox (15.27174pt too wide) in paragraph at lines 2563--2563
 []\T1/ppl/m/n/10.95 George Lyon. \T1/ppl/m/sc/10.95 url\T1/ppl/m/n/10.95 : [][]
 $\T1/fvm/m/n/10.95 https : / / gist . github . com / GeorgeLyon / c7b07923f7a80
 0674bc9745ae45ddc7f$[][]\T1/ppl/m/n/10.95 . 
  []
 
 
-Overfull \hbox (27.29716pt too wide) in paragraph at lines 2469--2469
+Overfull \hbox (27.29716pt too wide) in paragraph at lines 2563--2563
 []\T1/ppl/m/n/10.95 Wolfgang Weck and Clemens Szyper-ski. \T1/ppl/m/it/10.95 Do
  We Need In-her-i-tance? \T1/ppl/m/sc/10.95 url\T1/ppl/m/n/10.95 : [][]$\T1/fvm
 /m/n/10.95 https : / / www . researchgate .
  []
 
-[64
+[65
 
-]pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
- been already used, duplicate ignored
+] [66]pdfTeX warning (ext4): destination with the same identifier (name{page.1}
+) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2487 \end{abstract}
+l.2585 \end{abstract}
                       [1] (./traits.aux)
 Package rerunfilecheck Info: File `traits.out' has not changed.
-(rerunfilecheck)             Checksum: 0EFDC9854621B5BE28B42F12AA71332A;11710.
+(rerunfilecheck)             Checksum: 14BCDBEF0E986940867F7895F996FEA0;12071.
 Package logreq Info: Writing requests to 'traits.run.xml'.
 \openout1 = `traits.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 23286 strings out of 480247
- 388614 string characters out of 5896151
- 1113798 words of memory out of 5000000
- 39293 multiletter control sequences out of 15000+600000
+ 23330 strings out of 480247
+ 389557 string characters out of 5896151
+ 1114299 words of memory out of 5000000
+ 39313 multiletter control sequences out of 15000+600000
  512484 words of font info for 107 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  60i,16n,68p,7900b,3160s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -884,10 +891,10 @@ fonts/type1/public/bera/fvmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
 ublic/bera/fvmro8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/
 uplb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb><
 /usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on traits.pdf (66 pages, 311251 bytes).
+Output written on traits.pdf (68 pages, 318683 bytes).
 PDF statistics:
- 2549 PDF objects out of 2984 (max. 8388607)
- 2443 compressed objects within 25 object streams
- 1638 named destinations out of 1728 (max. 500000)
- 465 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 2603 PDF objects out of 2984 (max. 8388607)
+ 2495 compressed objects within 25 object streams
+ 1662 named destinations out of 1728 (max. 500000)
+ 473 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -3,8 +3,9 @@ module my_type
    use interfaces, only: IAdmissible, IPrintable
 
    implicit none
-  
-   type, sealed :: MyType
+   private
+   
+   type, public, sealed :: MyType
       private
       integer :: n
    end type MyType
@@ -40,6 +41,7 @@ module real_type
    use interfaces, only: IAdmissible, IPrintable
 
    implicit none
+   private
    
    implements (IAdmissible,IPrintable) :: real
       procedure :: add, cast, output
@@ -70,8 +72,7 @@ end module real_type
 program test
 
    use interfaces, only: IAdmissible, IPrintable
-   use my_type
-   use real_type
+   use my_type,    only: MyType
 
    implicit none
 

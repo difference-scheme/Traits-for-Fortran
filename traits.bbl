@@ -478,6 +478,30 @@
       \verb https://github.com/golang/go/issues/45346
       \endverb
     \endentry
+    \entry{JavaTutorial}{misc}{}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{labeltitlesource}{title}
+      \field{title}{The Java Tutorials. Abstract Methods and Classes}
+      \verb{urlraw}
+      \verb https://docs.oracle.com/javase/tutorial/java/IandI/abstract.html
+      \endverb
+      \verb{url}
+      \verb https://docs.oracle.com/javase/tutorial/java/IandI/abstract.html
+      \endverb
+    \endentry
+    \entry{SwiftLangRef}{misc}{}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{labeltitlesource}{title}
+      \field{title}{The Swift Programming Language (6 beta). Extensions}
+      \verb{urlraw}
+      \verb https://docs.swift.org/swift-book/documentation/the-swift-programming-language/extensions/
+      \endverb
+      \verb{url}
+      \verb https://docs.swift.org/swift-book/documentation/the-swift-programming-language/extensions/
+      \endverb
+    \endentry
     \entry{Weck_Szyperski}{misc}{}
       \name{author}{2}{}{%
         {{hash=6fc63043b845d08f2b05d169f2832b02}{%
