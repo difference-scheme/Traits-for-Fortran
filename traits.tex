@@ -308,11 +308,11 @@ straightforward monomorphic (i.e. rigidly coupled) functional
 implementation of this test problem, followed by a functional
 implementation that makes use of both run-time and compile-time
 polymorphism to manage rigid source code dependencies. In the survey
-of programming languages presented in Chapter~\ref{chapt:survey}, we
-will then recode this standard test problem in an encapsulated
-fashion, to highlight how the source code dependencies in this problem
-can be managed in different languages even in more complex situations,
-that require OO techniques.
+of programming languages that is presented in
+Chapter~\ref{chapt:survey}, we will then recode this standard test
+problem in an encapsulated fashion, to highlight how the source code
+dependencies in this problem can be managed in different languages
+even in more complex situations, that require OO techniques.
 
 \section{Monomorphic functional implementation}
 \label{sect:mono_functional}
@@ -408,7 +408,7 @@ Listing~\ref{lst:polyfuncGo}'s code:
   (like the interface \code{INumeric} in the following code).
 \item
   Interfaces consist of either explicit function signatures, or
-  \emph{type sets}, like ``\code{int32 | float64}'' in the present
+  \emph{type sets}, like \code{int32 | float64} in the present
   example. The latter actually signify a set of function signatures,
   too, namely the signatures of the intersecting set of all the
   operations and intrinsic functions for which the listed types
@@ -451,23 +451,23 @@ merely slightly different realizations of the same idea).
 
 In the present chapter, we give encapsulated (i.e. OO) code versions
 of the test problem in various modern languages. As in the functional
-code version presented in Sect.~\ref{sect:poly_functional}, we employ
-run-time polymorphism to manage the dependencies on user-defined
-implementations (in this case abstract data types), and generics in
-order to manage the dependencies on language-intrinsic types. This
-serves to illustrate how both run-time and compile-time polymorphism
-can be typically used for dependency management in an OO setting in
-these modern languages. The survey also aims to highlight the many
-commonalities but also some of the minor differences in the approaches
-to polymorphism that were taken in these different languages. As a
-final disclaimer, we do not advocate to code problems in an OO manner
-that can be easily coded in these languages in a functional way (as it
-is the case for this problem). However, in more complex cases, where
-many more nested functions would need to be used, and where state
-would have to be hidden, the OO programming style would be the more
-appropriate one. Hence, our test problem will stand in, in this
-chapter, for emulating such a more complex problem, that would
-benefit from an encapsulated coding style.
+code version that was presented in Sect.~\ref{sect:poly_functional},
+we employ run-time polymorphism to manage the dependencies on
+user-defined implementations (in this case abstract data types), and
+generics in order to manage the dependencies on language-intrinsic
+types. This serves to illustrate how both run-time and compile-time
+polymorphism can be typically used for dependency management in an OO
+setting in these modern languages. The survey also aims to highlight
+the many commonalities but also some of the minor differences in the
+approaches to polymorphism that were taken in these different
+languages. As a final disclaimer, we do not advocate to code problems
+in an OO manner that can be easily coded in these languages in a
+functional way (as it is the case for this problem). However, in more
+complex cases, where many more nested functions would need to be used,
+and where state would have to be hidden, the OO programming style
+would be the more appropriate one. Hence, our test problem will stand
+in, in this chapter, for emulating such a more complex problem, that
+would benefit from an encapsulated coding style.
 
 
 \section{Go}
@@ -475,7 +475,7 @@ benefit from an encapsulated coding style.
 Go has supported run-time polymorphism through (polymorphic)
 ``interfaces'' (and thus modern-day OO programming) since its
 inception. In Go, encapsulation is done by storing state in a
-``\code{struct}'' and by binding procedures, that need to use that
+\code{struct} and by binding procedures, that need to use that
 state, to this same \code{struct}. Thereby creating a user-defined
 abstract data type (or ADT) with methods. Go allows the programmer to
 implement multiple polymorphic interfaces for such a type (i.e. to use
@@ -484,14 +484,14 @@ language statement for this purpose.
 
 Instead, a user-defined type is implicitly assumed to implement an
 interface whenever it provides implementations of all the interface's
-function signatures. This way of implementing interfaces requires only
-an object reference of the type to be passed to its methods (by means
-of a separate parameter list, in front of a method's actual name). It
-is otherwise decoupled from the type's (i.e. the ADT's \code{struct})
-definition. Go, finally, makes it explicit in its syntax that
-interfaces (like \code{struct}s) are types in their own right, and
-that hence polymorphic variables (i.e. objects) can be declared in
-terms of them.
+function signatures. This (structural) way of implementing interfaces
+requires only an object reference of the type to be passed to its
+methods (by means of a separate parameter list, in front of a method's
+actual name). It is otherwise decoupled from the type's (i.e. the
+ADT's \code{struct}) definition. Go, finally, makes it explicit in its
+syntax that interfaces (like \code{struct}s) are types in their own
+right, and that hence polymorphic variables (i.e. objects) can be
+declared in terms of them.
 
 Restrictions in Go are that language-intrinsic types cannot have
 user-provided methods, and that methods and interfaces cannot be
@@ -561,12 +561,15 @@ code duplication in client code cannot be avoided in this way.
 
 Like Go, Rust supports both run-time and compile-time polymorphism
 through polymorphic interfaces, which Rust calls ``traits''. Unlike
-Go, Rust has its programmers implement traits in a nominal manner,
-by using explicit ``\code{impl}'' code blocks to provide a trait's
-method implementations. These same \code{impl} blocks also serve to
-bind methods to a type that aren't a part of some trait, like
-e.g. user-defined constructors for \code{struct}s (see the functions
-named ``\code{new}'' in the following code Listing~\ref{lst:OORust}).
+Go, Rust has its programmers implement traits in a nominal manner, by
+using explicit \code{impl} code blocks to provide a trait's method
+implementations. These same \code{impl} blocks can also be used to
+bind to a type so-called ``associated functions'' which aren't
+methods, i.e. which don't take in a \code{self} (passed-object dummy)
+argument. A typical example for this are user-defined constructors for
+\code{struct}s. See the functions that are named \code{new} in the
+following code Listing~\ref{lst:OORust}, and which are called using
+\code{::} syntax.
 
 In contrast to Go, Rust allows the programmer to implement traits for
 both user-defined \emph{and} language-intrinsic types, and to do so
@@ -605,55 +608,64 @@ differences, that are listed in the following notes.
   the required traits in \code{impl} blocks using \code{where}
   statements.
 \item
-  Use of a ``\code{Num}'' trait from the external ``\code{num}'' crate was
-  necessary, in order to enable numeric operations on generic types,
-  which leads to dependency on external library code.
+  Rust does not supply an equivalent to Go's \code{int32 | float64}
+  syntax and semantics. In order to enable numeric operations on
+  generic types, Rust instead provides a \code{Num} trait via an
+  external \code{num} crate (i.e. library). However, the use of this
+  external dependency makes available neither the \code{AddAssign}
+  (\code{+=}) operator, nor casts to generic types within generic
+  routines (as they are provided in Go).
 \item
-  At times, use of the ``\code{Copy}'' trait also had to be made, to
+  Since the employed algorithm relies on these features, the following
+  code uses a homemade \code{INumeric} trait, that derives from Rust's
+  \code{Num} and \code{AddAssign} traits, and extends them by the
+  requirement to also implement an associated function, \code{new},
+  that provides the needed type casting (notice that \code{Self}
+  stands in here for the implementing type). The conformance of the
+  \code{i32} and \code{f64} intrinsic types to the \code{INumeric}
+  trait is then acknowledged via \code{impl} blocks, that also
+  implement any of the still outstanding functionality of this trait
+  for these two types.
+\item
+  Where necessary, use of the \code{Copy} trait is also made, to
   work around Rust's default move semantics.
 \item
   In order to help make all of the source code dependencies explicit,
   our Rust version employs modules, and \code{use} statements to import
   the required functionality.
 \item
-  Despite reliance on external dependencies, conversion to generic
-  types wasn't possible. This led to the necessity to move a type
-  conversion, that in the Go implementation was included in the code
-  of method \code{average}, to this method's calls in the main
-  program. We also had to import a \code{zero} generic function from
-  the external \code{num} crate, in order to initialize the variable
-  \code{s} that is returned by the \code{sum} method of the
-  \code{SimpleSum} ADT.
-\item
   Rust's default structure constructors suffer from the same flaw as
   Fortran's. That is, they are unable to initialize from an external
   scope, structure components that are declared being private to their
   module. As in Fortran, use of user-defined constructors must be made
-  instead (see the functions named \code{new} that are defined in
+  instead (cf. the \code{new} functions that are defined in
   separate \code{impl} blocks for the ADTs \code{PairwiseSum} and
   \code{Averager}).
 \item
   To declare run-time polymorphic variables one has to put so-called
   ``trait objects'' into ``Boxes'', i.e. to declare smart pointers of
-  them, for dynamic instantiation and memory allocation (this is the
-  Rust equivalent to using \code{allocatable} polymorphic objects in
-  Fortran).
+  them, for dynamic instantiation and heap memory allocation (this is
+  the Rust equivalent to using \code{allocatable} polymorphic objects
+  in Fortran).
 \end{itemize}
 
 \lstinputlisting[language=Rust,style=boxed,label={lst:OORust},caption={Encapsulated Rust version of the array averaging example.}]{Code/Rust/mixed_poly/src/main.rs}
 
-The main program in the Rust version is somewhat longer than in the
-corresponding Go version because of the need to import dependencies
-from modules (as it would be necessary in realistic situations). Its
-logic is also somewhat convoluted compared to the Go version, because
-Rust doesn't allow the programmer to declare variables that aren't
-initialized upon declaration, and because of the aforementioned
-necessity to move the required type conversions out of method
-\code{average}, and into the calls of this method. Otherwise the codes
-are pretty much identical\footnote{Notice that the present Rust
-version makes universal use of dynamic method dispatch via trait
-objects, in order to correspond most closely to all the other
-implementations that we provide in both the present chapter, and in
+The Rust program version is somewhat longer than the corresponding Go
+version, because of the need to implement the aforementioned custom
+type conversion functionality, to provide user-defined constructors in
+order to initialize (opaque) module-hosted abstract data types, and to
+import dependencies from modules into the \code{main} function (as it
+would be necessary in realistic situations). The \code{main}
+function's logic could also not be expressed as concisely as in the Go
+version, because the various trait objects required ``boxing'' for
+their instantiation, because Rust's default move semantics had to be
+worked around, and because Rust wouldn't allow the declaration of
+variables without simultaneous initialization. Otherwise the codes are
+pretty much identical\footnote{Notice that the present Rust version
+makes universal use of dynamic method dispatch via trait objects, in
+order to correspond most closely to all the other implementations that
+we provide in both the present chapter, and in
 Sect.~\ref{sect:Fortran_dynamic_dispatch}. An alternative, more
 idiomatic, Rust version that is equivalent to the Fortran version
 which we give in Sect.~\ref{sect:Fortran_static_dispatch}, and that
@@ -720,15 +732,22 @@ Swift. See the following remarks in order to understand this code:
     Generic type constraints are formulated by supplying a protocol
     name after a type parameter (separated by a colon).
   \item
-    Swift does not supply an equivalent to Go's \code{int32 | float64}
-    syntax and semantics. Hence the user must use a \code{Numeric}
-    protocol that is defined by the standard library, as a constraint for
-    numeric types. Which leads to reliance on library code.
+    Similar to Rust, Swift provides a \code{Numeric} protocol that is
+    defined in its standard library, for use as a generics constraint
+    for numeric types.
   \item
-    Unfortunately, Swift's \code{Numeric} protocol does \emph{not} support
-    the division operation! Hence the division that would have been required
-    in function \code{average} of the \code{Averager} ADT had to be moved
-    out to the calling code of the main program.
+    Swift's own \code{Numeric} protocol does \emph{not} include the
+    division operation! Hence, the following code defines and uses
+    a custom \code{INumeric} protocol, that extends the former, to
+    require any adopting types to implement also the division
+    operator.
+  \item
+    Swift's \code{Int32} and \code{Float64} types already implement,
+    individually, both the functionality of Swift's own \code{Numeric}
+    protocol, and the division operation. It therefore suffices to
+    simply acknowledge, through empty \code{extension} statements,
+    that they also conform to the combined functionality of the
+    new \code{INumeric} protocol.
   \item
     The Swift version makes use of language built-in, default, structure
     constructors (called ``initializers'').
@@ -738,23 +757,24 @@ Swift. See the following remarks in order to understand this code:
   \item
     By default, function and method calls in Swift make use of keyword
     arguments.
-  \item
-    The syntax for type conversion into a generic type \code{T} is
-    somewhat peculiar. E.g. Go's \code{T(0)} is written as
-    \code{T(exactly:0)!} in Swift (making use of the mandatory keyword
-    ``\code{exactly}'' in the function responsible for the type
-    conversion).
+  \item    
+    Type conversion into a generic type, \code{T}, is effected in
+    Swift by calling an appropriate initiali\-zer of this type. The call
+    syntax is a bit peculiar, i.e. Go's \code{T(0)} is written as
+    \code{T(exactly:0)!} (making use of both the initializer's
+    mandatory keyword, \code{exactly}, and the \code{!}  operator to
+    unwrap the returned optional type).
 \end{itemize}
 
 \lstinputlisting[language=Swift,style=boxed,label={lst:OOSwift},caption={Encapsulated Swift version of the array averaging example.}]{Code/Swift/mixed.swift}
 
 Even a casual glance at the Swift version will show that the Swift
-code is the easiest to read and understand among the encapsulated
-implementations that were presented in this chapter. This is largely
-the result of Swift supporting generic methods, and hence not
-requiring the programmer to parameterize and instantiate any generic
-interfaces (protocols), in contrast to both Go and Rust. The
-consequences are
+code is the easiest to read and understand among the generic
+object-oriented implementations that were presented in this
+chapter. This is largely the result of Swift supporting generic
+methods, and hence not requiring the programmer to parameterize and
+instantiate any generic interfaces (protocols), in contrast to both Go
+and Rust. The consequences are
 \begin{itemize}
 \item
 that method genericity for an ADT's objects can be expressed using
@@ -780,12 +800,13 @@ polymorphically assigned different averaging algorithms (see the
 \code{average} method that is generic, it can be used on data of
 different intrinsic types, like \code{Int32} and \code{Float64} here.
 
-Notice that the main Swift program needs to declare merely a
-\emph{single} such object variable of \code{IAverager} type, to make use of
-all these capabilities. This is a direct consequence of there being
-only a single (i.e. unparameterized) version of the \code{IAverager}
-protocol, and of parameterizing the protocol's method signatures by
-generic types rather than the protocol itself.
+Notice that the \code{main} function in the Swift code needs to
+declare merely a \emph{single} such object variable of
+\code{IAverager} type, to make use of all these capabilities. This is
+a direct consequence of there being only a single
+(i.e. unparameterized) version of the \code{IAverager} protocol, and
+of parameterizing the protocol's method signatures by generic types
+rather than the protocol itself.
 
 Contrast this with Go's and Rust's model, where not only separate
 objects of \code{IAverager} type are required for \emph{every}
@@ -849,21 +870,21 @@ when compared to the other languages considered here. The language is
 unpleasant to use, because of its ``borrow checker'', its employment
 of move semantics by default, its \emph{excessive} obsession with type
 safety, and its overall C++-like philosophy to copiously rely on
-external dependencies, even for the most basic tasks, like
-initializing a generic type. The Rust version of our test case is
-therefore marred by some dependencies on external libraries, which is
-quite contrarian to the purpose of programming in a polymorphic
-fashion, namely to avoid rigid dependencies. But even with the
-functionality provided by such external dependencies, Rust doesn't
-allow type conversion to generic types within generic routines. A
-necessary capability for numerical work that is, for instance, built
-into Go. The points we like most about the language are its idea to
-decouple trait implementations from a \code{struct}'s definition
-through explicit \code{impl} blocks, and the complete control over the
-use of dynamic vs. static method dispatch (via trait objects and
-generics, respectively) that Rust affords the programmer. These are
-particular features of Rust that, in our opinion, Fortran should
-borrow in some form.
+external dependencies, even for the most basic tasks. The Rust version
+of our test case is therefore marred by a few dependencies on external
+libraries, which is quite contrarian to the purpose of programming in
+a polymorphic fashion, namely to avoid rigid dependencies. Even with
+the functionality provided by these external dependencies, type
+conversion to generic types within generic routines wasn't possible.
+A necessary capability for numerical work that is, for instance, built
+into Go, but has to be achieved in Rust by some gymnastics on the
+programmer's side. The points we like most about the language are its
+idea to decouple trait implementations from a \code{struct}'s
+definition through explicit \code{impl} blocks, and the complete
+control over the use of dynamic vs. static method dispatch (via trait
+objects and generics, respectively) that Rust affords the
+programmer. These are particular features of Rust that, in our
+opinion, Fortran should borrow in some form.
 
 \subsection{Swift}
 
@@ -1560,7 +1581,7 @@ end type Extended
 ! method implementation
 ...
 \end{lstlisting}
-that extends this \code{Base} type, must then implement the
+that extends the \code{Base} type, must then implement the
 \code{Interface}'s remaining method. Thus, the \code{implements}
 attribute makes interface inheritance interoperable even with
 \code{abstract} derived types and their type extensions (and hence
@@ -1646,7 +1667,8 @@ In order to make the interface based generics facility easy to use
 together with intrinsic types (and the multitude of intrinsic
 procedures that Fortran supports for these types), it must be
 possible, as in the Go language, to define generics constraints by
-means of abstract interfaces that consist of type sets.
+means of abstract interfaces that are expressed in terms of type
+sets.
 
 \subsubsection{Unions of types}
 
@@ -1680,15 +1702,17 @@ functions (also called methods in the following) that work with all
 the member types of the type set. This can also be restated, by saying
 that a type \code{T} \emph{implements} an interface consisting of such
 a type set, if (and only if) it is a member type of this set. For
-instance, Fortran's various \code{complex} types are not members of
-interface \code{INumeric}'s type set (as it is given above), because
-they do not appear in its definition. Hence, none of the
-\code{complex} types implements the \code{INumeric} interface. In
-particular, the \code{complex} types do not support, i.e. implement,
-the relational operators \code{(<)} and \code{(>)} that are required
-for conformance to this interface, given that these operators are
-implemented by both the \code{integer} and \code{real(real64)} member
-types.
+instance, the \code{integer} and \code{real(real64)} types implement
+the interface \code{INumeric} (as it is given above) because they are
+member types of its type set. In contrast, Fortran's various
+\code{complex} types do not implement this interface, because they do
+not belong to its set of member types. The validity of the latter
+statement can also be easily checked, by considering that the
+\code{complex} types do not support, i.e. implement, the relational
+operators \code{(<)} and \code{(>)}. Implementations of the latter are
+required for conformance to this interface, because these operators
+\emph{are} implemented by both the \code{integer} and
+\code{real(real64)} member types.
 
 \subsubsection{Assumed kind parameters}
 
@@ -1731,7 +1755,7 @@ types (since any type has at least zero methods):
 
 For simple use cases, it should be optionally possible for the
 programmer to employ a shorter notation for declaring type constraints
-for generics, than having to define an explicit interface of type
+for generics, than having to explicitly define an interface of type
 sets, like \code{INumeric} above, and to then use it as in
 Sect.~\ref{sect:generic_interfaces}. The following modification of
 interface \code{ISum}'s original declaration of
@@ -2037,7 +2061,7 @@ end module pairwise_library
 Notice, how type \code{PairwiseSum} depends on a generic type
 parameter, \code{U}, that is used within type \code{PairwiseSum}
 itself in order to declare a field variable of \code{type(U)}, which
-is named \code{other}. As is indicated by the type constraint on
+is named \code{other}. As it is indicated by the type constraint on
 \code{U}, object \code{other} conforms to the \code{ISum} interface
 itself, and therefore contains its own implementation of the
 \code{sum} procedure.
@@ -2128,7 +2152,7 @@ In this way, it would become possible to initialize \code{private},
 \code{allocatable} derived type components by structure constructors,
 which is absolutely crucial for concise OO programming. Since such an
 extension would merely add to the capabilities of the language, it
-would be fully backwards compatible. The elegance of the afore-given
+would be fully backwards compatible. The elegance of the aforegiven
 Go and Swift code versions, but also of the Fortran code examples that
 are presented in the next chapter is largely due to the use of such
 constructors. Lacking these, user-defined constructors would have to
@@ -2144,8 +2168,8 @@ allow for the possibility to also handle genericity of array rank. The
 present design offers a lot of room in this respect, but since this is
 a largely orthogonal issue, and since we consider a discussion of such
 functionality to be non-essential for the purpose of a very first
-prototype implementation of the generics features described here, we
-defer it to a separate document.
+prototype implementation of the generics features that are described
+here, we defer it to a separate document.
 
 
 \chapter{Fortran examples}
@@ -2204,7 +2228,7 @@ The example demonstrates that using the new generics features together
 with a functional (or procedural) programming style is easy, that the
 syntax is economical, and that type inference by the compiler should
 be straightforward and therefore reliable. Hence, we believe that the
-generics features described here will place no burden on the
+generics features, that are described here, will place no burden on the
 programmer.
 
 
@@ -2579,9 +2603,8 @@ and compile time polymorphism via union (sum) types.
   the original code version from which Listing~\ref{lst:polyfuncGo}
   was derived, and answered the many questions we had regarding Go's
   generics. We are also grateful to everyone who provided feedback to
-  our work. Brad Richardson reported an inconsistency in an earlier
-  version of the manuscript, which has helped us to improve this
-  paper.
+  our work, like Magne Haveraaen and Brad Richardson, whose comments
+  helped us to improve this paper.
 \end{abstract}
 
 \end{document}

@@ -1,22 +1,46 @@
 pub mod interfaces {
 
+    use num::Num;
+    use std::ops::AddAssign;
+
     // ...........
     // Interfaces
     // ...........
 
+    pub trait INumeric: Num + AddAssign {
+        fn new(input: usize) -> Self;
+    }
+
     pub trait ISum<T> {
         fn sum(&self, x: &[T]) -> T;
     }
-    
+
     pub trait IAverager<T> {
-        fn average(&self, x: &[T], length: T) -> T;
+        fn average(&self, x: &[T]) -> T;
     }
+}
+
+pub mod intrinsics {
+
+    use crate::interfaces::INumeric;
+    
+    impl INumeric for i32 {
+        fn new(input: usize) -> i32 {
+            return input as i32
+        }
+    }
+    
+    impl INumeric for f64 {
+        fn new(input: usize) -> f64 {
+            return input as f64
+        }
+    }
+
 }
 
 pub mod simple_library {
 
-    use num::{zero,Num};    
-    use crate::interfaces::ISum;
+    use crate::interfaces::{INumeric,ISum};
 
     // ..............
     // SimpleSum ADT
@@ -24,22 +48,22 @@ pub mod simple_library {
 
     pub struct SimpleSum;
     
-    impl<T> ISum<T> for SimpleSum where T: Num + Copy {
+    impl<T> ISum<T> for SimpleSum where T: INumeric + Copy {
         fn sum(&self, x: &[T]) -> T {
-            let mut s: T = zero();
+            let mut s: T;
+            s = T::new(0);
             for i in 0 .. x.len() {
-                s = s + x[i];
+                s += x[i];
             }
             return s
         }
     }
-    
+
 }
 
 pub mod pairwise_library {
 
-    use num::Num;
-    use crate::interfaces::ISum;
+    use crate::interfaces::{INumeric,ISum};
     
     // ................
     // PairwiseSum ADT
@@ -49,7 +73,7 @@ pub mod pairwise_library {
         other: Box<dyn ISum<T>>,
     }
 
-    impl<T> PairwiseSum<T> where T: Num {
+    impl<T> PairwiseSum<T> where T: INumeric {
         pub fn new(other: Box<dyn ISum<T>>) -> PairwiseSum<T> {
             PairwiseSum{
                 other: other,
@@ -57,7 +81,7 @@ pub mod pairwise_library {
         }
     }
     
-    impl<T> ISum<T> for PairwiseSum<T> where T: Num {
+    impl<T> ISum<T> for PairwiseSum<T> where T: INumeric {
         fn sum(&self, x: &[T]) -> T {
             if  x.len() <= 2 {
                 return self.other.sum(x);
@@ -72,8 +96,7 @@ pub mod pairwise_library {
 
 pub mod averager_library {
 
-    use num::Num;
-    use crate::interfaces::{ISum,IAverager};
+    use crate::interfaces::{INumeric,ISum,IAverager};
     
     // .............
     // Averager ADT
@@ -83,7 +106,7 @@ pub mod averager_library {
         drv: Box<dyn ISum<T>>,
     }
     
-    impl<T> Averager<T> where T: Num {
+    impl<T> Averager<T> where T: INumeric {
         pub fn new(drv: Box<dyn ISum<T>>) -> Averager<T> {
             Averager{
                 drv: drv,
@@ -91,9 +114,9 @@ pub mod averager_library {
         }
     }
     
-    impl<T> IAverager<T> for Averager<T> where T: Num {
-        fn average(&self, x: &[T], length: T) -> T {
-            return self.drv.sum(&x) / length;
+    impl<T> IAverager<T> for Averager<T> where T: INumeric {
+        fn average(&self, x: &[T]) -> T {
+            return self.drv.sum(&x) / T::new(x.len());
         }
     }
 
@@ -111,8 +134,8 @@ fn main() {
     use crate::pairwise_library::PairwiseSum;
     use crate::averager_library::Averager;
 
-    let avsi = Averager::new( Box::new( SimpleSum{} ));
-    let avsf = Averager::new( Box::new( SimpleSum{} ));
+    let avsi = Averager::new(Box::new(SimpleSum{}));
+    let avsf = Averager::new(Box::new(SimpleSum{}));
 
     let avpi = Averager::new(Box::new(PairwiseSum::new(Box::new(SimpleSum{}))));
     let avpf = Averager::new(Box::new(PairwiseSum::new(Box::new(SimpleSum{}))));
@@ -132,13 +155,11 @@ fn main() {
     match key {
         1 => {}
         2 => { avi = Box::new(avpi);
-               avf = Box::new(avpf);
-        }
+               avf = Box::new(avpf); }
         _ => { println!("Case not implemented!");
-               return;
-        }
+               return; }
     }
 
-    println!("{}", avi.average(&xi, xi.len() as i32));
-    println!("{}", avf.average(&xf, xf.len() as f64));
+    println!("{}", avi.average(&xi));
+    println!("{}", avf.average(&xf));
 }

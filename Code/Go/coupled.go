@@ -4,7 +4,7 @@ import "fmt"
 
 func simple_sum(x []int32) int32 {
    var s int32
-   s = 0
+   s = int32(0)
    for i := 0; i < len(x); i++ {
      s += x[i]
    }

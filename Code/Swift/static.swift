@@ -2,13 +2,24 @@
 // Interfaces
 // ...........
 
+protocol INumeric: Numeric {
+    static func / (lhs: Self, rhs: Self) -> Self
+}
+
 protocol ISum {
-    func sum<T: Numeric>(x: [T]) -> T
+    func sum<T: INumeric>(x: [T]) -> T
 }
 
 protocol IAverager {
-    func average<T: Numeric>(x: [T]) -> T
+    func average<T: INumeric>(x: [T]) -> T
 }
+
+// ...........
+// Intrinsics
+// ...........
+
+extension Int32: INumeric {}
+extension Float64: INumeric {}
 
 // ..............
 // SimpleSum ADT
@@ -16,10 +27,10 @@ protocol IAverager {
 
 struct SimpleSum: ISum {
     
-    func sum<T: Numeric>(x: [T]) -> T {
+    func sum<T: INumeric>(x: [T]) -> T {
         var s: T
         s = T(exactly:0)!
-        for i in 0 ... x.count-1 {
+        for i in 0 ..< x.count {
             s += x[i]
         }
         return s
@@ -33,7 +44,7 @@ struct SimpleSum: ISum {
 struct PairwiseSum<U: ISum>: ISum {    
     var other: U
     
-    func sum<T: Numeric>(x: [T]) -> T {
+    func sum<T: INumeric>(x: [T]) -> T {
         if ( x.count <= 2 ) {
             return other.sum(x: x)
         } else {
@@ -51,8 +62,8 @@ struct PairwiseSum<U: ISum>: ISum {
 struct Averager<U: ISum>: IAverager {    
     var drv: U
     
-    func average<T: Numeric>(x: [T]) -> T {
-        return drv.sum(x: x)
+    func average<T: INumeric>(x: [T]) -> T {
+        return drv.sum(x: x) / T(exactly: x.count)!
     }
 }
 
@@ -89,8 +100,8 @@ func main() {
         return
     }
 
-    print( av.average(x: xi) / Int32(xi.count) )
-    print( av.average(x: xf) / Float64(xf.count) )
+    print( av.average(x: xi) )
+    print( av.average(x: xf) )
 }
 
 // execute main function

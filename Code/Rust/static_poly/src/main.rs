@@ -1,22 +1,46 @@
 pub mod interfaces {
 
+    use num::Num;
+    use std::ops::AddAssign;
+
     // ...........
     // Interfaces
     // ...........
 
+    pub trait INumeric: Num + AddAssign {
+        fn new(input: usize) -> Self;
+    }
+
     pub trait ISum<T> {
         fn sum(&self, x: &[T]) -> T;
     }
-    
+
     pub trait IAverager<T> {
-        fn average(&self, x: &[T], length: T) -> T;
+        fn average(&self, x: &[T]) -> T;
     }
+}
+
+pub mod intrinsics {
+
+    use crate::interfaces::INumeric;
+    
+    impl INumeric for i32 {
+        fn new(input: usize) -> i32 {
+            return input as i32
+        }
+    }
+    
+    impl INumeric for f64 {
+        fn new(input: usize) -> f64 {
+            return input as f64
+        }
+    }
+
 }
 
 pub mod simple_library {
 
-    use num::{zero,Num};    
-    use crate::interfaces::ISum;
+    use crate::interfaces::{INumeric,ISum};
 
     // ..............
     // SimpleSum ADT
@@ -24,23 +48,23 @@ pub mod simple_library {
 
     pub struct SimpleSum;
     
-    impl<T> ISum<T> for SimpleSum where T: Num + Copy {
+    impl<T> ISum<T> for SimpleSum where T: INumeric + Copy {
         fn sum(&self, x: &[T]) -> T {
-            let mut s: T = zero();
+            let mut s: T;
+            s = T::new(0);
             for i in 0 .. x.len() {
-                s = s + x[i];
+                s += x[i];
             }
             return s
         }
     }
-    
+
 }
 
 pub mod pairwise_library {
 
-    use num::Num;
     use std::marker::PhantomData;
-    use crate::interfaces::ISum;
+    use crate::interfaces::{INumeric,ISum};
     
     // ................
     // PairwiseSum ADT
@@ -51,7 +75,7 @@ pub mod pairwise_library {
         phantom: PhantomData::<T>,
     }
 
-    impl<T,U> PairwiseSum<T,U> where T: Num, U: ISum<T> {
+    impl<T,U> PairwiseSum<T,U> where T: INumeric, U: ISum<T> {
         pub fn new(other: U) -> PairwiseSum<T,U> {
             PairwiseSum{
                 other: other,
@@ -60,7 +84,7 @@ pub mod pairwise_library {
         }
     }
     
-    impl<T,U> ISum<T> for PairwiseSum<T,U> where T: Num, U: ISum<T> {
+    impl<T,U> ISum<T> for PairwiseSum<T,U> where T: INumeric, U: ISum<T> {
         fn sum(&self, x: &[T]) -> T {
             if  x.len() <= 2 {
                 return self.other.sum(x);
@@ -75,9 +99,8 @@ pub mod pairwise_library {
 
 pub mod averager_library {
 
-    use num::Num;
     use std::marker::PhantomData;
-    use crate::interfaces::{ISum,IAverager};
+    use crate::interfaces::{INumeric,ISum,IAverager};
     
     // .............
     // Averager ADT
@@ -88,7 +111,7 @@ pub mod averager_library {
         phantom: PhantomData::<T>,
     }
     
-    impl<T,U> Averager<T,U> where T: Num, U: ISum<T> {
+    impl<T,U> Averager<T,U> where T: INumeric, U: ISum<T> {
         pub fn new(drv: U) -> Averager<T,U> {
             Averager{
                 drv: drv,
@@ -97,9 +120,9 @@ pub mod averager_library {
         }
     }
     
-    impl<T,U> IAverager<T> for Averager<T,U> where T: Num, U: ISum<T> {
-        fn average(&self, x: &[T], length: T) -> T {
-            return self.drv.sum(&x) / length;
+    impl<T,U> IAverager<T> for Averager<T,U> where T: INumeric, U: ISum<T> {
+        fn average(&self, x: &[T]) -> T {
+            return self.drv.sum(&x) / T::new(x.len());
         }
     }
 
@@ -117,11 +140,11 @@ fn main() {
     use crate::pairwise_library::PairwiseSum;
     use crate::averager_library::Averager;
 
-    let avsi = Averager::new( SimpleSum{} );
-    let avsf = Averager::new( SimpleSum{} );
+    let avsi = Averager::new(SimpleSum{});
+    let avsf = Averager::new(SimpleSum{});
 
-    let avpi = Averager::new( PairwiseSum::new(SimpleSum{}) );
-    let avpf = Averager::new( PairwiseSum::new(SimpleSum{}) );
+    let avpi = Averager::new(PairwiseSum::new(SimpleSum{}));
+    let avpf = Averager::new(PairwiseSum::new(SimpleSum{}));
 
     let mut avi: Box<dyn IAverager::<i32>> = Box::new(avsi);
     let mut avf: Box<dyn IAverager::<f64>> = Box::new(avsf);
@@ -138,13 +161,11 @@ fn main() {
     match key {
         1 => {}
         2 => { avi = Box::new(avpi);
-               avf = Box::new(avpf);
-        }
+               avf = Box::new(avpf); }
         _ => { println!("Case not implemented!");
-               return;
-        }
+               return; }
     }
 
-    println!("{}", avi.average(&xi, xi.len() as i32));
-    println!("{}", avf.average(&xf, xf.len() as f64));
+    println!("{}", avi.average(&xi));
+    println!("{}", avf.average(&xf));
 }
