@@ -12,23 +12,20 @@ module interfaces
    end interface INumeric
 
    abstract interface :: ISum
-      function sum{INumeric :: T}(self,x) result(s)
-         deferred(self), intent(in) :: self
-         type(T),        intent(in) :: x(:)
-         type(T)                    :: s
+      function sum{INumeric :: T}(x) result(s)
+         type(T), intent(in) :: x(:)
+         type(T)             :: s
       end function sum
    end interface ISum
 
    abstract interface :: IAverager
-      function average{INumeric :: T}(self,x) result(a)
-         deferred(self), intent(in) :: self
-         type(T),        intent(in) :: x(:)
-         type(T)                    :: a
+      function average{INumeric :: T}(x) result(a)
+         type(T), intent(in) :: x(:)
+         type(T)             :: a
       end function average
    end interface IAverager
 
 end module interfaces
-
 
 module simple_library
 
@@ -41,15 +38,14 @@ module simple_library
    
    type, sealed, implements(ISum) :: SimpleSum
    contains
-      procedure :: sum
+      procedure, nopass :: sum
    end type SimpleSum
 
 contains
    
-   function sum{INumeric :: T}(self,x) result(s)
-      type(SimpleSum), intent(in) :: self
-      type(T),         intent(in) :: x(:)
-      type(T)                     :: s
+   function sum{INumeric :: T}(x) result(s)
+      type(T), intent(in) :: x(:)
+      type(T)             :: s
       integer :: i
       s = T(0)
       do i = 1, size(x)
@@ -58,7 +54,6 @@ contains
    end function sum
 
 end module simple_library
-
 
 module pairwise_library
 
@@ -73,7 +68,7 @@ module pairwise_library
       private
       class(ISum), allocatable :: other
    contains
-      procedure :: sum
+      procedure, pass :: sum
    end type PairwiseSum
 
 contains
@@ -93,7 +88,6 @@ contains
 
 end module pairwise_library
 
-
 module averager_library
 
    use interfaces, only: IAverager, ISum, INumeric
@@ -107,7 +101,7 @@ module averager_library
       private
       class(ISum), allocatable :: drv
    contains
-      procedure :: average
+      procedure, pass :: average
    end type Averager
 
 contains
@@ -120,7 +114,6 @@ contains
    end function average
 
 end module averager_library
-
 
 program main
 

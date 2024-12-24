@@ -8,7 +8,7 @@ pub mod interfaces {
     // ...........
 
     pub trait INumeric: Num + AddAssign {
-        fn new(input: usize) -> Self;
+        fn new(n: usize) -> Self;
     }
 
     pub trait ISum<T> {
@@ -25,14 +25,14 @@ pub mod intrinsics {
     use crate::interfaces::INumeric;
     
     impl INumeric for i32 {
-        fn new(input: usize) -> i32 {
-            return input as i32
+        fn new(n: usize) -> i32 {
+            return n as i32
         }
     }
     
     impl INumeric for f64 {
-        fn new(input: usize) -> f64 {
-            return input as f64
+        fn new(n: usize) -> f64 {
+            return n as f64
         }
     }
 
@@ -121,11 +121,9 @@ pub mod averager_library {
     }
 
 }
-
 // ..............
 // main program
 // ..............
-
 #[macro_use] extern crate text_io;
 
 fn main() {

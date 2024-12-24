@@ -33,7 +33,6 @@ func pairwise_average(x []int32) int32 {
 // ..............
 
 func main() {
-
    xi := []int32{1,2,3,4,5}
 
    var key int32

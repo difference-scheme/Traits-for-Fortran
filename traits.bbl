@@ -310,6 +310,36 @@
       \verb https://gist.github.com/GeorgeLyon/c7b07923f7a800674bc9745ae45ddc7f
       \endverb
     \endentry
+    \entry{Martin_OCP}{article}{}
+      \name{author}{1}{}{%
+        {{hash=6f41df64eb0dc4855be70172368604c2}{%
+           family={Martin},
+           familyi={M\bibinitperiod},
+           given={Robert\bibnamedelima C.},
+           giveni={R\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+      }
+      \strng{namehash}{6f41df64eb0dc4855be70172368604c2}
+      \strng{fullhash}{6f41df64eb0dc4855be70172368604c2}
+      \strng{bibnamehash}{6f41df64eb0dc4855be70172368604c2}
+      \strng{authorbibnamehash}{6f41df64eb0dc4855be70172368604c2}
+      \strng{authornamehash}{6f41df64eb0dc4855be70172368604c2}
+      \strng{authorfullhash}{6f41df64eb0dc4855be70172368604c2}
+      \field{extraname}{1}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{C++ Report}
+      \field{month}{1}
+      \field{title}{The Open/Closed Principle}
+      \field{year}{1996}
+      \verb{urlraw}
+      \verb https://web.archive.org/web/20060822033314/http://www.objectmentor.com/resources/articles/ocp.pdf
+      \endverb
+      \verb{url}
+      \verb https://web.archive.org/web/20060822033314/http://www.objectmentor.com/resources/articles/ocp.pdf
+      \endverb
+    \endentry
     \entry{Martin_03}{book}{}
       \name{author}{1}{}{%
         {{hash=6f41df64eb0dc4855be70172368604c2}{%
@@ -327,7 +357,7 @@
       \strng{authorbibnamehash}{6f41df64eb0dc4855be70172368604c2}
       \strng{authornamehash}{6f41df64eb0dc4855be70172368604c2}
       \strng{authorfullhash}{6f41df64eb0dc4855be70172368604c2}
-      \field{extraname}{1}
+      \field{extraname}{2}
       \field{sortinit}{M}
       \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
       \field{labelnamesource}{author}
@@ -350,7 +380,7 @@
       \strng{authorbibnamehash}{6f41df64eb0dc4855be70172368604c2}
       \strng{authornamehash}{6f41df64eb0dc4855be70172368604c2}
       \strng{authorfullhash}{6f41df64eb0dc4855be70172368604c2}
-      \field{extraname}{2}
+      \field{extraname}{3}
       \field{sortinit}{M}
       \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
       \field{labelnamesource}{author}
@@ -385,7 +415,7 @@
       \strng{authorbibnamehash}{6f41df64eb0dc4855be70172368604c2}
       \strng{authornamehash}{6f41df64eb0dc4855be70172368604c2}
       \strng{authorfullhash}{6f41df64eb0dc4855be70172368604c2}
-      \field{extraname}{3}
+      \field{extraname}{4}
       \field{sortinit}{M}
       \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
       \field{labelnamesource}{author}
@@ -428,6 +458,18 @@
       \field{pages}{103\bibrangedash 104}
       \range{pages}{2}
     \endentry
+    \entry{MojoRef}{misc}{}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labeltitlesource}{title}
+      \field{title}{Mojo Manual: Traits}
+      \verb{urlraw}
+      \verb https://docs.modular.com/mojo/manual/traits/
+      \endverb
+      \verb{url}
+      \verb https://docs.modular.com/mojo/manual/traits/
+      \endverb
+    \endentry
     \entry{Pierce_91}{misc}{}
       \name{author}{1}{}{%
         {{hash=7365a4e827c2dfa2c5af0c0ec4c18c27}{%
@@ -452,6 +494,35 @@
       \endverb
       \verb{url}
       \verb https://api.semanticscholar.org/CorpusID:118907019
+      \endverb
+    \endentry
+    \entry{Fortran_standard}{misc}{}
+      \name{author}{2}{}{%
+        {{hash=f7d4f762c92ecf930ee85a4ed3ee5140}{%
+           family={PL22.3},
+           familyi={P\bibinitperiod}}}%
+        {{hash=7ec5de487033c9b9895beb4c11bdff61}{%
+           family={WG5},
+           familyi={W\bibinitperiod}}}%
+      }
+      \strng{namehash}{a7ac801eab36bafd65f9c21a5d2b7106}
+      \strng{fullhash}{a7ac801eab36bafd65f9c21a5d2b7106}
+      \strng{bibnamehash}{a7ac801eab36bafd65f9c21a5d2b7106}
+      \strng{authorbibnamehash}{a7ac801eab36bafd65f9c21a5d2b7106}
+      \strng{authornamehash}{a7ac801eab36bafd65f9c21a5d2b7106}
+      \strng{authorfullhash}{a7ac801eab36bafd65f9c21a5d2b7106}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{10}
+      \field{title}{J3/18-007r1 (F2018 interpretation document)}
+      \field{year}{2018}
+      \verb{urlraw}
+      \verb https://j3-fortran.org/doc/year/18/18-007r1.pdf
+      \endverb
+      \verb{url}
+      \verb https://j3-fortran.org/doc/year/18/18-007r1.pdf
       \endverb
     \endentry
     \entry{Taylor_21}{misc}{}

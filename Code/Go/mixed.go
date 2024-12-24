@@ -29,7 +29,7 @@ func (self SimpleSum[T]) sum(x []T) T {
    var s T
    s = T(0)
    for i := 0; i < len(x); i++ {
-     s += x[i]
+      s += x[i]
    }
    return s
 }
@@ -68,7 +68,6 @@ func (self Averager[T]) average(x []T) T {
 // ..............
 
 func main() {
-
    var avi IAverager[int32]
    var avf IAverager[float64]
 

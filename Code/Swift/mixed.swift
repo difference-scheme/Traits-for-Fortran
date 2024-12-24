@@ -2,7 +2,10 @@
 // Interfaces
 // ...........
 
-protocol INumeric: Numeric {
+protocol INumeric {
+    init?(exactly: Int)
+    static func += (lhs: inout Self, rhs: Self)
+    static func + (lhs: Self, rhs: Self) -> Self
     static func / (lhs: Self, rhs: Self) -> Self
 }
 
@@ -72,7 +75,6 @@ struct Averager: IAverager {
 // ..............
 
 func main() {
-    
     let avs = Averager(drv: SimpleSum())
     let avp = Averager(drv: PairwiseSum(other: SimpleSum()))
 
@@ -82,7 +84,7 @@ func main() {
     let xf: [Float64] = [1.0,2.0,3.0,4.0,5.0]
     
     var key: Int32?
-    
+
     print("Simple   sum average: 1")
     print("Pairwise sum average: 2")
     print("Choose an averaging method: ")

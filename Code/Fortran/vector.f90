@@ -7,9 +7,9 @@ module vector_library
    end interface IAnyType
    
    abstract interface :: IAppendable
-      subroutine append(self,item)
-         deferred(self), intent(inout) :: self
-         deferred(item), intent(in)    :: item
+      typedef, deferred :: Element
+      subroutine append(item)
+         type(Element), intent(in) :: item
       end subroutine append
    end interface IAppendable
 
@@ -17,7 +17,7 @@ module vector_library
       private
       type(U), allocatable :: elements(:)
    contains
-      procedure :: append
+      procedure, pass :: append
    end type Vector
 
 contains

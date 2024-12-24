@@ -1,19 +1,20 @@
 [0] Config.pm:307> INFO - This is Biber 2.17
 [1] Config.pm:310> INFO - Logfile is 'traits.blg'
-[195] biber:340> INFO - === Sat Sep 21, 2024, 13:41:20
-[274] Biber.pm:418> INFO - Reading 'traits.bcf'
-[424] Biber.pm:972> INFO - Found 17 citekeys in bib section 0
-[455] Biber.pm:4383> INFO - Processing section 0
-[525] Biber.pm:4574> INFO - Looking for bibtex file 'traits.bib' for section 0
-[526] bibtex.pm:1713> INFO - LaTeX decoding ...
-[555] bibtex.pm:1518> INFO - Found BibTeX data source 'traits.bib'
-[922] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[922] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[922] Biber.pm:4203> INFO - Sorting list 'nyt/global//global/global' of type 'entry' with template 'nyt' and locale 'en-US'
-[922] Biber.pm:4209> INFO - No sort tailoring available for locale 'en-US'
-[983] bbl.pm:654> INFO - Writing 'traits.bbl' with encoding 'UTF-8'
-[995] bbl.pm:757> INFO - Output to traits.bbl
-[995] Biber.pm:130> WARN - Duplicate entry key: 'Lyon' in file 'traits.bib', skipping ...
-[995] Biber.pm:130> WARN - legacy month field 'November' in entry 'Martin_14' is not an integer - this will probably not sort properly.
-[995] Biber.pm:130> WARN - legacy month field 'July' in entry 'Haveraaen_et_al_19' is not an integer - this will probably not sort properly.
-[995] Biber.pm:132> INFO - WARNINGS: 3
+[163] biber:340> INFO - === Wed Jan  1, 2025, 13:00:53
+[190] Biber.pm:418> INFO - Reading 'traits.bcf'
+[339] Biber.pm:972> INFO - Found 20 citekeys in bib section 0
+[370] Biber.pm:4383> INFO - Processing section 0
+[543] Biber.pm:4574> INFO - Looking for bibtex file 'traits.bib' for section 0
+[549] bibtex.pm:1713> INFO - LaTeX decoding ...
+[605] bibtex.pm:1518> INFO - Found BibTeX data source 'traits.bib'
+[1225] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[1225] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[1226] Biber.pm:4203> INFO - Sorting list 'nyt/global//global/global' of type 'entry' with template 'nyt' and locale 'en-US'
+[1226] Biber.pm:4209> INFO - No sort tailoring available for locale 'en-US'
+[1336] bbl.pm:654> INFO - Writing 'traits.bbl' with encoding 'UTF-8'
+[1356] bbl.pm:757> INFO - Output to traits.bbl
+[1356] Biber.pm:130> WARN - Duplicate entry key: 'Lyon' in file 'traits.bib', skipping ...
+[1356] Biber.pm:130> WARN - legacy month field 'November' in entry 'Martin_14' is not an integer - this will probably not sort properly.
+[1356] Biber.pm:130> WARN - legacy month field 'July' in entry 'Haveraaen_et_al_19' is not an integer - this will probably not sort properly.
+[1357] Biber.pm:130> WARN - legacy month field 'October' in entry 'Fortran_standard' is not an integer - this will probably not sort properly.
+[1357] Biber.pm:132> INFO - WARNINGS: 4

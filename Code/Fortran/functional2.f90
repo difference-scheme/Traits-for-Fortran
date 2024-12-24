@@ -49,7 +49,6 @@ contains
 
 end module averager_library
 
-
 program main
 
    ! dependencies on intrinsic constants

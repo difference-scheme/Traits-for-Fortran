@@ -6,5 +6,5 @@ extension Float64: IPrintable {
         print("I am \(self)")
     }
 }
-var x: Float64 = 4.9
-x.output()
+var y: Float64 = 4.9
+y.output()

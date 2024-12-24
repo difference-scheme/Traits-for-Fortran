@@ -1,34 +1,52 @@
 module interfaces
 
-   use, intrinsic :: iso_fortran_env, only: real64
-
    implicit none
    private
    
    public :: INumeric, ISum, IAverager
    
    abstract interface :: INumeric
-      integer | real(real64)
+      function init(n)
+         integer, intent(in) :: n
+      end function init
+      function operator(+)(lhs,rhs) result(res)
+         type(itself), intent(in) :: lhs, rhs
+         type(itself)             :: res
+      end function operator(+)
+      function operator(/)(lhs,rhs) result(res)
+         type(itself), intent(in) :: lhs, rhs
+         type(itself)             :: res
+      end function operator(/)
    end interface INumeric
 
    abstract interface :: ISum
-      function sum{INumeric :: T}(self,x) result(s)
-         deferred(self), intent(in) :: self
-         type(T),        intent(in) :: x(:)
-         type(T)                    :: s
+      function sum{INumeric :: T}(x) result(s)
+         type(T), intent(in) :: x(:)
+         type(T)             :: s
       end function sum
    end interface ISum
 
    abstract interface :: IAverager
-      function average{INumeric :: T}(self,x) result(a)
-         deferred(self), intent(in) :: self
-         type(T),        intent(in) :: x(:)
-         type(T)                    :: a
+      function average{INumeric :: T}(x) result(a)
+         type(T), intent(in) :: x(:)
+         type(T)             :: a
       end function average
    end interface IAverager
 
 end module interfaces
 
+module intrinsics
+
+   use, intrinsic :: iso_fortran_env, only: real64   
+   use interfaces, only: INumeric
+      
+   implements INumeric :: integer
+   end implements integer
+
+   implements INumeric :: real(real64)
+   end implements real(real64)
+   
+end module intrinsics
 
 module simple_library
 
@@ -41,15 +59,14 @@ module simple_library
    
    type, sealed, implements(ISum) :: SimpleSum
    contains
-      procedure :: sum
+      procedure, nopass :: sum
    end type SimpleSum
 
 contains
    
-   function sum{INumeric :: T}(self,x) result(s)
-      type(SimpleSum), intent(in) :: self
-      type(T),         intent(in) :: x(:)
-      type(T)                     :: s
+   function sum{INumeric :: T}(x) result(s)
+      type(T), intent(in) :: x(:)
+      type(T)             :: s
       integer :: i
       s = T(0)
       do i = 1, size(x)
@@ -58,7 +75,6 @@ contains
    end function sum
 
 end module simple_library
-
 
 module pairwise_library
 
@@ -69,19 +85,19 @@ module pairwise_library
 
    public :: PairwiseSum
    
-   type, sealed, implements(ISum) :: PairwiseSum{ISum :: U}
+   type, sealed, implements(ISum) :: PairwiseSum
       private
-      type(U), allocatable :: other
+      class(ISum), allocatable :: other
    contains
-      procedure :: sum
+      procedure, pass :: sum
    end type PairwiseSum
 
 contains
 
    function sum{INumeric :: T}(self,x) result(s)
-      type(PairwiseSum{U}), intent(in) :: self
-      type(T),              intent(in) :: x(:)
-      type(T)                          :: s
+      type(PairwiseSum), intent(in) :: self
+      type(T),           intent(in) :: x(:)
+      type(T)                       :: s
       integer :: m
       if (size(x) <= 2) then
          s = self%other%sum(x)
@@ -93,7 +109,6 @@ contains
 
 end module pairwise_library
 
-
 module averager_library
 
    use interfaces, only: IAverager, ISum, INumeric
@@ -102,25 +117,24 @@ module averager_library
    private
 
    public :: Averager
-
-   type, sealed, implements(IAverager) :: Averager{ISum :: U}
+   
+   type, sealed, implements(IAverager) :: Averager
       private
-      type(U), allocatable :: drv
+      class(ISum), allocatable :: drv
    contains
-      procedure :: average
+      procedure, pass :: average
    end type Averager
 
 contains
 
    function average{INumeric :: T}(self,x) result(a)
-      type(Averager{U}), intent(in) :: self
-      type(T),           intent(in) :: x(:)
-      type(T)                       :: a
+      type(Averager), intent(in) :: self
+      type(T),        intent(in) :: x(:)
+      type(T)                    :: a
       a = self%drv%sum(x) / T(size(x))
    end function average
 
 end module averager_library
-
 
 program main
 
