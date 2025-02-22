@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2025.1.2)  22 JAN 2025 14:05
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2025.1.2)  22 FEB 2025 11:59
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -822,9 +822,15 @@ LaTeX Font Info:    Font shape `T1/fvm/m/it' in size <10.95> not available
 LaTeX Font Info:    Font shape `T1/fvm/m/sl' will be
 (Font)              scaled to size 8.97906pt on input line 1123.
  [27]
-[28] [29] [30] (./Code/Fortran/printy.f90 [31]) [32] [33]
-(./Code/Fortran/Interop/extends.f90) [34]
-Overfull \hbox (1.8835pt too wide) in paragraph at lines 1555--1563
+[28] [29] [30]
+Overfull \hbox (1.2037pt too wide) in paragraph at lines 1376--1385
+\T1/ppl/m/n/10.95 Here we have skipped again, for brevity, the ac-tual im-ple-m
+en-ta-tions. Such a split-ting of \T1/fvm/m/n/10.95 implements
+ []
+
+(./Code/Fortran/printy.f90 [31]) [32] [33] (./Code/Fortran/Interop/extends.f90)
+[34]
+Overfull \hbox (1.8835pt too wide) in paragraph at lines 1555--1567
 []\T1/ppl/m/n/10.95 This is a fun-da-men-tal de-sign flaw in the present lan-gu
 age that re-quired cor-rec-tion, and couldn't
  []
@@ -836,7 +842,7 @@ Chapter 5.
 ] [38] [39] (./Code/Fortran/ocp.f90
 consecutive:
 )
-Overfull \hbox (2.98062pt too wide) in paragraph at lines 1869--1873
+Overfull \hbox (2.98062pt too wide) in paragraph at lines 1873--1877
 []\T1/ppl/m/n/10.95 In gen-eral, as-so-ci-ated types will have to be de-clared 
 by the pro-gram-mer him-self, us-ing \T1/fvm/m/n/10.95 deferred
  []
@@ -844,14 +850,14 @@ by the pro-gram-mer him-self, us-ing \T1/fvm/m/n/10.95 deferred
 (./Code/Fortran/vector.f90
 consecutive:
 )
-Overfull \hbox (0.26125pt too wide) in paragraph at lines 1897--1899
+Overfull \hbox (0.26125pt too wide) in paragraph at lines 1901--1903
 []\T1/ppl/m/n/10.95 traits with as-so-ci-ated types (or ``TATs''), like the \T1
 /fvm/m/n/10.95 INumeric \T1/ppl/m/n/10.95 and \T1/fvm/m/n/10.95 IAppendable \T1
 /ppl/m/n/10.95 traits of Sect. [][]5.1.3[][]. 
  []
 
 [40] [41] [42]
-Overfull \hbox (3.22954pt too wide) in paragraph at lines 2078--2082
+Overfull \hbox (3.22954pt too wide) in paragraph at lines 2082--2086
 []\T1/ppl/m/n/10.95 Although the present de-sign \T1/ppl/m/it/10.95 doesn't \T1
 /ppl/m/n/10.95 typ-i-cally re-quire it, the pro-gram-mer can ac-com-plish gener
 ic
@@ -864,7 +870,7 @@ Chapter 6.
 ] [48]) (./Code/Fortran/functional2.f90
 consecutive:
 [49]) [50]
-Overfull \hbox (2.98868pt too wide) in paragraph at lines 2454--2461
+Overfull \hbox (2.98868pt too wide) in paragraph at lines 2458--2465
 []\T1/ppl/m/n/10.95 Interface in-her-i-tance is ex-pressed through the pres-enc
 e of the \T1/fvm/m/n/10.95 implements \T1/ppl/m/n/10.95 at-tribute in derived-
  []
@@ -877,7 +883,7 @@ Chapter 7.
 [63
 
 ] [64]
-Overfull \hbox (15.27174pt too wide) in paragraph at lines 2872--2872
+Overfull \hbox (15.27174pt too wide) in paragraph at lines 2876--2876
 []\T1/ppl/m/n/10.95 George Lyon. \T1/ppl/m/sc/10.95 url\T1/ppl/m/n/10.95 : [][]
 $\T1/fvm/m/n/10.95 https : / / gist . github . com / GeorgeLyon / c7b07923f7a80
 0674bc9745ae45ddc7f$[][]\T1/ppl/m/n/10.95 . 
@@ -886,7 +892,7 @@ $\T1/fvm/m/n/10.95 https : / / gist . github . com / GeorgeLyon / c7b07923f7a80
 [65
 
 ]
-Overfull \hbox (27.29716pt too wide) in paragraph at lines 2872--2872
+Overfull \hbox (27.29716pt too wide) in paragraph at lines 2876--2876
 []\T1/ppl/m/n/10.95 Wolfgang Weck and Clemens Szyper-ski. \T1/ppl/m/it/10.95 Do
  We Need In-her-i-tance? \T1/ppl/m/sc/10.95 url\T1/ppl/m/n/10.95 : [][]$\T1/fvm
 /m/n/10.95 https : / / www . researchgate .
@@ -896,7 +902,7 @@ Overfull \hbox (27.29716pt too wide) in paragraph at lines 2872--2872
 has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2893 \end{abstract}
+l.2897 \end{abstract}
                       [1] (./traits.aux)
 Package rerunfilecheck Info: File `traits.out' has not changed.
 (rerunfilecheck)             Checksum: F422DF7393DFEFF960C9FF9E210051B3;12990.
@@ -918,7 +924,7 @@ fonts/type1/public/bera/fvmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
 ublic/bera/fvmro8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/
 uplb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb><
 /usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on traits.pdf (68 pages, 341370 bytes).
+Output written on traits.pdf (68 pages, 341533 bytes).
 PDF statistics:
  2718 PDF objects out of 2984 (max. 8388607)
  2608 compressed objects within 27 object streams

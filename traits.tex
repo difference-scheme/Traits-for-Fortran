@@ -627,8 +627,8 @@ i.e. Rust supports ``strong concepts''.
 \subsection{Encapsulated version coded in Rust}
 \label{sect:OORust}
 
-The encapsulated Rust version of our test problem that is given in the
-following Listing~\ref{lst:OORust} is in its outline quite similar to
+The encapsulated Rust version of our test problem, that is given in the
+following Listing~\ref{lst:OORust}, is in its outline quite similar to
 the corresponding Go version\footnote{Notice that the present Rust
 version makes universal use of dynamic method dispatch via trait
 objects, in order to correspond most closely to all the other
@@ -666,8 +666,8 @@ that are listed in the following notes, and in our concluding remarks.
   that \code{Self} stands in here for the implementing type). The
   conformance of the \code{i32} and \code{f64} intrinsic types to the
   \code{INumeric} trait is then acknowledged via \code{impl} blocks,
-  that also implement any of the still outstanding functionality of
-  this trait for these two types.
+  that furthermore implement any of the still outstanding
+  functionality of this trait for these two types.
 \item
   Where necessary, use of the \code{Copy} trait is also made, to
   work around Rust's default move semantics.
@@ -1210,7 +1210,7 @@ type-bound initializers (i.e. constructors).
 
 The main difference to derived type definitions is that the
 \code{implements} statement does not accept \code{deferred} type-bound
-procedure declarations (which we propose to retire,
+procedure declarations (which we propose to retire partly or entirely,
 see Sect.~\ref{sect:abstract_types}), and that it cannot be used with
 \code{abstract} derived types. If interoperability with
 \code{abstract} types is required, the later to be discussed
@@ -1246,16 +1246,16 @@ module basic
    
 contains
 
-   function init_by_int(n) result(self)
+   function init_by_int(n) result(res)
       integer, intent(in) :: n
-      type(MyType)        :: self
-      self%a = real(n)
+      type(MyType)        :: res
+      res%a = real(n)
    end function init_by_int
 
-   function init_by_real(a) result(self)
+   function init_by_real(a) result(res)
       real, intent(in) :: a
-      type(MyType)     :: self
-      self%a = a
+      type(MyType)     :: res
+      res%a = a
    end function init_by_real
 
    subroutine output(self)
@@ -1269,7 +1269,7 @@ end module basic
 Notice the use of the new declaration of \code{initial} type, that
 instructs the compiler to overload the implementing type's structure
 constructor with, in this case, multiple type-bound initializer
-implementations of the generic (reserved) name \code{init}. Notice,
+implementations of the (reserved) generic name \code{init}. Notice,
 also, that the return type of a module function that actually
 implements an initializer is always the concrete type that it
 initializes.
@@ -1344,8 +1344,8 @@ contains
 ...
 end module basic      
 \end{lstlisting}
-To avoid needless repetition, we have skipped here the implementation
-of the actual procedures, that would be done exactly as it was shown in
+To avoid needless repetition, we have omitted here the implementation
+of the actual procedures, which would be done exactly as it was shown in
 Sect.~\ref{sect:adding_methods}.
 
 \subsubsection{Split implementation}
@@ -1373,7 +1373,7 @@ contains
    ...   
 end module basic      
 \end{lstlisting}
-Here we have omitted again, for brevity, the actual implementations.
+Here we have skipped again, for brevity, the actual implementations.
 Such a splitting of \code{implements} statements can be useful to
 improve code readability, as it makes the association between the
 traits and the actual procedures, that are to be implemented for
@@ -1467,16 +1467,16 @@ module basic
    
 contains
 
-   function init_by_int(n) result(self)
+   function init_by_int(n) result(res)
       integer, intent(in) :: n
-      type(MyType)        :: self
-      self%a = real(n)
+      type(MyType)        :: res
+      res%a = real(n)
    end function init_by_int
 
-   function init_by_real(a) result(self)
+   function init_by_real(a) result(res)
       real, intent(in) :: a
-      type(MyType)     :: self
-      self%a = a
+      type(MyType)     :: res
+      res%a = a
    end function init_by_real
 
    subroutine output(self)
@@ -1520,14 +1520,14 @@ consist of the signatures of these methods.
 \lstinputlisting[linerange={1-52},language=LFortran,style=boxed]{Code/Fortran/Interop/extends.f90}
 
 In cases like the present one, where the \code{extends} and
-\code{implements} derived type attributes are used in combination, the
-\code{extends} attribute shall always precede the \code{implements}
-attribute. Since the latter attribute allows for the inheritance of
-\emph{multiple} interfaces/traits, as it is demonstrated in this
-example, this also fixes present Fortran's single inheritance
-limitations, \emph{without} introducing the potential ambiguities that
-multiple inheritance of implementation would cause (which are also
-known as ``The Diamond Problem'').
+\code{implements} derived type attributes are used in combination,
+\code{extends} shall always precede \code{implements}. Since the
+latter attribute allows for the inheritance of \emph{multiple}
+interfaces/traits, as it is demonstrated in this example, this also
+fixes present Fortran's single inheritance limitations, \emph{without}
+introducing the potential ambiguities that multiple inheritance of
+implementation would cause (which are also known as ``The Diamond
+Problem'').
 
 \subsection{Use with the abstract attribute}
 \label{sect:abstract_types}
@@ -1550,16 +1550,20 @@ the traits based \code{implements} mechanisms that are proposed here,
 in that it generally requires these signatures to contain entirely
 \emph{superfluous} passed-object dummy arguments, which unnecessarily
 and wrongly \emph{intermix} the receiver of a message (i.e. the
-passed object), with the interface of the message itself.
+passed-object), with the interface of the message itself.
 
 This is a fundamental design flaw in the present language that
 required correction, and couldn't be simply carried over to the design
 of the traits based facilities, because it would have compromised all
 the new features that are based upon traits. In order to avoid having
-two subtly different ways of expressing abstract method signatures in
-the language, we therefore propose to retire (in the long run)
-Fortran's \code{deferred} type-bound procedure declarations, in favor
-of using traits, as it is demonstrated in the following example.
+(in the long run) two subtly different ways of expressing abstract
+method signatures in the language, we propose to first make the
+specification of passed-object dummy arguments, in abstract interfaces
+of \code{deferred} methods, optional rather than mandatory, and to
+subsequently declare obsolescent such mandatory
+specification. Alternatively, Fortran's \code{deferred} type-bound
+procedure declarations could be retired in their entirety, in favor of
+using traits, as it is demonstrated in the following example:
 
 \lstinputlisting[linerange={1-52},language=LFortran,style=boxed]{Code/Fortran/Interop/abstract2b.f90}
 

@@ -47,10 +47,10 @@ module my_type
 
 contains
    
-   function init(n) result(self)
+   function init(n) result(res)
       integer, intent(in) :: n
-      type(MyType)        :: self
-      self%n = n
+      type(MyType)        :: res
+      res%n = n
    end function init
    
    elemental function multiply(lhs,rhs) result(res)
