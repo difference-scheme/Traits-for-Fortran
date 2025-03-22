@@ -78,7 +78,7 @@ func main() {
     let avs = Averager(drv: SimpleSum())
     let avp = Averager(drv: PairwiseSum(other: SimpleSum()))
 
-    var av : IAverager = avs
+    var av : any IAverager = avs
     
     let xi: [Int32] = [1,2,3,4,5]
     let xf: [Float64] = [1.0,2.0,3.0,4.0,5.0]

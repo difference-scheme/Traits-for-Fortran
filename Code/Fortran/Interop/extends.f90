@@ -1,4 +1,4 @@
-module extends
+module extends_parent
 
    abstract interface :: IParent
       subroutine method1(n)
@@ -34,4 +34,4 @@ contains
       real,         intent(out) :: res
    end subroutine method1
 
-end module extends
+end module extends_parent

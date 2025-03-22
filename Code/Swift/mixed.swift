@@ -45,7 +45,7 @@ struct SimpleSum: ISum {
 // ................
 
 struct PairwiseSum: ISum {    
-    var other: ISum
+    var other: any ISum
     
     func sum<T: INumeric>(x: [T]) -> T {
         if ( x.count <= 2 ) {
@@ -63,7 +63,7 @@ struct PairwiseSum: ISum {
 // .............
 
 struct Averager: IAverager {    
-    var drv: ISum
+    var drv: any ISum
     
     func average<T: INumeric>(x: [T]) -> T {
         return drv.sum(x: x) / T(exactly: x.count)!
@@ -78,7 +78,7 @@ func main() {
     let avs = Averager(drv: SimpleSum())
     let avp = Averager(drv: PairwiseSum(other: SimpleSum()))
 
-    var av : IAverager = avs
+    var av : any IAverager = avs
     
     let xi: [Int32] = [1,2,3,4,5]
     let xf: [Float64] = [1.0,2.0,3.0,4.0,5.0]

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2025.1.2)  22 FEB 2025 11:59
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2025.1.2)  22 MAR 2025 16:43
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -697,30 +697,30 @@ Package biblatex Info: ... file 'traits.bbl' found.
 Package biblatex Info: Reference section=0 on input line 51.
 Package biblatex Info: Reference segment=0 on input line 51.
 LaTeX Font Info:    Trying to load font information for OT1+ppl on input line 5
-9.
+8.
  (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ppl.fd
 File: ot1ppl.fd 2001/06/04 font definitions for OT1/ppl.
 )
 LaTeX Font Info:    Trying to load font information for OML+zplm on input line 
-59.
+58.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omlzplm.fd
 File: omlzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OML/zplm.
 )
 LaTeX Font Info:    Trying to load font information for OMS+zplm on input line 
-59.
+58.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omszplm.fd
 File: omszplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMS/zplm.
 )
 LaTeX Font Info:    Trying to load font information for OMX+zplm on input line 
-59.
+58.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omxzplm.fd
 File: omxzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMX/zplm.
 )
 LaTeX Font Info:    Trying to load font information for OT1+zplm on input line 
-59.
+58.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1zplm.fd
 File: ot1zplm.fd 2002/09/08 Fontinst v1.914 font definitions for OT1/zplm.
@@ -731,25 +731,25 @@ ination with the same identifier (name{page.1}) has been already used, duplicat
 e ignored
 <to be read again> 
                    \relax 
-l.86 \chapter
+l.85 \chapter
              {Introduction} [1]
 Chapter 1.
 [2
 
 ]
 LaTeX Font Info:    Trying to load font information for TS1+ppl on input line 1
-44.
+43.
  (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ppl.fd
 File: ts1ppl.fd 2001/06/04 font definitions for TS1/ppl.
 )
 LaTeX Font Info:    Trying to load font information for T1+fvm on input line 16
-1.
+0.
 
 (/usr/share/texlive/texmf-dist/tex/latex/bera/t1fvm.fd
 File: t1fvm.fd 2004/09/07 scalable font definitions for T1/fvm.
 )
 LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
-(Font)              scaled to size 8.97906pt on input line 161.
+(Font)              scaled to size 8.97906pt on input line 160.
  [3] [4] [5]
 Chapter 2.
 [6
@@ -764,7 +764,7 @@ File: lstlang2.sty 2020/03/24 1.8d listings language file
 File: lstlang3.sty 2020/03/24 1.8d listings language file
 )
 LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
-(Font)              scaled to size 8.20007pt on input line 353.
+(Font)              scaled to size 8.20007pt on input line 352.
 
 (./Code/Go/coupled.go
 LaTeX Font Info:    Font shape `T1/fvm/b/n' will be
@@ -772,7 +772,7 @@ LaTeX Font Info:    Font shape `T1/fvm/b/n' will be
 ) [7] (./Code/Go/functional.go [8] [9]) [10]
 Chapter 3.
 
-Overfull \hbox (0.76628pt too wide) in paragraph at lines 504--510
+Overfull \hbox (0.76628pt too wide) in paragraph at lines 503--509
 []\T1/ppl/m/n/10.95 Since ver-sion 1.18, Go also sup-ports compile-time poly-mo
 r-phism through gener-ics. Go's gener-
  []
@@ -781,9 +781,9 @@ r-phism through gener-ics. Go's gener-
 
 ] (./Code/Go/mixed.go [12] [13]) [14]
 LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
-(Font)              scaled to size 7.38007pt on input line 641.
+(Font)              scaled to size 7.38007pt on input line 640.
  [15]
-Overfull \hbox (8.59001pt too wide) in paragraph at lines 687--692
+Overfull \hbox (8.59001pt too wide) in paragraph at lines 686--691
 []\T1/ppl/m/n/10.95 To de-clare run-time poly-mor-phic vari-ables one has to pu
 t so-called ``trait ob-jects'' into ``Boxes'',
  []
@@ -818,19 +818,19 @@ File: lstlang1.sty 2020/03/24 1.8d listings language file
 
 ]
 LaTeX Font Info:    Font shape `T1/fvm/m/it' in size <10.95> not available
-(Font)              Font shape `T1/fvm/m/sl' tried instead on input line 1123.
+(Font)              Font shape `T1/fvm/m/sl' tried instead on input line 1122.
 LaTeX Font Info:    Font shape `T1/fvm/m/sl' will be
-(Font)              scaled to size 8.97906pt on input line 1123.
+(Font)              scaled to size 8.97906pt on input line 1122.
  [27]
 [28] [29] [30]
-Overfull \hbox (1.2037pt too wide) in paragraph at lines 1376--1385
+Overfull \hbox (1.2037pt too wide) in paragraph at lines 1375--1384
 \T1/ppl/m/n/10.95 Here we have skipped again, for brevity, the ac-tual im-ple-m
 en-ta-tions. Such a split-ting of \T1/fvm/m/n/10.95 implements
  []
 
 (./Code/Fortran/printy.f90 [31]) [32] [33] (./Code/Fortran/Interop/extends.f90)
 [34]
-Overfull \hbox (1.8835pt too wide) in paragraph at lines 1555--1567
+Overfull \hbox (1.8835pt too wide) in paragraph at lines 1554--1566
 []\T1/ppl/m/n/10.95 This is a fun-da-men-tal de-sign flaw in the present lan-gu
 age that re-quired cor-rec-tion, and couldn't
  []
@@ -842,7 +842,7 @@ Chapter 5.
 ] [38] [39] (./Code/Fortran/ocp.f90
 consecutive:
 )
-Overfull \hbox (2.98062pt too wide) in paragraph at lines 1873--1877
+Overfull \hbox (2.98062pt too wide) in paragraph at lines 1872--1876
 []\T1/ppl/m/n/10.95 In gen-eral, as-so-ci-ated types will have to be de-clared 
 by the pro-gram-mer him-self, us-ing \T1/fvm/m/n/10.95 deferred
  []
@@ -850,14 +850,14 @@ by the pro-gram-mer him-self, us-ing \T1/fvm/m/n/10.95 deferred
 (./Code/Fortran/vector.f90
 consecutive:
 )
-Overfull \hbox (0.26125pt too wide) in paragraph at lines 1901--1903
+Overfull \hbox (0.26125pt too wide) in paragraph at lines 1900--1902
 []\T1/ppl/m/n/10.95 traits with as-so-ci-ated types (or ``TATs''), like the \T1
 /fvm/m/n/10.95 INumeric \T1/ppl/m/n/10.95 and \T1/fvm/m/n/10.95 IAppendable \T1
 /ppl/m/n/10.95 traits of Sect. [][]5.1.3[][]. 
  []
 
 [40] [41] [42]
-Overfull \hbox (3.22954pt too wide) in paragraph at lines 2082--2086
+Overfull \hbox (3.22954pt too wide) in paragraph at lines 2081--2085
 []\T1/ppl/m/n/10.95 Although the present de-sign \T1/ppl/m/it/10.95 doesn't \T1
 /ppl/m/n/10.95 typ-i-cally re-quire it, the pro-gram-mer can ac-com-plish gener
 ic
@@ -870,7 +870,7 @@ Chapter 6.
 ] [48]) (./Code/Fortran/functional2.f90
 consecutive:
 [49]) [50]
-Overfull \hbox (2.98868pt too wide) in paragraph at lines 2458--2465
+Overfull \hbox (2.98868pt too wide) in paragraph at lines 2457--2464
 []\T1/ppl/m/n/10.95 Interface in-her-i-tance is ex-pressed through the pres-enc
 e of the \T1/fvm/m/n/10.95 implements \T1/ppl/m/n/10.95 at-tribute in derived-
  []
@@ -883,7 +883,7 @@ Chapter 7.
 [63
 
 ] [64]
-Overfull \hbox (15.27174pt too wide) in paragraph at lines 2876--2876
+Overfull \hbox (15.27174pt too wide) in paragraph at lines 2875--2875
 []\T1/ppl/m/n/10.95 George Lyon. \T1/ppl/m/sc/10.95 url\T1/ppl/m/n/10.95 : [][]
 $\T1/fvm/m/n/10.95 https : / / gist . github . com / GeorgeLyon / c7b07923f7a80
 0674bc9745ae45ddc7f$[][]\T1/ppl/m/n/10.95 . 
@@ -892,7 +892,7 @@ $\T1/fvm/m/n/10.95 https : / / gist . github . com / GeorgeLyon / c7b07923f7a80
 [65
 
 ]
-Overfull \hbox (27.29716pt too wide) in paragraph at lines 2876--2876
+Overfull \hbox (27.29716pt too wide) in paragraph at lines 2875--2875
 []\T1/ppl/m/n/10.95 Wolfgang Weck and Clemens Szyper-ski. \T1/ppl/m/it/10.95 Do
  We Need In-her-i-tance? \T1/ppl/m/sc/10.95 url\T1/ppl/m/n/10.95 : [][]$\T1/fvm
 /m/n/10.95 https : / / www . researchgate .
@@ -902,7 +902,7 @@ Overfull \hbox (27.29716pt too wide) in paragraph at lines 2876--2876
 has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2897 \end{abstract}
+l.2896 \end{abstract}
                       [1] (./traits.aux)
 Package rerunfilecheck Info: File `traits.out' has not changed.
 (rerunfilecheck)             Checksum: F422DF7393DFEFF960C9FF9E210051B3;12990.
@@ -911,10 +911,10 @@ Package logreq Info: Writing requests to 'traits.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 23469 strings out of 480247
- 392093 string characters out of 5896152
+ 23473 strings out of 480247
+ 392147 string characters out of 5896152
  1130262 words of memory out of 5000000
- 39395 multiletter control sequences out of 15000+600000
+ 39399 multiletter control sequences out of 15000+600000
  516243 words of font info for 114 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  60i,16n,68p,7900b,3180s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -924,7 +924,7 @@ fonts/type1/public/bera/fvmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
 ublic/bera/fvmro8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/
 uplb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb><
 /usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on traits.pdf (68 pages, 341533 bytes).
+Output written on traits.pdf (68 pages, 341536 bytes).
 PDF statistics:
  2718 PDF objects out of 2984 (max. 8388607)
  2608 compressed objects within 27 object streams

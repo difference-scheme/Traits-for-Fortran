@@ -50,38 +50,37 @@
 
 \begin{document}
 
-\title{\textbf{A traits system for the uniform expression of run-time
-       and compile-time polymorphism in Fortran}}
+\title{\textbf{Traits, Generics, and Modern-day OOP for Fortran}}
 
 \author{Konstantinos Kifonidis, Ondrej Certik, Derick Carnazzola}
 
 \maketitle
 
 \abstract{Based on conclusions drawn from a survey of modern
-  languages, a traits system for Fortran is developed that is fully
-  backwards compatible with the present Fortran language, and allows
-  for the uniform management of source code dependencies on both
-  user-defined and language-intrinsic types via run-time and
-  compile-time polymorphism. The feature set that is described here is
-  small enough to facilitate a first prototype implementation in an
-  open source compiler (like LFortran, LLVM Flang, or GNU Fortran),
-  but at the same time comprehensive enough to already endow Fortran
-  with polymorphism capabilities that equal those of modern
-  programming languages like Swift, Rust, Go, Carbon, or Mojo. The
-  discussed extensions allow for modern-day, traits-based,
-  object-oriented programming, and powerful, easy to use, fully
-  type-checked, generics. The latter support seamlessly both the
-  procedural, functional, and object-oriented programming styles, and
-  they largely get by \emph{without} requiring manual instantiations
-  by the user. The presented design could also be naturally extended
-  to support rank-genericity for arrays, structural subtyping, and
-  compile-time polymorphic union/sum types. Its modern capabilities
-  are expected to transform the way both Fortran applications and
-  libraries will be written in the future. Decoupled software plugin
-  architectures with enormously improved source code flexibility,
-  reusability, maintainability, and reliability will become possible,
-  without any need for run-time type inspections, and without any loss
-  in computational performance.}
+  languages, a traits system for Fortran is developed that allows for
+  the uniform expression of run-time and compile-time polymorphism in
+  the language, and thus for the uniform management of source code
+  dependencies on user-defined and language-intrinsic types. The
+  feature set that is described here is small enough to facilitate a
+  first prototype implementation in an open source compiler (like
+  LFortran, LLVM Flang, or GNU Fortran), but at the same time
+  comprehensive enough to already endow Fortran with polymorphic
+  capabilities that equal those of modern programming languages like
+  Swift, Rust, Go, Carbon, or Mojo. The discussed extensions are fully
+  backwards compatible with present Fortran, and enable modern-day,
+  traits-based, object-oriented programming, and powerful, easy to
+  use, fully type-checked, generics. The latter support seamlessly
+  both the procedural, functional, and object-oriented programming
+  styles, and they largely get by \emph{without} requiring manual
+  instantiations by the user. The presented design could also be
+  naturally extended to support rank-genericity for arrays, structural
+  subtyping, and compile-time polymorphic union/sum types. Its modern
+  capabilities are expected to transform the way both Fortran
+  applications and libraries will be written in the future. Decoupled
+  software plugin architectures with enormously improved source code
+  flexibility, reusability, maintainability, and reliability will
+  become possible, without any need for run-time type inspections, and
+  without any loss in computational performance.}
 
 \chapter{Introduction}
 
@@ -1220,7 +1219,7 @@ disclaimer, notice that the \code{implements} statement has absolutely
 \emph{no} relation to subclassing, i.e. one derived type being
 extended into another through (rigid) implementation
 inheritance. Rather, this is a feature that adds new capabilities to a
-single, \emph{given} type.
+single, \emph{given}, type.
 
 \subsection{Binding functionality to a type}
 \label{sect:adding_methods}
@@ -1301,7 +1300,7 @@ checking for trait, i.e. interface, conformance of an implementation).
 However, we haven't made \code{MyType} pluggable yet into code that is
 written in terms of these traits. To fix this, we can simply
 acknowledge (even from a different module, as in the following
-example), that \code{MyType} already has all of the required
+example) that \code{MyType} already has all of the required
 functionality to implement these traits:
 \begin{lstlisting}[language=LFortran,style=boxed]
 module enhanced
@@ -1388,7 +1387,7 @@ but not required.
 
 The \code{implements} statement can be used to provide new
 functionality also for types that are \emph{intrinsic} to the language
--- quite in the same fashion as it was already demonstrated for
+-- in quite the same fashion as it was already demonstrated for
 derived types. However, the present language features some
 restrictions in this respect, that we deem essential to retain. In
 particular, present Fortran doesn't allow one to overload the
@@ -1569,7 +1568,7 @@ using traits, as it is demonstrated in the following example:
 
 Here, the \code{abstract} type \code{Parent} provides an
 implementation of a \code{method1}, but it also obliges any type that
-derives from it to implement an abstract \code{method2}. In present
+derives from it to implement the abstract \code{method2}. In present
 Fortran, this would be expressed through a \code{deferred} type-bound
 procedure declaration within \code{Parent}, along with the provision
 of an unnamed abstract interface for \code{method2}. Whereas in the
@@ -2243,8 +2242,8 @@ but \emph{different} \code{PairwiseSum} types, whose \emph{only}
 commonality is that they all implement the \code{ISum} trait (and
 furthermore contain different field components that do the same). Of
 course, passed-object dummy arguments of any of the different
-\code{PairwiseSum} types of this set can then be run-time polymorphic,
-in exactly the same manner that passed-object dummy arguments of other
+\code{PairwiseSum} types of this set can then be run-time polymorphic.
+In exactly the same manner that passed-object dummy arguments of other
 derived types that implement the same trait can be run-time
 polymorphic.
 
@@ -2591,7 +2590,7 @@ instantiation (in the main program) of the objects \code{other} and
 \code{drv} through constructor calls, has the benefit that the
 compiler can infer the correct type arguments, that are required to
 automatically instantiate all the involved generic derived types
-(cf. Sect~\ref{sect:param_constructors}). Hence (and similarly to both
+(cf. Sect~\ref{sect:param_constructors}). Hence (and similar to both
 the functional and dynamically dispatched OO code versions of
 Listings~\ref{lst:Func1Fortran} and \ref{lst:OOFortran},
 respectively), not a single manual instantiation of generics is
@@ -2783,7 +2782,7 @@ here, we defer it to a separate document.
 \label{sect:structural_subtyping}
 
 A pretty natural extension of the present design would be to
-\emph{supplement} the currently used nominal subtyping, with
+\emph{supplement} the currently used nominal subtyping with
 structural subtyping. The latter could be easily incorporated, by
 making lists of interface/trait names optional (rather than mandatory)
 when providing trait implementations. The \code{implements} statement,
@@ -2850,7 +2849,7 @@ supporting both compile-time and run-time polymorphism, so that
 orthogonality, again, prevailed.
 
 The end result is a language that is both far less verbose, much
-easier to use, and incomparably more powerful, than that of competing
+easier to use, and incomparably more powerful than that of competing
 non-holistic approaches, which prefer to abandon the proven philosophy
 of orthogonal design. The presented extensions are fully backwards
 compatible with the present Fortran language, and (in stark contrast
