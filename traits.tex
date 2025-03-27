@@ -1516,7 +1516,7 @@ is required for it to conform to both the \code{IParent} and
 \code{IChild} traits, respectively, that it adopts. Which
 consist of the signatures of these methods.
 
-\lstinputlisting[linerange={1-52},language=LFortran,style=boxed]{Code/Fortran/Interop/extends.f90}
+\lstinputlisting[linerange={1-52},language=LFortran,style=boxed]{Code/Fortran/Interop/extends_parent.f90}
 
 In cases like the present one, where the \code{extends} and
 \code{implements} derived type attributes are used in combination,
@@ -1564,7 +1564,7 @@ specification. Alternatively, Fortran's \code{deferred} type-bound
 procedure declarations could be retired in their entirety, in favor of
 using traits, as it is demonstrated in the following example:
 
-\lstinputlisting[linerange={1-52},language=LFortran,style=boxed]{Code/Fortran/Interop/abstract2b.f90}
+\lstinputlisting[linerange={1-52},language=LFortran,style=boxed]{Code/Fortran/Interop/abstract_new.f90}
 
 Here, the \code{abstract} type \code{Parent} provides an
 implementation of a \code{method1}, but it also obliges any type that
