@@ -50,8 +50,7 @@ pub mod simple_library {
     
     impl<T> ISum<T> for SimpleSum where T: INumeric + Copy {
         fn sum(&self, x: &[T]) -> T {
-            let mut s: T;
-            s = T::new(0);
+            let mut s = T::new(0);
             for i in 0 .. x.len() {
                 s += x[i];
             }
@@ -133,37 +132,36 @@ pub mod averager_library {
 #[macro_use] extern crate text_io;
 
 fn main() {
+    use std::io;
+    use std::io::Write;
     use crate::interfaces::IAverager;
     use crate::simple_library::SimpleSum;
     use crate::pairwise_library::PairwiseSum;
     use crate::averager_library::Averager;
 
-    let avsi = Averager::new(SimpleSum{});
-    let avsf = Averager::new(SimpleSum{});
-
-    let avpi = Averager::new(PairwiseSum::new(SimpleSum{}));
-    let avpf = Averager::new(PairwiseSum::new(SimpleSum{}));
-
-    let mut avi: Box<dyn IAverager::<i32>> = Box::new(avsi);
-    let mut avf: Box<dyn IAverager::<f64>> = Box::new(avsf);
-
-    let xi : [i32;5] = [1,2,3,4,5];
-    let xf : [f64;5] = [1.,2.,3.,4.,5.];
-
+    let avi: Box<dyn IAverager::<i32>>;
+    let avf: Box<dyn IAverager::<f64>>;
     let key: i32;
 
     println!("Simple   sum average: 1");
     println!("Pairwise sum average: 2");
+    print!("Choose an averaging method: ");
+
+    io::stdout().flush().unwrap();
     scan!("{}\n",key);
 
     match key {
-        1 => {}
-        2 => { avi = Box::new(avpi);
-               avf = Box::new(avpf); }
+        1 => { avi = Box::new(Averager::new(SimpleSum{}));
+               avf = Box::new(Averager::new(SimpleSum{})); }
+        2 => { avi = Box::new(Averager::new(PairwiseSum::new(SimpleSum{})));
+               avf = Box::new(Averager::new(PairwiseSum::new(SimpleSum{}))); }
         _ => { println!("Case not implemented!");
                return; }
     }
 
+    let xi: [i32;5] = [1,2,3,4,5];
+    let xf: [f64;5] = [1.,2.,3.,4.,5.];
+
     println!("{}", avi.average(&xi));
-    println!("{}", avf.average(&xf));
+    println!("{:.1}", avf.average(&xf));
 }

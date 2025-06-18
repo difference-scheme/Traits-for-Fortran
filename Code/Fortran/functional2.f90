@@ -16,9 +16,8 @@ contains
    function simple_sum{INumeric :: T}(x) result(s)
       type(T), intent(in) :: x(:)
       type(T)             :: s
-      integer :: i
       s = T(0)
-      do i = 1, size(x)
+      do i := 1, size(x)
          s = s + x(i)
       end do
    end function simple_sum
@@ -26,11 +25,10 @@ contains
    function pairwise_sum{INumeric :: T}(x) result(s)
       type(T), intent(in) :: x(:)
       type(T)             :: s
-      integer :: m
       if (size(x) <= 2) then
          s = simple_sum(x)
       else
-         m = size(x) / 2
+         m := size(x) / 2
          s = pairwise_sum(x(:m)) + pairwise_sum(x(m+1:))
       end if
    end function pairwise_sum
@@ -60,9 +58,6 @@ program main
    implicit none
    
    ! declarations
-   integer,      parameter :: xi(5) = [1, 2, 3, 4, 5]
-   real(real64), parameter :: xf(5) = [1.d0, 2.d0, 3.d0, 4.d0, 5.d0]
-
    integer :: key
    procedure(average_integer), pointer :: avi
    procedure(average_real64),  pointer :: avf
@@ -94,7 +89,10 @@ program main
       stop 'Case not implemented!'
    end select
 
-   print '(i8)',   avi(xi)
-   print '(f8.5)', avf(xf)
+   xi := [1, 2, 3, 4, 5]
+   xf := [1.d0, 2.d0, 3.d0, 4.d0, 5.d0]
+
+   print '(i1)',   avi(xi)
+   print '(f3.1)', avf(xf)
 
 end program main

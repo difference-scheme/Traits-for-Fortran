@@ -16,9 +16,8 @@ contains
    function simple_sum{INumeric :: T}(x) result(s)
       type(T), intent(in) :: x(:)
       type(T)             :: s
-      integer :: i
       s = T(0)
-      do i = 1, size(x)
+      do i := 1, size(x)
          s = s + x(i)
       end do
    end function simple_sum
@@ -26,11 +25,10 @@ contains
    function pairwise_sum{INumeric :: T}(x) result(s)
       type(T), intent(in) :: x(:)
       type(T)             :: s
-      integer :: m
       if (size(x) <= 2) then
          s = simple_sum(x)
       else
-         m = size(x) / 2
+         m := size(x) / 2
          s = pairwise_sum(x(:m)) + pairwise_sum(x(m+1:))
       end if
    end function pairwise_sum
@@ -60,9 +58,6 @@ program main
    implicit none
    
    ! declarations
-   integer,      parameter :: xi(5) = [1, 2, 3, 4, 5]
-   real(real64), parameter :: xf(5) = [1.d0, 2.d0, 3.d0, 4.d0, 5.d0]
-
    integer :: key
 
    write(*,'(a)') 'Simple   sum average: 1'
@@ -70,13 +65,16 @@ program main
    write(*,'(a)',advance='no') 'Choose an averaging method: '
    read(*,*) key
 
+   xi := [1, 2, 3, 4, 5]
+   xf := [1.d0, 2.d0, 3.d0, 4.d0, 5.d0]
+   
    select case (key)
    case (1)
-      print '(i8)',   simple_average(xi)
-      print '(f8.5)', simple_average(xf)
+      print '(i1)',   simple_average(xi)
+      print '(f3.1)', simple_average(xf)
    case (2)
-      print '(i8)',   pairwise_average(xi)
-      print '(f8.5)', pairwise_average(xf)
+      print '(i1)',   pairwise_average(xi)
+      print '(f3.1)', pairwise_average(xf)
    case default
       stop 'Case not implemented!'
    end select

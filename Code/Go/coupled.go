@@ -3,8 +3,7 @@ package main
 import "fmt"
 
 func simple_sum(x []int32) int32 {
-   var s int32
-   s = int32(0)
+   s := int32(0)
    for i := 0; i < len(x); i++ {
      s += x[i]
    }
@@ -33,8 +32,6 @@ func pairwise_average(x []int32) int32 {
 // ..............
 
 func main() {
-   xi := []int32{1,2,3,4,5}
-
    var key int32
 
    fmt.Println("Simple   sum average: 1")
@@ -42,11 +39,13 @@ func main() {
    fmt.Print("Choose an averaging method: ")
    fmt.Scan(&key)
 
+   xi := []int32{1,2,3,4,5}
+
    switch key {
    case 1:
-      fmt.Println(simple_average(xi))
+      fmt.Printf("%d\n",simple_average(xi))
    case 2:
-      fmt.Println(pairwise_average(xi))
+      fmt.Printf("%d\n",pairwise_average(xi))
    default:
       fmt.Println("Case not implemented!")
    }

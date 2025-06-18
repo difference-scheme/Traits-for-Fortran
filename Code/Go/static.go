@@ -26,8 +26,7 @@ type SimpleSum[T INumeric] struct {
 }
 
 func (self SimpleSum[T]) sum(x []T) T {
-   var s T
-   s = T(0)
+   s := T(0)
    for i := 0; i < len(x); i++ {
       s += x[i]
    }
@@ -70,10 +69,6 @@ func (self Averager[T,U]) average(x []T) T {
 func main() {
    var avi IAverager[int32]
    var avf IAverager[float64]
-
-   xi := []int32{1,2,3,4,5}
-   xf := []float64{1.,2.,3.,4.,5.}
-
    var key int32
 
    fmt.Println("Simple   sum average: 1")
@@ -93,6 +88,9 @@ func main() {
       return
    }
 
-   fmt.Println(avi.average(xi))
-   fmt.Println(avf.average(xf))
+   xi := []int32{1,2,3,4,5}
+   xf := []float64{1.,2.,3.,4.,5.}
+
+   fmt.Printf("%d\n",  avi.average(xi))
+   fmt.Printf("%.1f\n",avf.average(xf))
 }

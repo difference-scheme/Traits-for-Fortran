@@ -5,8 +5,7 @@ import "fmt"
 type INumeric interface{ int32 | float64 }
 
 func simple_sum[T INumeric](x []T) T {
-   var s T
-   s = T(0)
+   s := T(0)
    for i := 0; i < len(x); i++ {
      s += x[i]
    }
@@ -26,13 +25,10 @@ func average[T INumeric](sum func([]T) T, x []T) T {
 }
 
 func main() {
-   xi := []int32{1, 2, 3, 4, 5}
-   xf := []float64{1, 2, 3, 4, 5}
-
-   var key int32
    var avi, psi func([]int32) int32
    var avf, psf func([]float64) float64
-
+   var key int32
+	
    fmt.Println("Simple   sum average:", 1)
    fmt.Println("Pairwise sum average:", 2)
    fmt.Print("Choose an averaging method: ")
@@ -67,6 +63,9 @@ func main() {
 	 return
     }
 
-    fmt.Println(avi(xi))
-    fmt.Println(avf(xf))
+    xi := []int32{1, 2, 3, 4, 5}
+    xf := []float64{1, 2, 3, 4, 5}
+
+    fmt.Printf("%d\n",  avi(xi))
+    fmt.Printf("%.1f\n",avf(xf))
 }

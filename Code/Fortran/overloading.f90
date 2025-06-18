@@ -39,9 +39,9 @@ module my_type
       integer :: n
    end type MyType
 
-   implements (IReducible,IPrintable) :: MyType
+   implements (IReducible + IPrintable) :: MyType
       initial :: init
-      procedure, nopass :: operator(*) => multiply, multiply_by_int
+      procedure, static :: operator(*) => multiply, multiply_by_int
       procedure, pass   :: output
    end implements MyType
 
@@ -80,7 +80,7 @@ module real_type
    implicit none
    private
    
-   implements (IReducible,IPrintable) :: real
+   implements (IReducible + IPrintable) :: real
       procedure, pass :: output
    end implements real
 
@@ -88,7 +88,7 @@ contains
 
    subroutine output(self)
       real, intent(in) :: self
-      write(*,'(a,f8.5)') "I am: ", self
+      write(*,'(a,f8.1)') "I am: ", self
    end subroutine output
 
 end module real_type
@@ -100,36 +100,30 @@ program main
 
    implicit none
 
-   integer      :: i
-   type(MyType) :: at(4)     ! Array of MyType 
-   real         :: ar(4)     ! Array of real type
-   
-   ! initializations
-   at = [(MyType(i),i=1,4)]  ! Use of user-defined initializer/constructor
-   ar = [(real(i),i=1,4)]    ! Use of built-in initializer (i.e. cast)
+   ! declare and initialize arrays with four elements
+   at := [(MyType(i),i:=1,4)]  ! Use user-defined initializer for MyType
+   ar := [(real(i),i:=1,4)]    ! Use built-in initializer/cast for real type
    
    call products(at,ar)
    
 contains
 
-   subroutine products{IReducible,IPrintable :: T,R}(at,ar)
+   subroutine products{IReducible + IPrintable :: T, &
+                       IReducible + IPrintable :: R}(at,ar)
       type(T), intent(in) :: at(4)
       type(R), intent(in) :: ar(4)
-      type(T) :: st                      ! Scalar of type(T)
-      type(R) :: sr                      ! Scalar of type(R)
-      st = prod( (at * at) * [4,3,2,1] ) ! Reduce arrays to scalars after
-      sr = prod( (ar * ar) * [4,3,2,1] ) ! elementwise multiplication operations
-      call st%output()                   ! Print the results
-      call sr%output()                   ! (13824 in both cases)
+      st := prod( (at * at) * [4,3,2,1] )   ! Reduce arrays to scalars after
+      sr := prod( (ar * ar) * [4,3,2,1] )   ! elementwise multiplications
+      call st%output()                      ! Print the results
+      call sr%output()                      ! (13824 in both cases)
    end subroutine products
 
    function prod{IReducible :: T}(arr) result(res)
       type(T), intent(in) :: arr(:)
       type(T)             :: res
-      integer :: i
-      res = T(1)                         ! Use initializer for cast
-      do i = 1, size(arr)
-         res = res * arr(i)              ! Use operator(*) for reduction
+      res = T(1)                            ! Use initializer for cast
+      do i := 1, size(arr)
+         res = res * arr(i)                 ! Use operator(*) for reduction
       end do
    end function prod
    

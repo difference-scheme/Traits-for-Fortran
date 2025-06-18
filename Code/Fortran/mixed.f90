@@ -46,9 +46,8 @@ contains
    function sum{INumeric :: T}(x) result(s)
       type(T), intent(in) :: x(:)
       type(T)             :: s
-      integer :: i
       s = T(0)
-      do i = 1, size(x)
+      do i := 1, size(x)
          s = s + x(i)
       end do
    end function sum
@@ -68,20 +67,26 @@ module pairwise_library
       private
       class(ISum), allocatable :: other
    contains
+      initial :: init
       procedure, pass :: sum
    end type PairwiseSum
 
 contains
 
+   function init(other) result(res)
+      class(ISum), intent(in) :: other
+      type(PairwiseSum)       :: res
+      res%other = other
+   end function init
+
    function sum{INumeric :: T}(self,x) result(s)
       type(PairwiseSum), intent(in) :: self
       type(T),           intent(in) :: x(:)
       type(T)                       :: s
-      integer :: m
       if (size(x) <= 2) then
          s = self%other%sum(x)
       else
-         m = size(x) / 2
+         m := size(x) / 2
          s = self%sum(x(:m)) + self%sum(x(m+1:))
       end if
    end function sum
@@ -96,15 +101,22 @@ module averager_library
    private
 
    public :: Averager
-   
+
    type, sealed, implements(IAverager) :: Averager
       private
       class(ISum), allocatable :: drv
    contains
+      initial :: init
       procedure, pass :: average
    end type Averager
 
 contains
+
+   function init(drv) result(res)
+      class(ISum), intent(in) :: drv
+      type(Averager)          :: res
+      res%drv = drv
+   end function init
 
    function average{INumeric :: T}(self,x) result(a)
       type(Averager), intent(in) :: self
@@ -128,12 +140,8 @@ program main
    implicit none
    
    ! declarations
+   class(IAverager), allocatable :: av
    integer :: key
-   class(IAverager), allocatable :: avs, avp, av
-
-   ! use of enhanced structure constructors
-   avs = Averager(drv = SimpleSum())
-   avp = Averager(drv = PairwiseSum(other = SimpleSum()))
 
    write(*,'(a)') 'Simple   sum average: 1'
    write(*,'(a)') 'Pairwise sum average: 2'
@@ -142,16 +150,17 @@ program main
 
    select case (key)
    case (1)
-      ! simple sum case
-      av = avs
+      av = Averager(drv = SimpleSum())
    case (2)
-      ! pairwise sum case
-      av = avp 
+      av = Averager(drv = PairwiseSum(other = SimpleSum()))
    case default
       stop 'Case not implemented!'
    end select
 
-   print '(i8)',   av%average([1, 2, 3, 4, 5])
-   print '(f8.5)', av%average([1.d0, 2.d0, 3.d0, 4.d0, 5.d0])
+   xi := [1, 2, 3, 4, 5]
+   xf := [1.d0, 2.d0, 3.d0, 4.d0, 5.d0]
+
+   print '(i1)',   av%average(xi)
+   print '(f3.1)', av%average(xf)
 
 end program main

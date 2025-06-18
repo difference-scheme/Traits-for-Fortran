@@ -17,7 +17,7 @@ module extends_parent
       procedure, pass :: method1 => implementation1
    end type Parent
 
-   type, extends(Parent), implements(IParent,IChild) :: Child
+   type, extends(Parent), implements(IParent + IChild) :: Child
    contains
       procedure, pass :: method2 => implementation2
    end type Child
