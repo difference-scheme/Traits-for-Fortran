@@ -6,9 +6,9 @@ module basic_interfaces
    public :: IReducible, IPrintable
 
    abstract interface :: IReducible
-      function init(n)
+      initial(n)
          integer, intent(in) :: n
-      end function init
+      end initial
       elemental function operator(*)(lhs,rhs) result(res)
          type(itself), intent(in) :: lhs, rhs
          type(itself)             :: res

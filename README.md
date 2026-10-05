@@ -20,5 +20,6 @@ The resulting design features:
 - Type sets as traits, to easily formulate generics constraints (as in Go).
 - "Zero cost" static polymorphic method dispatch via generics (as in Rust).
 - Interoperability with class inheritance, but also support of "sealed" classes.
-- Room for future growth, e.g. for future support of array-rank-genericity,
-  structural subtyping, and compile-time polymorphic union types.
+- Room for future growth, e.g. for future support of array-rank and
+  declaration-attribute genericity, structural subtyping, and compile-time
+  polymorphic union types.

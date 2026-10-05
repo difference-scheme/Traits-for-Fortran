@@ -6,9 +6,9 @@ module interfaces
    public :: INumeric, ISum, IAverager
    
    abstract interface :: INumeric
-      function init(n)
+      initial(n)
          integer, intent(in) :: n
-      end function init
+      end initial
       function operator(+)(lhs,rhs) result(res)
          type(itself), intent(in) :: lhs, rhs
          type(itself)             :: res

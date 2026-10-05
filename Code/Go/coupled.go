@@ -19,11 +19,11 @@ func pairwise_sum(x []int32) int32 {
    }
 }
 
-func simple_average(x []int32) int32 {
+func simple_sum_average(x []int32) int32 {
    return simple_sum(x) / int32(len(x))
 }
 
-func pairwise_average(x []int32) int32 {
+func pairwise_sum_average(x []int32) int32 {
    return pairwise_sum(x) / int32(len(x))
 }
 
@@ -43,9 +43,9 @@ func main() {
 
    switch key {
    case 1:
-      fmt.Printf("%d\n",simple_average(xi))
+      fmt.Printf("%d\n",simple_sum_average(xi))
    case 2:
-      fmt.Printf("%d\n",pairwise_average(xi))
+      fmt.Printf("%d\n",pairwise_sum_average(xi))
    default:
       fmt.Println("Case not implemented!")
    }

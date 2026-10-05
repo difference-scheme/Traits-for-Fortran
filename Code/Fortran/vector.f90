@@ -3,7 +3,7 @@ module traits
    implicit none
 
    abstract interface :: IAppendable
-      typedef, deferred :: Element
+      type :: Element
       subroutine append(item)
          type(Element), intent(in) :: item
       end subroutine append
