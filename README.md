@@ -23,3 +23,15 @@ The resulting design features:
 - Room for future growth, e.g. for future support of array-rank and
   declaration-attribute genericity, structural subtyping, and compile-time
   polymorphic union types.
+
+The example programs are in [`Code/`](Code).
+[`Code/README.md`](Code/README.md) compares two implementations of the same
+trait for the same type in Fortran, Rust, and Swift (issue #2).
+
+[`most-restrictive-plan.md`](most-restrictive-plan.md) proposes, for
+discussion, a restrictive starting point for issue #2: at most one
+implementation of a trait for a type in a whole program, declared in the
+module that defines the trait or the type. It also discusses ways to relax
+these rules.
+[`Code/Fortran/globally_unique.f90`](Code/Fortran/globally_unique.f90) is a
+small example.
