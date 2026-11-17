@@ -655,8 +655,15 @@ possible:
 - the set of instantiations is open, i.e. unknown when the trait object
   is formed.
 
-The proposal restricts runtime generic messages to closed type sets for
-this reason.
+*Correction:* an earlier version of this section stated that the
+proposal restricts runtime generic messages to closed type sets. That
+is not so. A generic message whose type parameter is constrained by a
+trait gets one erased slot, which receives the type argument's witness
+table at run time, and the LFortran prototype implements this. What is
+missing is the case where the type parameter is a *trait* parameter
+(E1), as in `resolve{P}`. See
+[traits-di-review-answers.md](traits-di-review-answers.md), which also
+proposes the missing piece (E10).
 
 The Fortran design therefore splits `resolve` in two:
 - **A non-generic message:** `resolve_key(key) result(class(*))` is a
