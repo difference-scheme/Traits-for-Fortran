@@ -2,7 +2,9 @@
 
 *A proposed extension to the Fortran traits proposal, motivated by
 dependency injection. Draft for review; nothing described here is
-implemented yet.*
+implemented yet. This version incorporates the review
+[traits-di-review.md](traits-di-review.md) and the authors'
+[answers](traits-di-review-answers.md) to it.*
 
 ## 1. Introduction
 
@@ -86,7 +88,7 @@ Swift's version of the same container
 ([DIContainer](https://github.com/difference-scheme/DIContainer)) has
 no factory functions at all. The compiler generates them, using two
 language features:
-- **Overloading of generic functions;**
+- **Overloading of generic functions and initializers;**
 - **A small amount of reflection:**
   - meta-types;
   - initializers usable as function values;
@@ -97,11 +99,14 @@ This document:
 - proposes the minimal set of Fortran extensions that achieves the same
   (Sect. 3);
 - shows the complete ported container (Sect. 4);
-- closes with restrictions, open questions and an outlook (Sects. 5–6).
+- closes with restrictions, the decisions taken in review, and an
+  outlook (Sects. 5–6).
 
 The end result for the user is:
 
 ```fortran
+cont = Container()
+
 call cont%register{IClient}(Client)
 call cont%register{ILogger}(DoubleLogger)
 call cont%register{IPrinter}(Printer)
@@ -117,8 +122,17 @@ With these extensions:
 - **Compile-time errors** catch:
   - registering a type under a trait it does not implement;
   - registering a type whose initializer the container cannot call.
+- **Loose coupling:** the container's code depends only on traits, and
+  on the one concrete `Factory` type, exactly as the Swift container
+  does.
 
 ## 2. How it works in Swift
+
+The reference is the closure-less version of the Swift container, in
+the
+[`noclosure`](https://github.com/difference-scheme/DIContainer/tree/noclosure)
+branch of DIContainer. It replaces the closures of the original by
+objects, so that it can be compared directly with Fortran.
 
 ### 2.1 Usage
 
@@ -172,54 +186,84 @@ the container needs.
 `register` is generic:
 
 ```swift
-public mutating func register<P,T,U>(_ protocolType: P.Type,
-                                     _ constructor: @escaping (T) -> U)
+public mutating func register<P,T1,U>(_ protocolType: P.Type,
+                                      _ ctor: @escaping (T1) -> U)
 ```
 
-Passing `Client.init`, of type `(ILogger) -> Client`, binds `T` to
+Passing `Client.init`, of type `(ILogger) -> Client`, binds `T1` to
 `ILogger` and `U` to `Client`. The compiler does so by unifying the
 function type of the actual argument with the function type of the
 parameter.
 
 **Overloading of generic functions.** Swift has no variadic generics in
-the version used here, so there are three overloads of `register` and
-of `Factory.init`, for initializers of zero, one and two arguments:
+the version used here, so there are three overloads of `register`, for
+initializers of zero, one and two arguments:
 
 ```swift
-func register<P,T>    (_: P.Type, _ constructor: @escaping ()     -> T)
-func register<P,T,U>  (_: P.Type, _ constructor: @escaping (T)    -> U)
-func register<P,T,U,V>(_: P.Type, _ constructor: @escaping (T, U) -> V)
+func register<P,U>      (_: P.Type, _ ctor: @escaping ()      -> U)
+func register<P,T1,U>   (_: P.Type, _ ctor: @escaping (T1)    -> U)
+func register<P,T1,T2,U>(_: P.Type, _ ctor: @escaping (T1,T2) -> U)
 ```
 
 Only the overload whose function type has the right number of
 parameters can accept a given initializer, so the call resolves
 uniquely.
 
-**Closures and type erasure.** Each overload of `Factory.init` wraps the
-initializer in a closure. The closure captures the initializer and
-resolves its arguments recursively through the container:
+**Generic, overloaded initializers.** The type-erasing `Factory` has
+three generic initializers of its own, again one per arity:
 
 ```swift
-public init<T,U>(_ constructor: @escaping (T) -> U) {
-    create = { c in
-        return constructor(c.resolve(T.self))
+public struct Factory: IFactory {
+    private let box: any IFactory
+
+    public init<U>(_ constructor: @escaping () -> U) {
+        box = Factory0(ctor: constructor)
+    }
+    public init<T1,U>(_ constructor: @escaping (T1) -> U) {
+        box = Factory1(ctor: constructor)
+    }
+    public init<T1,T2,U>(_ constructor: @escaping (T1,T2) -> U) {
+        box = Factory2(ctor: constructor)
+    }
+    ...
+}
+```
+
+`register` simply writes `Factory(ctor)`, and the overloads of
+`Factory.init` pick the right one.
+
+**Inference of a generic type's parameters.** In
+`box = Factory1(ctor: constructor)`, the generic struct
+`Factory1<T1,U>` is constructed without its type arguments. Swift infers
+`T1` and `U` from the type of `constructor`.
+
+**Type erasure through objects.** Each of `Factory0`, `Factory1` and
+`Factory2` stores the initializer and resolves its arguments
+recursively through the container:
+
+```swift
+private struct Factory1<T1,U>: IFactory {
+    let ctor: (T1) -> U
+    public func create(_ c: any IResolver) -> Any {
+        ctor(c.resolve(T1.self))
     }
 }
 ```
 
-All closures have the same type, `IFactory = (IResolver) -> Any`, so
-they can be stored in one dictionary keyed by the protocol name. This
-*type-erases* the different initializers.
+All of them conform to `IFactory`, so they can be stored as
+`any IFactory` in `Factory`'s `box`. `Factory` conforms to `IFactory`
+as well, and the container keeps `Factory` objects in one dictionary
+keyed by the protocol name. This *type-erases* the different
+initializers.
 
-**Dynamic casts.** `resolve` looks up the closure, calls it, and casts
+**Dynamic casts.** `resolve` looks up the factory, calls it, and casts
 the `Any` result back with `as? P`. The cast is checked at run time
 against the protocol conformance records of the dynamic type:
 
 ```swift
 public func resolve<P>(_ protocolType: P.Type) -> P {
     let key = String(describing: protocolType)
-    guard let create = factories[key],
-          let instance = create(self) as? P else {
+    guard let instance = factories[key]?.create(self) as? P else {
         fatalError("No registration available for \(protocolType)!")
     }
     return instance
@@ -255,8 +299,9 @@ viable, the solutions are compared:
 3. **Ambiguity.** If still no solution is better than all others, the
    call is ambiguous and rejected.
 
-Swift never rejects overlapping overloads at the point of declaration;
-ambiguity is diagnosed only at a call. Its rules are not given in a
+Swift rejects only identical redeclarations at the point of
+declaration; overlapping overloads are accepted, and ambiguity is
+diagnosed only at a call. Its rules are not given in a
 formal specification. They live in the type checker's ranking code
 (`CSRanking.cpp`) and are described informally in the compiler's
 `docs/TypeChecker.md`.
@@ -267,11 +312,19 @@ one overload is viable, and no ranking is needed at all.
 
 ### 2.4 What Swift does at run time
 
-Swift generics need not be specialized at compile time. A call
-`c.resolve(T.self)` inside a closure works even though `c` is an
-existential (`IResolver`, a protocol-typed value). The type metadata of
-`T` is captured by the closure and passed to `resolve` at run time. Two
-other things also happen at run time:
+Swift compiles a generic function once, without specializing it. The
+type metadata of each type parameter, and the witness table of each
+conformance the function needs, are passed to it as hidden arguments.
+Specializing a generic function for particular type arguments, as
+Fortran does, is an optimization. Swift builds metadata for instances
+of generic types lazily at run time, but it never generates code at run
+time.
+
+This is why the call `c.resolve(T1.self)` inside `Factory1.create` works
+even though `c` is an existential (`IResolver`, a protocol-typed value):
+the metadata of `T1` is passed to `resolve` at run time, and `resolve`
+is found in `c`'s witness table. Two other things also happen at run
+time:
 - the `as? P` cast;
 - a failed lookup, which is a run-time `fatalError`.
 
@@ -284,35 +337,37 @@ In particular, nothing checks at compile time that
 ### 3.1 Overview
 
 The design maps each Swift ingredient to a Fortran counterpart. Most of
-the needed machinery already exists in the proposal:
+the needed machinery already exists in the proposal or in the LFortran
+prototype:
 - generic procedures and generic derived types;
 - type inference;
 - initializers;
 - trait objects;
 - `select type` with `class is (ITrait)`.
 
-What is missing are seven small extensions, E1–E7:
+What is missing are eleven small extensions, E1–E10 with E8b:
 
 | Swift | Fortran (this proposal) | |
 |---|---|---|
-| `P.Type`, `IClient.self` | trait parameters `{abstract interface :: P}`; explicit type argument `register{IClient}(...)` | E1, E5 |
+| `P.Type`, `IClient.self` | trait parameters `{Trait :: P}`; explicit type argument `register{IClient}(...)` | E1, E5 |
 | (runtime check `as? P` only) | conformance constraints between parameters, `{P :: U}` | E2 |
 | `DoubleLogger.init` as a value | the type name designates its initializer: `register{ILogger}(DoubleLogger)` | E3 |
-| inference from `(T) -> U` | generic abstract interfaces, and inference through dummy procedures | E4 |
-| `register<P,T>`, `register<P,T,U>`, ... overloads | overloading of generic procedures | E6 |
+| inference from `(T1) -> U` | generic abstract interfaces, and inference through dummy procedures | E4 |
+| `register<P,U>`, `register<P,T1,U>`, ... overloads | overloading of generic procedures | E6 |
 | `String(describing: P.self)` | intrinsic `type_name{P}()` | E7 |
-| escaping closure `{ c in ... }` | a generic derived type implementing an `IFactory` trait | (existing) |
+| `init<T1,U>(...)` of `Factory` | generic initializers | E8 |
+| `Factory1(ctor: constructor)` | inference of a generic type's parameters in constructor references | E8b |
+| `init<U>`, `init<T1,U>`, ... overloads | overloading of generic initializers | E9 |
+| `c.resolve(T1.self)` on an existential `c` | generic messages with trait parameters, called through trait objects | E10 |
+| `Factory0<U>: IFactory`, `any IFactory` | generic derived types implementing an `IFactory` trait, stored as trait objects | (existing) |
 | `as? P` | `select type ... class is (P)` | (existing) |
-
-(E5, partially explicit type arguments, is listed separately because it
-is useful on its own.)
 
 Two Swift features are deliberately *not* adopted:
 - **Escaping closures.** Fortran has no closures that outlive their
   host. A closure is an object with one method, and the proposal
-  already has objects with methods. A generic derived type that
-  implements a one-message trait does exactly what the Swift closure
-  does, with no new language feature (Sect. 3.9).
+  already has objects with methods. The Swift container itself can do
+  without closures, as its `noclosure` version shows, and the Fortran
+  design follows that version.
 - **Meta-type values.** Fortran's generics are instantiated statically,
   and the proposal already has a syntax for passing types to generic
   procedures: explicit type arguments in curly braces. A type or trait
@@ -323,23 +378,20 @@ Two Swift features are deliberately *not* adopted:
 ### 3.2 E1: Trait parameters
 
 A generic type parameter may range over *traits*, not only over types.
-It is declared with the meta-constraint `abstract interface`, mirroring
-how a trait itself is declared:
+It is declared with the predefined meta-trait `Trait`:
 
 ```fortran
-function resolve{abstract interface :: P}(c) result(res)
-   class(IResolver), intent(in)  :: c
-   class(P),         allocatable :: res
-   ...
+function resolve{Trait :: P}(self) result(res)
+   type(itself), pass, intent(in) :: self
+   class(P),           allocatable :: res
 end function resolve
 ```
 
 The corresponding type argument must be a trait:
-`resolve{IClient}(cont)`. A trait combination such as `IA + IB` is also
+`c%resolve{IClient}()`. A trait combination such as `IA + IB` is also
 allowed. Inside the generic, a trait parameter `P` may be used wherever
 a trait name may be used:
-- in `class(P)` declarations of trait objects (owners, views and
-  pointers);
+- in `class(P)` declarations of trait objects;
 - in `select type` guards `class is (P)`;
 - as the constraint of another type parameter (E2);
 - as a type argument of other generics;
@@ -347,10 +399,53 @@ a trait name may be used:
 
 It may not be used in `type(P)`: a trait is not a type.
 
-Since instantiation is static, an instance such as `resolve{IClient}`
-is ordinary code in which `P` has been replaced by `IClient`. Its
-`class is (IClient)` guard is the existing run-time conformance query,
-so the run-time machinery is the existing one.
+Where a trait argument is known at compile time, an instance such as
+`resolve{IClient}` is ordinary code in which `P` has been replaced by
+`IClient`. Its `class is (IClient)` guard is the existing run-time
+conformance query, so the run-time machinery is the existing one. E10
+covers the calls through trait objects, where the trait argument is not
+known when the called code is compiled.
+
+**The predefined names `Trait` and `AnyType`.** `Trait` is the
+meta-trait that every trait satisfies. The empty trait of the main
+proposal, which every type satisfies, is renamed from `IAnyType` to
+`AnyType`. Neither name carries a prefix: the main proposal's `I`
+prefix for traits is a convention that is left to the user, as Fortran
+leaves all naming conventions to the user. Both names follow the rules
+of Fortran's intrinsic type names:
+- **Always available.** They are accessible in every scoping unit,
+  without a `use` statement, like `integer` or `real`.
+- **Not reserved.** Fortran has no reserved words. An entity other than
+  a derived type or trait, such as a variable or a procedure, may be
+  named `Trait` or `AnyType`. Where a generic parameter list expects a
+  constraint, before `::`, the name always denotes the predefined
+  meta-trait or trait. The parser decides by context, as it does for
+  intrinsic type names.
+- **Not usable for a derived type or trait.** As a derived type may not
+  be named after an intrinsic type (F2023 7.5.2.1), a derived type or a
+  trait may not be named `Trait` or `AnyType`.
+
+For intrinsic type names this gives, for example:
+
+```fortran
+program test
+   integer :: real = 1     ! a variable named real
+   real    :: x            ! still the intrinsic type real
+   x = 4.0
+   print *, x              ! 4.0
+   print *, real           ! 1
+end program test
+```
+
+and `integer :: trait = 1` followed by
+`function f{Trait :: P}(...)` behaves the same way.
+
+**Unconstrained parameters.** The main proposal's rule that an
+unconstrained type parameter `{U}` stands for `{AnyType :: U}` is kept
+for now. Whether it should be dropped, now that both types and traits
+can be passed to generics, will be decided after more experience with
+the prototype. A trait parameter therefore always needs its explicit
+`Trait ::`.
 
 ### 3.3 E2: Conformance constraints between parameters
 
@@ -358,7 +453,7 @@ The constraint of a type parameter may be an *earlier trait parameter*
 of the same list:
 
 ```fortran
-subroutine register1{abstract interface :: P, abstract interface :: T, P :: U}(self, ctor)
+subroutine register1{Trait :: P, Trait :: T1, P :: U}(self, ctor)
 ```
 
 `P :: U` requires the type bound to `U` to implement the trait bound to
@@ -392,8 +487,8 @@ designated is determined as follows:
    the designated procedure is chosen among them. If there is more than
    one, the choice is made by the interface of the dummy procedure or
    procedure pointer: exactly one must match, otherwise the reference
-   is ambiguous. The user can always name the specific initializer
-   function instead.
+   is ambiguous. Where the initializer is accessible by its own name,
+   the user can also name it instead.
 2. Otherwise, the type's structure constructor is designated. Its
    interface has one `intent(in)` dummy argument per component, in
    component order, with the declared type, kind and rank of the
@@ -401,36 +496,50 @@ designated is determined as follows:
    where the structure constructor itself could be referenced: no
    inaccessible (`private`) components, no pointer components, and no
    components with default initialization. Otherwise, an initializer
-   must be written.
+   must be written. The compiler supplies a procedure with this
+   interface, which exists for the whole execution of the program, so
+   it may be stored in a procedure pointer.
 
-Rule 2 is the Fortran analogue of Swift's memberwise initializer. Both
-need to be written out explicitly once the stored properties are
-private. This is why the Swift `DoubleLogger` declares
-`public init(...)` and the Fortran one declares `initial :: init`
-(Sect. 4).
+The designation depends only on the accessibility of the type name, as
+a reference to the type's constructor does. The specific initializer
+procedures may be private, as `init` is in `DoubleLoggerMod`
+(Sect. 4.6).
+
+Rule 2 is the Fortran analogue of Swift's memberwise initializer. In
+Swift the memberwise initializer is never public, so each type of the
+Swift container, which lives in its own module, declares
+`public init(...)`, even `Printer` and `Writer`. In Fortran a structure
+constructor is usable outside its module unless the type has private
+components. So `DoubleLogger`, whose components are private, declares
+`initial :: init` (Sect. 4.6), while `Printer` and `Writer`, which have
+no components at all, need nothing.
+
+A generic derived type used as a procedure designator must be given its
+type arguments explicitly, as in `Box{real}`. E8b does not apply here,
+because there are no actual arguments to infer them from.
 
 No standard program changes meaning. Standard Fortran allows neither a
-type name nor a generic name as an actual argument.
+type name nor a generic name, unless it is also the name of a specific
+procedure, as an actual argument.
 
 ### 3.5 E4: Generic abstract interfaces and inference through dummy procedures
 
-Swift writes the function type `(T) -> U` inline. Fortran describes
+Swift writes the function type `(T1) -> U` inline. Fortran describes
 procedure types by abstract interfaces, so we allow abstract interfaces
 to have generic type parameters, exactly like generic procedures:
 
 ```fortran
 abstract interface
-   function initializer1{abstract interface :: T, IAnyType :: U}(a) result(res)
-      class(T), intent(in) :: a
-      type(U)              :: res
-   end function initializer1
+   function ctor1{Trait :: T1, U}(a) result(res)
+      class(T1), intent(in) :: a
+      type(U)               :: res
+   end function ctor1
 end interface
 ```
 
-An instance of it, `initializer1{T,U}` or `initializer1{IPrinter,Printer}`,
-can be used wherever an abstract interface name can be used:
-`procedure(initializer1{T,U}) :: ctor`, or a procedure-pointer
-component.
+An instance of it, `ctor1{T1,U}` or `ctor1{ILogger,Client}`, can be
+used wherever an abstract interface name can be used:
+`procedure(ctor1{T1,U}) :: ctor`, or a procedure-pointer component.
 
 When a generic procedure has a dummy procedure whose interface mentions
 its type parameters, those parameters are inferred from the actual
@@ -450,6 +559,12 @@ types:
   attributes; F2023 15.5.2.9). As for data arguments, no implicit
   conversions apply.
 
+The actual procedure may itself be a dummy procedure, or a procedure
+pointer, whose interface is an instance such as `ctor1{T1,U}` of an
+enclosing generic. Its characteristics are then those of the instance,
+so `register1`'s dummy `ctor` can be passed on to `Factory(ctor)`
+(Sect. 4.5).
+
 For example, `DoubleLogger`'s initializer:
 
 ```fortran
@@ -459,11 +574,10 @@ function init(printer, writer) result(self)
    type(DoubleLogger)          :: self
 ```
 
-matched against `initializer2{T1,T2,U}` binds `T1 = IPrinter`,
-`T2 = IWriter` and `U = DoubleLogger`. This is the "reflection on
-initializers" the container needs: the compiler reads the
-initializer's signature, and the generic code receives it as type
-arguments.
+matched against `ctor2{T1,T2,U}` binds `T1 = IPrinter`, `T2 = IWriter`
+and `U = DoubleLogger`. This is the "reflection on initializers" the
+container needs: the compiler reads the initializer's signature, and
+the generic code receives it as type arguments.
 
 ### 3.6 E5: Partially explicit type arguments
 
@@ -488,10 +602,11 @@ A generic interface, or a `generic ::` type-bound binding, may contain
 *generic* specific procedures, alongside non-generic ones:
 
 ```fortran
-type, implements(IResolver) :: Container
+type, sealed, implements(IResolver) :: Container
    ...
 contains
-   generic :: register => register0, register1, register2
+   generic   :: register => register0, register1, register2
+   procedure :: register0, register1, register2
    ...
 end type
 ```
@@ -499,13 +614,12 @@ end type
 with:
 
 ```fortran
-subroutine register0{abstract interface :: P, P :: U}(self, ctor)
-   procedure(initializer0{U}) :: ctor
-subroutine register1{abstract interface :: P, abstract interface :: T, P :: U}(self, ctor)
-   procedure(initializer1{T,U}) :: ctor
-subroutine register2{abstract interface :: P, abstract interface :: T1, &
-                     abstract interface :: T2, P :: U}(self, ctor)
-   procedure(initializer2{T1,T2,U}) :: ctor
+subroutine register0{Trait :: P, P :: U}(self, ctor)
+   procedure(ctor0{U}) :: ctor
+subroutine register1{Trait :: P, Trait :: T1, P :: U}(self, ctor)
+   procedure(ctor1{T1,U}) :: ctor
+subroutine register2{Trait :: P, Trait :: T1, Trait :: T2, P :: U}(self, ctor)
+   procedure(ctor2{T1,T2,U}) :: ctor
 ```
 
 Fortran and Swift take opposite approaches to overloading. Fortran
@@ -532,9 +646,11 @@ distinguishable, with two extensions:
    - some pair of corresponding dummy arguments, or their function
      results, are distinguishable.
 
-   Standard Fortran has no such rule. Two dummy procedures are
-   indistinguishable in standard Fortran, so this only accepts generic
-   interfaces that were previously rejected.
+   Standard Fortran distinguishes two dummy procedures only if both
+   are known to be functions whose results are not TKR compatible
+   (F2023 15.4.3.4.5). The new rule adds the number of arguments and
+   the arguments' characteristics. It only accepts generic interfaces
+   that were previously rejected.
 
 `register0`, `register1` and `register2` are distinguishable by rule 2:
 their `ctor` interfaces have 0, 1 and 2 arguments. This is the Swift
@@ -555,8 +671,7 @@ end interface
 
 **Resolution rule.** A reference to a generic name is resolved as
 follows:
-1. The non-generic specifics are tried by the existing rules, including
-   the proposal's conformance tier for trait-view dummies. If one
+1. The non-generic specifics are tried by the existing rules. If one
    matches, it is selected.
 2. Otherwise each generic specific is tried. A specific is *viable* if:
    - the explicit type arguments, if any, are admitted by its leading
@@ -579,10 +694,13 @@ candidates. They could be added later without breaking any program
 
 ### 3.8 E7: The `type_name` intrinsic
 
-`type_name{P}()` is an intrinsic function of the `generics` intrinsic
-module that returns the name of the type or trait `P`, as a `character`
-constant expression. `P` is any type argument: a derived type, a trait
-or an intrinsic type.
+`type_name{P}()` is an intrinsic function that returns the name of the
+type or trait `P`, as a `character` value. It is a constant expression
+wherever `P` is known at compile time, which is everywhere except in the
+erased code of E10. `P` is any type
+argument: a derived type, a trait or an intrinsic type. Like other
+intrinsic procedures, it is available in every scoping unit without a
+`use` statement, and a user-declared entity of the same name hides it.
 - **Unqualified form:** returns the name with the letter case of its
   declaration, e.g. `"ILogger"`. It is the analogue of Swift's
   `String(describing:)`.
@@ -595,15 +713,210 @@ The container uses the qualified form as its key, so two traits with the
 same name in different modules never collide. It uses the unqualified
 form in messages.
 
-Inside an instantiated generic, `type_name{P}()` is a constant. No
-run-time type information is involved.
+Inside an instantiated generic, `type_name{P}()` is a constant. Inside
+the erased code of E10, both forms are read from the trait descriptor.
+No other run-time type information is involved.
 
-### 3.9 Closures: generic factory types
+### 3.9 E8: Generic initializers
 
-Swift's `Factory` stores a closure that captures the initializer. In
-Fortran, the closure becomes an *object*. It is an instance of a generic
-derived type that holds the initializer in a procedure-pointer
-component, and implements a one-message trait `IFactory`:
+An initializer, i.e. a procedure bound to a type with `initial ::`, may
+have type parameters of its own. They are independent of the type's
+parameters: the type may itself be generic or not. This is the
+counterpart of Swift's `init<T1,U>(...)`. The main proposal's rule that
+an initializer does not declare the *type's* parameters, which it sees
+through the type (Sect. "Constructors of generic types"), is
+unchanged; E8 concerns additional parameters of the initializer
+itself:
+
+```fortran
+type, sealed, implements(IFactory) :: Factory
+   private
+   class(IFactory), allocatable :: box
+contains
+   initial   :: init0, init1, init2
+   procedure :: create
+end type Factory
+
+function init1{Trait :: T1, U}(ctor) result(self)
+   procedure(ctor1{T1,U}) :: ctor
+   type(Factory)          :: self
+   self%box = Factory1(ctor)
+end function init1
+```
+
+The rules are those of generic procedures:
+- **Inference only.** In a reference such as `Factory(ctor)`, the
+  initializer's type parameters are inferred from the actual arguments,
+  including through dummy procedures (E4). They cannot be given
+  explicitly, because braces after a type name, as in `Box{real}(...)`,
+  give the *type's* arguments. Swift has the same restriction.
+- **Result.** The result is the type being initialized. If the type is
+  generic, its own parameters are visible in the initializer, as for any
+  procedure bound to a generic type.
+- **Constraints.** All constraints of the initializer's parameters
+  (E2) are checked at the reference.
+
+### 3.10 E8b: Inference of a generic type's parameters in constructor references
+
+The main proposal already infers a generic type's parameters from the
+actual arguments of a constructor reference, such as
+`PairwiseSum(SimpleSum())`, and allows them to be given explicitly in
+braces (Sect. "Constructors of generic types"). E8b extends this
+inference to procedure arguments, through the rules of E4. This is the
+counterpart of Swift's `Factory1(ctor: constructor)`, where
+`Factory1<T1,U>`'s parameters are inferred from the function type of
+`constructor`:
+
+```fortran
+type, sealed, implements(IFactory) :: Factory1{Trait :: T1, U}
+   private
+   procedure(ctor1{T1,U}), pointer, nopass :: ctor => null()
+contains
+   procedure :: create => create1
+end type Factory1
+
+self%box = Factory1(ctor)         ! Factory1{T1,U} with T1, U inferred
+```
+
+The rules:
+- **What is matched.** The actual arguments are matched against the
+  interface of what the reference designates:
+  - the type's structure constructor, whose dummy arguments are the
+    components, with their declared types, which may mention the type's
+    parameters;
+  - or the type's initializers, which are tried by the rules of E9.
+- **How parameters are bound.** By the rules of E4, for data arguments
+  and for procedures. In the example, the actual procedure `ctor` is
+  matched against the interface `ctor1{T1,U}` of the procedure-pointer
+  component `ctor`, which binds `T1` and `U`.
+- **Errors.** If any parameter remains undetermined, the reference is an
+  error that names it.
+- **Only constructor references.** As in the main proposal, inference
+  applies only where the type is referenced as a constructor with
+  actual arguments. Type declarations such as `type(Factory1{T1,U})`
+  and procedure designators (E3) need the type arguments explicitly.
+
+The structure constructor itself is unchanged. It can be referenced only
+where it could be referenced anyway, for example inside `FactoryMod`,
+where `Factory1`'s private component `ctor` is accessible.
+
+### 3.11 E9: Overloading of generic initializers
+
+The main proposal already allows several initializers per type,
+`initial :: init_by_int, init_by_real`, which overload the type's
+structure constructor. E9 allows generic initializers among them, and
+applies to them the declaration and resolution rules of E6:
+- **Declaration.** The type's initializers must be pairwise
+  distinguishable, with type parameters acting as wildcards and dummy
+  procedures distinguishable by their interfaces. A non-generic
+  initializer may overlap a generic one.
+- **Resolution.** In a reference such as `Factory(ctor)`, the
+  non-generic initializers are tried first, then the generic ones. At
+  most one generic initializer is viable, and its parameters are
+  inferred (E8).
+
+`Factory`'s `init0`, `init1` and `init2` are distinguishable because
+their `ctor` interfaces have 0, 1 and 2 arguments, as are `register0`,
+`register1` and `register2`. A reference `Factory(ctor)` thus selects
+the initializer by the arity of `ctor`, as Swift's `Factory.init`
+overloads do.
+
+It would be inconsistent to allow overloaded generic procedures (E6)
+but not overloaded generic initializers, which are the procedures that
+construct a type.
+
+### 3.12 E10: Generic messages with trait parameters through trait objects
+
+In Swift, `resolve<P>` is a requirement of the protocol `IResolver`, and
+`Factory1.create` calls it on an existential `c`. E10 allows the same in
+Fortran: a message of a trait may have trait parameters (E1), and may be
+called through a trait object.
+
+```fortran
+abstract interface :: IResolver
+   function resolve{Trait :: P}(self) result(res)
+      type(itself), pass, intent(in) :: self
+      class(P),           allocatable :: res
+   end function resolve
+end interface
+
+function create1(self, c) result(res)
+   type(Factory1{T1,U}), intent(in)  :: self
+   class(IResolver),     intent(in)  :: c
+   class(*),             allocatable :: res
+   res = self%ctor(c%resolve{T1}())        ! Swift: ctor(c.resolve(T1.self))
+end function create1
+```
+
+A type implements such a message by a generic procedure with the same
+type-parameter list, as for any generic message. `Container`'s
+`resolve{Trait :: P}` is an example (Sect. 4.5).
+
+**The problem it solves.** A trait object is a pair of a data pointer
+and a pointer to a table that the dynamic type provides for the trait.
+The table has one entry, or *slot*, per message. It is filled where a
+value of a concrete type becomes a trait object, and each slot must
+then hold one procedure. A statically instantiated generic message is a
+family of procedures, one per type argument, and the set of type
+arguments that later callers will use is open. So there is no single
+procedure to place in the slot.
+
+**The solution.** The slot holds a single *erased* copy of the
+implementing procedure. It is compiled once, in the module that
+implements the message, and receives each trait argument as a hidden
+run-time argument: a *trait descriptor*. A trait descriptor is a
+constant record, one per trait, that holds the trait's unqualified and
+qualified names (E7) and its identity for run-time conformance
+queries.
+
+Every use of a trait parameter `P` that E1 allows can be carried out
+with the descriptor alone:
+- **`class(P)` declarations:** a trait object has the same
+  representation for every trait, a data pointer and a table pointer, so
+  its size and layout do not depend on `P`.
+- **`select type ... class is (P)`:** the run-time conformance query
+  that `class is (ILogger)` performs, with the trait taken from the
+  descriptor. The query yields the dynamic type's table for `P`.
+- **Assigning to a `class(P)` result:** the data pointer is paired with
+  the table found by the query.
+- **`type_name{P}()`:** the names are read from the descriptor.
+- **Passing `P` on** to another generic: the descriptor is passed on.
+
+`type(P)` is not allowed by E1, so the layout of `P` is never needed.
+Trait parameters are therefore the easiest kind of type parameter to
+erase, and the erased body needs no restrictions beyond those of E1.
+
+**Compilation model.** Fortran's static instantiation is kept. A
+generic message is compiled in two forms:
+- **Static instances,** wherever the type arguments are known at
+  compile time. This includes every call on a non-polymorphic object,
+  such as `cont%resolve{IClient}()` on a `type(Container)`, and every
+  call that the compiler can devirtualize, for example because the
+  dynamic type is a known `sealed` type.
+- **One erased copy,** placed in the slot of the implementing type's
+  table for the trait.
+
+At a call through a trait object, such as `c%resolve{T1}()` in the
+instance `Factory1{ILogger,Client}`, the compiler loads the slot and
+passes the descriptor of `ILogger`, which is a compile-time constant
+there. No code is generated at run time, and no meta-type values are
+visible to the user.
+
+**Scope.** E10 covers trait parameters. Generic messages whose type
+parameters range over types are dispatched through trait objects by
+the means the LFortran prototype already implements: one slot per
+member for closed type sets, and dictionary passing of the type's
+witness table for open traits
+([answers](traits-di-review-answers.md), Sect. 2 and Appendix A).
+
+**Run-time cost.** The conformance query and the call through the table
+are the same work that Swift's `as? P` and its witness-table call do.
+
+### 3.13 Type erasure through generic factory types
+
+Swift's `Factory0`, `Factory1` and `Factory2` become generic derived
+types that store the initializer in a procedure-pointer component and
+implement a one-message trait `IFactory`:
 
 ```fortran
 abstract interface :: IFactory
@@ -613,76 +926,39 @@ abstract interface :: IFactory
       class(*),           allocatable :: res
    end function create
 end interface
-
-type, implements(IFactory) :: Factory1{abstract interface :: T, IAnyType :: U}
-   procedure(initializer1{T,U}), pointer, nopass :: ctor => null()
-contains
-   procedure :: create => create1
-end type
-
-function create1(self, c) result(res)
-   class(Factory1{T,U}), intent(in)  :: self
-   class(IResolver),     intent(in)  :: c
-   class(*),             allocatable :: res
-   res = self%ctor(resolve{T}(c))          ! the Swift closure body
-end function create1
 ```
 
-Compare `create = { c in return constructor(c.resolve(T.self)) }`:
-- the captured `constructor` is the component `ctor`;
-- the captured type `T` is the instance's type parameter;
-- the closure type `IFactory = (IResolver) -> Any` is the trait
-  `IFactory`.
+`Factory1{T1,U}` and `create1` are shown in Sects. 3.10 and 3.12.
+Compare them with Swift's `Factory1<T1,U>` (Sect. 2.2):
+- the stored `ctor` is the procedure-pointer component `ctor`;
+- `T1` is the instance's type parameter, passed on to `resolve` as a
+  trait argument;
+- `any IFactory` is a `class(IFactory)` trait object.
 
-The container stores the factories as `class(IFactory), allocatable`
-trait objects. This type-erases them, just as Swift's dictionary of
-closures does. Everything used here is already in the proposal:
+The decorator `Factory` holds one of them in its `box` component, and
+its generic, overloaded initializers (E8, E9) construct the right one
+with inferred type arguments (E8b). The container stores the factories
+as `class(IFactory)` trait objects in its map. This type-erases them,
+just as Swift's dictionary of `any IFactory` does.
+
+Everything else used here is already in the proposal:
 - generic derived types;
 - type-bound procedures that see the type's parameters;
 - trait objects;
 - `class(*)` results.
 
-Only the component's interface, `initializer1{T,U}`, needs E4.
-
-### 3.10 Why `resolve` is not a generic message of `IResolver`
-
-In Swift, `resolve<P>` is a requirement of the protocol `IResolver`, and
-the closure calls it on an existential. This works because Swift passes
-`P`'s metadata at run time. With static instantiation this is not
-possible:
-- a trait object's runtime contract has one slot per message;
-- a generic message would need one slot per instantiation;
-- the set of instantiations is open, i.e. unknown when the trait object
-  is formed.
-
-*Correction:* an earlier version of this section stated that the
-proposal restricts runtime generic messages to closed type sets. That
-is not so. A generic message whose type parameter is constrained by a
-trait gets one erased slot, which receives the type argument's witness
-table at run time, and the LFortran prototype implements this. What is
-missing is the case where the type parameter is a *trait* parameter
-(E1), as in `resolve{P}`. See
-[traits-di-review-answers.md](traits-di-review-answers.md), which also
-proposes the missing piece (E10).
-
-The Fortran design therefore splits `resolve` in two:
-- **A non-generic message:** `resolve_key(key) result(class(*))` is a
-  message of `IResolver`, dispatched at run time.
-- **A generic procedure:** `resolve{P}(c)` is an ordinary generic
-  procedure over `class(IResolver)`. It is statically instantiated once
-  per trait, and it computes the key with `type_name`, calls the
-  message, and downcasts with `class is (P)`.
-
-This is the same split as a Swift protocol *extension* method. The
-container type additionally offers `resolve{P}` as a generic method, so
-that the user writes `cont%resolve{IClient}()`.
-
 ## 4. The complete Fortran container
 
-The file layout mirrors the Swift repository. Unchanged files of the
-present Fortran version are not repeated.
+The code below is that of the
+[`projected`](https://github.com/difference-scheme/FortranDIContainer/tree/projected)
+branch of FortranDIContainer, which uses all of E1–E10, with shortened
+comments and one correction in `resolve` (Sect. 4.5). The file layout
+mirrors the Swift repository. `FactoryMapMod`, the hash map, and the
+modules of the traits `IClient`, `IPrinter` and `IWriter` and of the
+types `Client`, `SingleLogger`, `Printer` and `Writer` are not repeated
+in full.
 
-### 4.1 Traits (unchanged)
+### 4.1 Traits of the application (unchanged)
 
 `ILoggerMod`, `IClientMod`, `IPrinterMod` and `IWriterMod` stay as
 they are. For example:
@@ -698,54 +974,28 @@ abstract interface, extends(ILogger) :: IClient
 end interface
 ```
 
-### 4.2 `IResolverMod.f90`
+### 4.2 `IResolverMod.f90` and `IFactoryMod.f90`
 
 ```fortran
 module IResolverMod
-   use, intrinsic :: generics, only: type_name
    implicit none
-   private
-   public :: IResolver, resolve
 
    abstract interface :: IResolver
-      function resolve_key(self, key) result(res)
+      function resolve{Trait :: P}(self) result(res)
          type(itself), pass, intent(in)  :: self
-         character(*),       intent(in)  :: key
-         class(*),           allocatable :: res
-      end function resolve_key
+         class(P),           allocatable :: res
+      end function resolve
    end interface
-
-contains
-
-   function resolve{abstract interface :: P}(c) result(res)
-      !.............................................................
-      ! Resolve the registration of trait P and return it as a
-      ! trait object of P (Swift: c.resolve(P.self)).
-      !.............................................................
-      class(IResolver), intent(in)  :: c
-      class(P),         allocatable :: res
-
-      select type( obj => c%resolve_key(type_name{P}(qualified=.true.)) )
-      class is (P)
-         res = obj
-      class default
-         error stop "No registration available for " // type_name{P}()
-      end select
-   end function resolve
 
 end module IResolverMod
 ```
-
-### 4.3 `IFactoryMod.f90`
 
 ```fortran
 module IFactoryMod
    use IResolverMod, only: IResolver
    implicit none
-   private
-   public :: IFactory, initializer0, initializer1, initializer2
 
-   !.. Swift: typealias IFactory = (IResolver) -> Any
+   !.. Swift: protocol IFactory { func create(_ c: any IResolver) -> Any }
    abstract interface :: IFactory
       function create(self, c) result(res)
          type(itself), pass, intent(in)  :: self
@@ -754,80 +1004,126 @@ module IFactoryMod
       end function create
    end interface
 
-   !.. Swift: () -> U,  (T) -> U,  (T1, T2) -> U
+end module IFactoryMod
+```
+
+### 4.3 `InterfacesMod.f90`
+
+```fortran
+module InterfacesMod
+   implicit none
+
+   !.. Swift: () -> U,  (T1) -> U,  (T1, T2) -> U
    abstract interface
-      function initializer0{IAnyType :: U}() result(res)
+      function ctor0{U}() result(res)
          type(U) :: res
-      end function initializer0
+      end function ctor0
 
-      function initializer1{abstract interface :: T, IAnyType :: U}(a) result(res)
-         class(T), intent(in) :: a
-         type(U)              :: res
-      end function initializer1
+      function ctor1{Trait :: T1, U}(a) result(res)
+         class(T1), intent(in) :: a
+         type(U)               :: res
+      end function ctor1
 
-      function initializer2{abstract interface :: T1, abstract interface :: T2, &
-                            IAnyType :: U}(a, b) result(res)
+      function ctor2{Trait :: T1, Trait :: T2, U}(a, b) result(res)
          class(T1), intent(in) :: a
          class(T2), intent(in) :: b
          type(U)               :: res
-      end function initializer2
+      end function ctor2
    end interface
 
-end module IFactoryMod
+end module InterfacesMod
 ```
+
+`U` is unconstrained, i.e. constrained by `AnyType`.
 
 ### 4.4 `FactoryMod.f90`
 
 ```fortran
 module FactoryMod
-   use IResolverMod, only: IResolver, resolve
-   use IFactoryMod,  only: IFactory, initializer0, initializer1, initializer2
+   use IFactoryMod,   only: IFactory
+   use IResolverMod,  only: IResolver
+   use InterfacesMod, only: ctor0, ctor1, ctor2
    implicit none
    private
-   public :: Factory0, Factory1, Factory2
+   public :: Factory
 
-   !.. one generic "closure" type per initializer arity
+   !.. the type-erasing decorator (Swift: struct Factory)
+   type, sealed, implements(IFactory) :: Factory
+      private
+      class(IFactory), allocatable :: box
+   contains
+      initial   :: init0, init1, init2                   ! E8, E9
+      procedure :: create
+   end type Factory
 
-   type, implements(IFactory) :: Factory0{IAnyType :: U}
-      procedure(initializer0{U}), pointer, nopass :: ctor => null()
+   !.. helper types for type erasure, one per initializer arity
+   type, sealed, implements(IFactory) :: Factory0{U}
+      private
+      procedure(ctor0{U}), pointer, nopass :: ctor => null()
    contains
       procedure :: create => create0
    end type Factory0
 
-   type, implements(IFactory) :: Factory1{abstract interface :: T, IAnyType :: U}
-      procedure(initializer1{T,U}), pointer, nopass :: ctor => null()
+   type, sealed, implements(IFactory) :: Factory1{Trait :: T1, U}
+      private
+      procedure(ctor1{T1,U}), pointer, nopass :: ctor => null()
    contains
       procedure :: create => create1
    end type Factory1
 
-   type, implements(IFactory) :: Factory2{abstract interface :: T1, &
-                                          abstract interface :: T2, IAnyType :: U}
-      procedure(initializer2{T1,T2,U}), pointer, nopass :: ctor => null()
+   type, sealed, implements(IFactory) :: Factory2{Trait :: T1, Trait :: T2, U}
+      private
+      procedure(ctor2{T1,T2,U}), pointer, nopass :: ctor => null()
    contains
       procedure :: create => create2
    end type Factory2
 
 contains
 
+   function init0{U}(ctor) result(self)
+      procedure(ctor0{U}) :: ctor
+      type(Factory)       :: self
+      self%box = Factory0(ctor)                          ! E8b
+   end function init0
+
+   function init1{Trait :: T1, U}(ctor) result(self)
+      procedure(ctor1{T1,U}) :: ctor
+      type(Factory)          :: self
+      self%box = Factory1(ctor)
+   end function init1
+
+   function init2{Trait :: T1, Trait :: T2, U}(ctor) result(self)
+      procedure(ctor2{T1,T2,U}) :: ctor
+      type(Factory)             :: self
+      self%box = Factory2(ctor)
+   end function init2
+
+   function create(self, c) result(res)
+      type(Factory),    intent(in)  :: self
+      class(IResolver), intent(in)  :: c
+      class(*),         allocatable :: res
+      res = self%box%create(c)
+   end function create
+
    function create0(self, c) result(res)
-      class(Factory0{U}), intent(in)  :: self
-      class(IResolver),   intent(in)  :: c
-      class(*),           allocatable :: res
+      type(Factory0{U}), intent(in)  :: self
+      class(IResolver),  intent(in)  :: c
+      class(*),          allocatable :: res
       res = self%ctor()
    end function create0
 
    function create1(self, c) result(res)
-      class(Factory1{T,U}), intent(in)  :: self
+      type(Factory1{T1,U}), intent(in)  :: self
       class(IResolver),     intent(in)  :: c
       class(*),             allocatable :: res
-      res = self%ctor(resolve{T}(c))
+      res = self%ctor(c%resolve{T1}())                   ! E10
    end function create1
 
    function create2(self, c) result(res)
-      class(Factory2{T1,T2,U}), intent(in)  :: self
-      class(IResolver),         intent(in)  :: c
-      class(*),                 allocatable :: res
-      res = self%ctor(resolve{T1}(c), resolve{T2}(c))
+      type(Factory2{T1,T2,U}), intent(in)  :: self
+      class(IResolver),        intent(in)  :: c
+      class(*),                allocatable :: res
+      res = self%ctor(c%resolve{T1}(), c%resolve{T2}())
    end function create2
 
 end module FactoryMod
@@ -837,11 +1133,11 @@ end module FactoryMod
 
 ```fortran
 module ContainerMod
-   use, intrinsic :: generics, only: type_name
-   use IResolverMod,  only: IResolver, resolve_trait => resolve
-   use IFactoryMod,   only: initializer0, initializer1, initializer2
-   use FactoryMod,    only: Factory0, Factory1, Factory2
+   use IResolverMod,  only: IResolver
+   use IFactoryMod,   only: IFactory
+   use InterfacesMod, only: ctor0, ctor1, ctor2
    use FactoryMapMod, only: FactoryMap
+   use FactoryMod,    only: Factory
    implicit none
    private
    public :: Container
@@ -850,54 +1146,62 @@ module ContainerMod
    ! Dependency injection container for traits.
    ! Employs trait parameters and overloading of generic methods.
    !...........................................................
-   type, implements(IResolver) :: Container
+   type, sealed, implements(IResolver) :: Container
       private
       type(FactoryMap) :: factories
    contains
+      initial   :: init
       generic   :: register => register0, register1, register2
       procedure :: register0, register1, register2
-      procedure :: resolve_key
       procedure :: resolve
    end type Container
 
 contains
 
+   function init() result(self)
+      type(Container) :: self
+   end function init
+
    !.. registration for initializers taking no arguments
-   subroutine register0{abstract interface :: P, P :: U}(self, ctor)
-      class(Container), intent(inout) :: self
-      procedure(initializer0{U})      :: ctor
-      call self%factories%store(type_name{P}(qualified=.true.), Factory0{U}(ctor))
+   subroutine register0{Trait :: P, P :: U}(self, ctor)
+      type(Container), intent(inout) :: self
+      procedure(ctor0{U})            :: ctor
+      key := type_name{P}(qualified=.true.)
+      call self%factories%store(key, Factory(ctor))
    end subroutine register0
 
-   !.. registration for initializers taking one argument, of trait T
-   subroutine register1{abstract interface :: P, abstract interface :: T, P :: U}(self, ctor)
-      class(Container), intent(inout) :: self
-      procedure(initializer1{T,U})    :: ctor
-      call self%factories%store(type_name{P}(qualified=.true.), Factory1{T,U}(ctor))
+   !.. registration for initializers taking one argument, of trait T1
+   subroutine register1{Trait :: P, Trait :: T1, P :: U}(self, ctor)
+      type(Container), intent(inout) :: self
+      procedure(ctor1{T1,U})         :: ctor
+      key := type_name{P}(qualified=.true.)
+      call self%factories%store(key, Factory(ctor))
    end subroutine register1
 
    !.. registration for initializers taking two arguments, of traits T1 and T2
-   subroutine register2{abstract interface :: P, abstract interface :: T1, &
-                        abstract interface :: T2, P :: U}(self, ctor)
-      class(Container), intent(inout) :: self
-      procedure(initializer2{T1,T2,U}) :: ctor
-      call self%factories%store(type_name{P}(qualified=.true.), Factory2{T1,T2,U}(ctor))
+   subroutine register2{Trait :: P, Trait :: T1, Trait :: T2, P :: U}(self, ctor)
+      type(Container), intent(inout) :: self
+      procedure(ctor2{T1,T2,U})      :: ctor
+      key := type_name{P}(qualified=.true.)
+      call self%factories%store(key, Factory(ctor))
    end subroutine register2
 
-   !.. call the factory registered under key on this container,
-   !.. which resolves its dependencies recursively
-   function resolve_key(self, key) result(res)
-      class(Container), intent(in)  :: self
-      character(*),     intent(in)  :: key
-      class(*),         allocatable :: res
-      res = self%factories%create(key, self)
-   end function resolve_key
-
-   !.. Swift: c.resolve(P.self)
-   function resolve{abstract interface :: P}(self) result(res)
-      class(Container), intent(in)  :: self
-      class(P),         allocatable :: res
-      res = resolve_trait{P}(self)
+   !.. call the factory registered for trait P, passing it this
+   !.. container, to resolve dependencies recursively
+   function resolve{Trait :: P}(self) result(res)
+      type(Container), intent(in)  :: self
+      class(P),        allocatable :: res
+      class(IFactory), allocatable :: fact
+      key := type_name{P}(qualified=.true.)
+      call self%factories%retrieve(key, fact)
+      if (.not. allocated(fact)) &
+         error stop "No registration available for " // type_name{P}() // "!"
+      select type (obj => fact%create(self))
+      class is (P)
+         res = obj
+      class default
+         error stop "No registration available for " // type_name{P}() // "!"
+      end select
    end function resolve
 
 end module ContainerMod
@@ -905,9 +1209,17 @@ end module ContainerMod
 
 `FactoryMapMod` is the present hash map, with its value changed from a
 procedure pointer to a `class(IFactory), allocatable` component. Its
-`store(key, factory)` copies the factory object. Its
-`create(key, c)` looks up the entry, stops with an error if there is
-none, and returns `entry%factory%create(c)`.
+`store(key, factory)` copies the factory object, and its
+`retrieve(key, factory)` returns a copy of the stored one, or leaves
+`factory` unallocated if there is none. The check of `fact` in
+`resolve` covers that case; without it, `fact%create(self)` would
+reference an unallocated object. Swift covers it with the optional
+chaining in `factories[key]?.create(self)`.
+
+Compared with Swift's `Container.swift`, which imports `IResolver`,
+`IFactory` and `Factory`, the only additional dependencies are
+`InterfacesMod`, which holds what Swift writes inline as function types,
+and `FactoryMapMod`, which stands in for Swift's built-in dictionary.
 
 ### 4.6 Implementing types
 
@@ -954,9 +1266,10 @@ end module DoubleLoggerMod
 ```
 
 `Client` and `SingleLogger` follow the same pattern, with an
-initializer of one argument. `Printer` and `Writer` have no components,
-so their structure constructors `Printer()` and `Writer()` serve as
-initializers (E3, rule 2), and they need nothing at all:
+initializer of one argument. Their components are private, so they
+need an explicit initializer (E3, rule 2). `Printer` and `Writer` have
+no components, so their structure constructors `Printer()` and
+`Writer()` serve as initializers, and they need nothing at all:
 
 ```fortran
 type, implements(IPrinter) :: Printer
@@ -981,10 +1294,13 @@ program main
    use WriterMod,       only: Writer
    implicit none
 
-   type(Container)             :: cont
-   class(IClient), allocatable :: cobj
+   type(Container), allocatable :: cont
+   class(IClient),  allocatable :: cobj
 
-   !.. register the initializers of the implementing types with the traits
+   !.. get a dependency injection container
+   cont = Container()
+
+   !.. register a concrete type (initializer) with each trait
    call cont%register{IClient}(Client)
    call cont%register{ILogger}(DoubleLogger)
    call cont%register{IPrinter}(Printer)
@@ -1012,29 +1328,43 @@ Switching to single logging means changing one line, to
 `call cont%register{ILogger}(SingleLogger)`. The `IWriter` registration
 is then simply unused.
 
-### 4.8 What the compiler does for one registration
+### 4.8 What the compiler does
 
 For `call cont%register{ILogger}(DoubleLogger)`:
-1. **Resolve `register` (E6).** The non-generic specifics are tried
-   first; there are none. Then each generic specific is tried:
+1. **Resolve `register` (E6).** There are no non-generic specifics.
+   Each generic specific is tried:
    - `register0` and `register1` are not viable, because
      `DoubleLogger`'s initializer has 2 arguments.
    - `register2` is viable.
 2. **Bind the explicit argument (E1, E5).** `P = ILogger` is given
    explicitly.
 3. **Infer the rest (E3, E4).** `DoubleLogger` designates `init`.
-   Matching `init` against `initializer2{T1,T2,U}` infers
-   `T1 = IPrinter`, `T2 = IWriter` and `U = DoubleLogger`.
+   Matching `init` against `ctor2{T1,T2,U}` infers `T1 = IPrinter`,
+   `T2 = IWriter` and `U = DoubleLogger`.
 4. **Check the constraint (E2).** `ILogger :: DoubleLogger` holds, since
    `DoubleLogger` implements `ILogger`.
-5. **Instantiate.** `register2{ILogger, IPrinter, IWriter, DoubleLogger}`
-   is instantiated. Its body instantiates
-   `Factory2{IPrinter, IWriter, DoubleLogger}`, whose `create2`
-   instantiates `resolve{IPrinter}` and `resolve{IWriter}`.
-   - `create2` is precisely the former hand-written
-     `create_DoubleLogger`;
-   - its two `select type` blocks are the instantiated bodies of
-     `resolve`.
+5. **Instantiate** `register2{ILogger, IPrinter, IWriter, DoubleLogger}`.
+   In its body:
+   - `type_name{ILogger}(qualified=.true.)` is the constant
+     `"ILoggerMod::ILogger"` (E7).
+   - `Factory(ctor)` selects `init2` among `Factory`'s initializers by
+     the arity of `ctor` (E9), and infers its parameters from `ctor`'s
+     interface `ctor2{IPrinter,IWriter,DoubleLogger}` (E8, E4).
+   - In `init2`'s instance, `Factory2(ctor)` infers
+     `Factory2{IPrinter, IWriter, DoubleLogger}` from `ctor` (E8b).
+6. **Instantiate `create2`** for that instance of `Factory2`. Its two
+   calls `c%resolve{IPrinter}()` and `c%resolve{IWriter}()` go through
+   the `resolve` slot of `c`'s table, passing the descriptors of
+   `IPrinter` and `IWriter` (E10). `create2` is precisely the former
+   hand-written `create_DoubleLogger`.
+
+For `cobj = cont%resolve{IClient}()`, `cont` is a `type(Container)`, so
+`resolve{IClient}` is a static instance (E10's compilation model). In
+addition, `ContainerMod` contains one erased copy of `resolve`, which
+is placed in the `resolve` slot of `Container`'s table for `IResolver`.
+It is the procedure that the factories' `c%resolve{...}()` calls reach
+when `fact%create(self)` passes the container to them as a
+`class(IResolver)`.
 
 ## 5. Present restrictions
 
@@ -1052,40 +1382,52 @@ For `call cont%register{ILogger}(DoubleLogger)`:
 - **Exact interface match.** The initializer's dummy arguments must be
   declared exactly as the container's interfaces expect:
   `class(T), intent(in)`, no `optional`, no keyword reordering.
+- **Explicit initializers for private components.** A type with private
+  components needs an explicit initializer to be registered from
+  outside its module (E3, rule 2), as `Client`, `SingleLogger` and
+  `DoubleLogger` have.
 - **Lifetimes.** As for any procedure pointer, a factory must not
-  capture an internal procedure whose host has returned. Initializers
-  are module procedures, so this does not arise for E3.
+  capture an internal procedure whose host has returned. This does not
+  arise for E3: initializers are module procedures, and the procedure
+  supplied for a structure constructor exists for the whole execution
+  of the program.
 - **Instance lifetime.** Each `resolve` creates new objects. Singletons
   and scoped lifetimes are a container design question, not a language
   one.
 
-## 6. Open questions for review and outlook
+## 6. Decisions taken in review, and outlook
 
-**Open questions:**
-1. **Spelling of trait parameters.** `{abstract interface :: P}` mirrors
-   trait declarations but is verbose. Alternatives are
-   `{interface :: P}`, or a predefined meta-trait `{ITrait :: P}` in
-   the `generics` module.
-2. **Overlap of generic specifics.** Should Swift's "more specialized"
-   and "more constrained" ranking rules be adopted too? This proposal
-   keeps Fortran's rule that overlapping specifics are a declaration
-   error, except non-generic over generic.
-3. **Implicit structure constructors as initializers (E3, rule 2).**
-   This is useful (`Printer`, `Writer`) and parallels Swift's memberwise
-   initializers. Alternatively only explicit initializers could be
-   designated, which settles the proposal's open question on whether
-   the implicit structure constructor counts as an initializer the
-   other way.
-4. **`type_name` result form.** Should the qualified form use
-   `Module::Name`? Should letter case be preserved?
+**Decisions** (see [traits-di-review.md](traits-di-review.md), Sect. 5):
+1. **Spelling of trait parameters.** `{Trait :: P}`, with the predefined
+   meta-trait `Trait`. The empty trait `IAnyType` is renamed to
+   `AnyType`. Both follow the rules of intrinsic type names and are not
+   reserved words (Sect. 3.2). The main proposal will be updated
+   accordingly.
+2. **Unconstrained type parameters.** They keep meaning `AnyType` for
+   now. Whether to require explicit constraints will be decided after
+   more experience with the prototype.
+3. **Overlap of generic specifics.** Fortran's rule is kept: overlapping
+   specifics are a declaration error, except non-generic over generic.
+   Swift's "more specialized" and "more constrained" ranking rules are
+   not adopted.
+4. **Implicit structure constructors as initializers (E3, rule 2).**
+   They count, where they are accessible.
+5. **`type_name` result form.** To be decided after more experience
+   with the prototype. The qualified form `Module::Name`, with the
+   letter case of the declarations, is provisional.
 
 **Outlook:**
 - **Variadic generics.** Swift 5.9 added parameter packs
   (`register<P, each T, U>(_: P.Type, _: (repeat each T) -> U)`), which
   reduce the three overloads to one. A Fortran analogue,
-  `{abstract interface, dimension(*) :: T}`, would do the same here.
-- **Default methods in traits.** Swift's protocol extensions could
-  allow `resolve{P}` to be written once in `IResolver` and called as
-  `c%resolve{T}()` on any trait object.
+  `{Trait, dimension(*) :: T}`, would do the same here.
+- **Default methods in traits.** Swift's protocol extensions add methods
+  with bodies to a protocol. A Fortran analogue would give method syntax
+  to helper procedures that use only a trait's messages.
+- **Parameterized traits.** Traits with their own type parameters, as in
+  Rust and Go, would let the factory map hold
+  `class(IFactory{Container})`. All calls of `resolve` would then be
+  static, and only the map lookup would remain dynamic
+  ([answers](traits-di-review-answers.md), Sect. 8).
 - **Meta-type values.** Storing types in variables, as Swift's `P.Type`
   allows, is not needed for DI. It would be a far larger extension.
