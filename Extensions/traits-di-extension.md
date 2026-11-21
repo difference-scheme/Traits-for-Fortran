@@ -481,24 +481,46 @@ p => DoubleLogger                            ! the same, as a pointer target
 ```
 
 This is the counterpart of Swift's `DoubleLogger.init`. The initializer
-designated is determined as follows:
+designated is determined by the interface of the dummy procedure or
+procedure pointer, which must be explicit:
 1. If the type has initializer bindings (`initial :: ...` in the type or
    in an `implements` block, or a standard `interface DoubleLogger`),
-   the designated procedure is chosen among them. If there is more than
-   one, the choice is made by the interface of the dummy procedure or
-   procedure pointer: exactly one must match, otherwise the reference
-   is ambiguous. Where the initializer is accessible by its own name,
-   the user can also name it instead.
-2. Otherwise, the type's structure constructor is designated. Its
-   interface has one `intent(in)` dummy argument per component, in
-   component order, with the declared type, kind and rank of the
-   component, and its result is a scalar of the type. This applies only
-   where the structure constructor itself could be referenced: no
-   inaccessible (`private`) components, no pointer components, and no
-   components with default initialization. Otherwise, an initializer
-   must be written. The compiler supplies a procedure with this
-   interface, which exists for the whole execution of the program, so
-   it may be stored in a procedure pointer.
+   the initializer whose interface matches is designated. If more than
+   one matches, the reference is ambiguous. Where the initializer is
+   accessible by its own name, the user can also name it instead.
+2. If no initializer matches, the type's structure constructor is
+   designated, by the rule: *if the structure constructor is accessible,
+   it is admissible*. Let the interface have `n` dummy arguments. The
+   structure constructor is admissible if the reference
+   `DoubleLogger(a1, ..., an)`, with `n` positional component values,
+   would be valid in this scoping unit:
+   - the type name and the first `n` components are accessible;
+   - every remaining component has default initialization or is
+     allocatable, so it may be omitted (F2023 7.5.10), even if it is
+     private;
+   - each dummy argument is `intent(in)` and has the declared type, kind
+     and rank of the corresponding component, which is not a pointer.
+
+   The result is a scalar of the type. The omitted components get their
+   default values, or are unallocated. The compiler supplies a procedure
+   with this interface, which exists for the whole execution of the
+   program, so it may be stored in a procedure pointer. If neither rule
+   applies, an initializer must be written.
+
+Rules 1 and 2 follow Fortran's existing rule for a generic interface
+that has the name of a type: a reference is to a specific procedure
+when one matches, and to the structure constructor otherwise. For
+example, a type whose only component is private and default-initialized
+can be registered through a dummy procedure with no arguments:
+
+```fortran
+type, implements(ICounter) :: Counter
+   private
+   integer :: n = 0
+end type Counter
+
+call cont%register{ICounter}(Counter)  ! Counter(), valid outside the module
+```
 
 The designation depends only on the accessibility of the type name, as
 a reference to the type's constructor does. The specific initializer
@@ -509,10 +531,15 @@ Rule 2 is the Fortran analogue of Swift's memberwise initializer. In
 Swift the memberwise initializer is never public, so each type of the
 Swift container, which lives in its own module, declares
 `public init(...)`, even `Printer` and `Writer`. In Fortran a structure
-constructor is usable outside its module unless the type has private
-components. So `DoubleLogger`, whose components are private, declares
-`initial :: init` (Sect. 4.6), while `Printer` and `Writer`, which have
-no components at all, need nothing.
+constructor is usable outside its module whenever every component it is
+given is accessible. `Printer` and `Writer`, which have no components at
+all, need nothing. `DoubleLogger` must receive its private components
+from its arguments, so it declares `initial :: init` (Sect. 4.6).
+Outside its module `DoubleLogger()` remains valid, because both
+components are allocatable, and it would match an interface without
+arguments, returning a logger whose components are unallocated. This is
+the same object that a reference `DoubleLogger()` gives in standard
+Fortran.
 
 A generic derived type used as a procedure designator must be given its
 type arguments explicitly, as in `Box{real}`. E8b does not apply here,
@@ -1266,8 +1293,9 @@ end module DoubleLoggerMod
 ```
 
 `Client` and `SingleLogger` follow the same pattern, with an
-initializer of one argument. Their components are private, so they
-need an explicit initializer (E3, rule 2). `Printer` and `Writer` have
+initializer of one argument. Their components are private and must be
+set from the argument, so they need an explicit initializer (E3,
+rule 2). `Printer` and `Writer` have
 no components, so their structure constructors `Printer()` and
 `Writer()` serve as initializers, and they need nothing at all:
 
@@ -1382,10 +1410,13 @@ when `fact%create(self)` passes the container to them as a
 - **Exact interface match.** The initializer's dummy arguments must be
   declared exactly as the container's interfaces expect:
   `class(T), intent(in)`, no `optional`, no keyword reordering.
-- **Explicit initializers for private components.** A type with private
-  components needs an explicit initializer to be registered from
-  outside its module (E3, rule 2), as `Client`, `SingleLogger` and
-  `DoubleLogger` have.
+- **Explicit initializers for private components.** A private component
+  can be omitted from a structure constructor outside its module only if
+  it has default initialization or is allocatable, and it can never be
+  given there. A type whose private components must be set from the
+  initializer's arguments therefore needs an explicit initializer to be
+  registered from outside its module (E3, rule 2), as `Client`,
+  `SingleLogger` and `DoubleLogger` have.
 - **Lifetimes.** As for any procedure pointer, a factory must not
   capture an internal procedure whose host has returned. This does not
   arise for E3: initializers are module procedures, and the procedure
@@ -1411,7 +1442,9 @@ when `fact%create(self)` passes the container to them as a
    Swift's "more specialized" and "more constrained" ranking rules are
    not adopted.
 4. **Implicit structure constructors as initializers (E3, rule 2).**
-   They count, where they are accessible.
+   If the structure constructor is accessible, it is admissible. This
+   includes types with private components that have default
+   initialization or are allocatable.
 5. **`type_name` result form.** To be decided after more experience
    with the prototype. The qualified form `Module::Name`, with the
    letter case of the declarations, is provisional.
