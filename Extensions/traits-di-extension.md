@@ -706,8 +706,26 @@ follows:
    - inference (E4) determines all remaining parameters;
    - all constraints (E2) are satisfied.
 
-   By the declaration rule, at most one generic specific is viable, and
-   it is selected and instantiated.
+   By the declaration rule, ordinary arguments leave at most one generic
+   specific viable. A type name used as a procedure designator (E3) is
+   the one exception: a type whose components are `allocatable` or
+   default-initialized has an accessible zero-argument structure
+   constructor alongside any user-provided initializer, so both
+   `register0` (via E3 rule 2) and `register1` or `register2` (via E3
+   rule 1) can be viable for the same call — as happens for `Client`,
+   `SingleLogger` and `DoubleLogger` in Sect. 4. When more than one
+   generic specific is viable, a single tie-break applies:
+
+   - **Initializers before structure constructors.** Among the viable
+     generic specifics, those for which every type name in the actual
+     arguments designates an initializer (E3 rule 1) are preferred over
+     those for which any type name falls back to a structure constructor
+     (E3 rule 2).
+
+   This extends E3's preference of a user-provided initializer over the
+   structure constructor from a single dummy procedure to the specifics
+   of a generic. If exactly one specific remains, it is selected and
+   instantiated; if more than one remains, the reference is ambiguous.
 3. If no specific is viable, the error names each candidate and the
    reason it failed. For example: "register1: initializer of `Printer`
    has 0 arguments, the interface requires 1"; "register0: type
@@ -716,8 +734,8 @@ follows:
 Swift's remaining ranking rules (more specialized, more constrained) are
 *not* adopted. Overlapping generic specifics remain a declaration error,
 in keeping with Fortran's design that resolution never has to rank
-candidates. They could be added later without breaking any program
-(Sect. 6).
+overlapping candidates. They could be added later without breaking any
+program (Sect. 6).
 
 ### 3.8 E7: The `type_name` intrinsic
 
@@ -1361,9 +1379,17 @@ is then simply unused.
 For `call cont%register{ILogger}(DoubleLogger)`:
 1. **Resolve `register` (E6).** There are no non-generic specifics.
    Each generic specific is tried:
-   - `register0` and `register1` are not viable, because
-     `DoubleLogger`'s initializer has 2 arguments.
-   - `register2` is viable.
+   - `register1` is not viable, because `DoubleLogger` has neither a
+     1-argument initializer nor an accessible 1-argument structure
+     constructor.
+   - `register0` is viable via the zero-argument structure constructor
+     `DoubleLogger()` (both components are `allocatable`, E3 rule 2).
+   - `register2` is viable via the user-provided initializer `init`
+     (E3 rule 1).
+   - The E6 tie-break prefers `register2` over `register0`, because
+     `DoubleLogger` designates an initializer rather than a structure
+     constructor. (The same tie-break selects `register1` over
+     `register0` for `Client` and `SingleLogger`.)
 2. **Bind the explicit argument (E1, E5).** `P = ILogger` is given
    explicitly.
 3. **Infer the rest (E3, E4).** `DoubleLogger` designates `init`.
