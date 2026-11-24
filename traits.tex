@@ -1721,7 +1721,7 @@ combinations in run-time and compile-time polymorphism, see
 Sects.~\ref{sect:trait_combinations} and \ref{sect:overloading},
 respectively.}. If the constraint is omitted by the programmer, then
 the compiler will infer the corresponding type parameter to be
-constrained by the \code{IAnyType} (empty) trait of
+constrained by the \code{AnyType} (empty) trait of
 Sect.~\ref{sect:type_sets}. The proposed Fortran generics thus support
 ``strong concepts'', and can be fully type-checked by a compiler.
 
@@ -1733,6 +1733,24 @@ is used here, which deviates slightly from how Fortran's regular
 function arguments are declared, appears justified, as it reflects
 that, despite some similarities, in type parameters one is dealing
 with different entities.
+
+Type parameters may range not only over types, but also over
+traits. Such a trait parameter is constrained by the predefined
+meta-trait \code{Trait}, that is satisfied by every trait (but by no
+type). Its actual argument must thus be a trait, like in
+\code{resolve\{ISum\}()} for the following function:
+\begin{lstlisting}[language=LFortran,style=boxed]
+  function resolve{Trait :: P}() result(res)
+     class(P), allocatable :: res
+  end function resolve
+\end{lstlisting}
+Since an unconstrained parameter always stands for \code{AnyType},
+a trait parameter always needs the explicit \code{Trait ::}
+constraint. Like \code{AnyType}, \code{Trait} is always available (see
+Sect.~\ref{sect:predefined_traits}). The full rules for trait
+parameters, and the further extensions that build on them, are given
+in the extension document \code{Extensions/traits-di-extension.md}
+(extensions E1--E10).
 
 %Notice that as a direct consequence of the ad hoc polymorphism of
 %Sect.~\ref{sect:overloaded_signatures}, \emph{overloaded} generically
@@ -1832,11 +1850,15 @@ of intersecting methods will usually become.
 In the limit of adding all possible types to a type set, there won't
 be any common methods left that are implemented by all its types. This
 results in the important case of the empty trait, that matches all
-types (since any type has at least zero methods):
+types (since any type has at least zero methods). The language
+predefines this trait under the name \code{AnyType}, as if it had been
+declared as
 \begin{lstlisting}[language=LFortran,style=boxed]
-  abstract interface :: IAnyType
-  end interface IAnyType
+  abstract interface :: AnyType
+  end interface AnyType
 \end{lstlisting}
+It is always available, and cannot be declared by the user (see
+Sect.~\ref{sect:predefined_traits}).
 
 \subsubsection{Inline notation}
 
@@ -1909,6 +1931,7 @@ actual use of this trait is provided in
 Sect.~\ref{sect:associated_types_usage}.
 
 \subsection{Predefined traits}
+\label{sect:predefined_traits}
 
 The facilities that were described in the previous sections are
 flexible enough to enable the user to easily construct generics
@@ -1918,9 +1941,6 @@ frequently used, generics constraints, in the form of traits that are
 contained in a language-intrinsic module (that we'll tentatively call
 \code{generics} here). A list of such predefined traits could include
 \begin{itemize}
-\item
-  the empty trait \code{IAnyType} that admits any type (see
-  Sect.~\ref{sect:type_sets}),
 \item
   some predefined numeric traits allowing for different numeric
   operations, but also
@@ -1946,6 +1966,30 @@ module user_code
 
 end module user_code
 \end{lstlisting}
+
+Two predefined names are not contained in this module: the empty trait
+\code{AnyType} that admits any type (see Sect.~\ref{sect:type_sets}),
+and the meta-trait \code{Trait} that admits any trait (see
+Sect.~\ref{sect:generic_interfaces}). Both follow the rules of
+Fortran's intrinsic type names:
+\begin{itemize}
+\item
+  they are accessible in every scoping unit without a \code{use}
+  statement, like \code{integer} or \code{real},
+\item
+  they are not reserved words (Fortran has none): an entity other than
+  a derived type or trait, such as a variable or a procedure, may be
+  named \code{Trait} or \code{AnyType}, while in front of the
+  \code{::} of a generic type parameters list these names always
+  denote the predefined meta-trait and trait, respectively,
+\item
+  and, as a derived type may not be named after an intrinsic type
+  (F2023, 7.5.2.1), a derived type or a trait may not be named
+  \code{Trait} or \code{AnyType}.
+\end{itemize}
+Neither name carries the \code{I} prefix, that is used for traits
+throughout this document. This prefix is merely a naming convention,
+that is left to the user.
 
 \subsection{Present restrictions}
 \label{sect:restrictions}
@@ -2786,7 +2830,7 @@ definition of this type is expressed in terms of the declaration
 contain an explicitly provided constraint for the type parameter
 \code{U}. The latter is therefore, according to
 Sect.~\ref{sect:generic_interfaces}, implicitly inferred by the
-compiler to conform to the \code{IAnyType} trait. Thus enabling
+compiler to conform to the \code{AnyType} trait. Thus enabling
 \code{Vector} to store items of any existing type, \code{U}, within
 the generic \code{elements} array that it contains.
 
